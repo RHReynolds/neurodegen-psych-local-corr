@@ -344,22 +344,6 @@ UCL<br>
 </div>
 
 
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(colochelpR) <span class="co"># Helper package with wrapper functions. See: https://github.com/RHReynolds/colochelpR.</span>
-<span class="kw">library</span>(data.table) <span class="co"># Loaded for fread(), which permits fast loading of files with many rows</span>
-<span class="kw">library</span>(here) <span class="co"># For file path construction</span>
-<span class="kw">library</span>(tidyverse) <span class="co"># For tidy manipulation of data</span>
-<span class="kw">library</span>(SNPlocs.Hsapiens.dbSNP144.GRCh37) <span class="co"># Used to add rs ids to GRCh37 genomic locations</span>
-<span class="kw">library</span>(stringr) <span class="co"># For string manipulation</span>
-<span class="kw">library</span>(rutils) <span class="co"># Own package with common R utility functions, including liftover of genomic coords. See: https://github.com/RHReynolds/rutils.</span>
-
-<span class="co"># Load dbsnp</span>
-dbsnp_<span class="dv">144</span> &lt;-<span class="st"> </span>SNPlocs.Hsapiens.dbSNP144.GRCh37
-
-<span class="co"># Common file paths and extensions</span>
-gwas_dir &lt;-<span class="st"> &quot;/data/LDScore/GWAS/&quot;</span>
-lava_ext &lt;-<span class="st"> &quot;.lava.gz&quot;</span>
-
-knitr<span class="op">::</span>opts_chunk<span class="op">$</span><span class="kw">set</span>(<span class="dt">echo =</span> T, <span class="dt">warning =</span> F, <span class="dt">message =</span> F)</code></pre></div>
 <blockquote>
 <p>Aim: preprocess GWASs for use with LAVA and LDSC</p>
 </blockquote>
@@ -438,111 +422,8 @@ devtools<span class="op">::</span><span class="kw">install_github</span>(<span c
   <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>
 )</code></pre></div>
 </div>
-<div id="als" class="section level2">
-<h2><span class="header-section-number">3.2</span> ALS</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">file_path &lt;-
-<span class="st">  </span><span class="kw">file.path</span>(
-    gwas_dir,
-    <span class="st">&quot;ALS2018/ALS2018_SNPlocMappedtoRS.txt&quot;</span>
-  )
-
-<span class="kw">fread</span>(file_path, <span class="dt">nrows =</span> <span class="dv">6</span>)</code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["SNPloc"],"name":[1],"type":["chr"],"align":["left"]},{"label":["RefSNP_id"],"name":[2],"type":["chr"],"align":["left"]},{"label":["Allele1"],"name":[3],"type":["chr"],"align":["left"]},{"label":["Allele2"],"name":[4],"type":["chr"],"align":["left"]},{"label":["Freq1"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["FreqSE"],"name":[6],"type":["int"],"align":["right"]},{"label":["MinFreq"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["MaxFreq"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["Effect"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["StdErr"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["P"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["Direction"],"name":[12],"type":["chr"],"align":["left"]},{"label":["HetISq"],"name":[13],"type":["int"],"align":["right"]},{"label":["HetChiSq"],"name":[14],"type":["int"],"align":["right"]},{"label":["HetDf"],"name":[15],"type":["int"],"align":["right"]},{"label":["HetPVal"],"name":[16],"type":["int"],"align":["right"]},{"label":["SNPforpos"],"name":[17],"type":["chr"],"align":["left"]},{"label":["CHR"],"name":[18],"type":["int"],"align":["right"]},{"label":["BP"],"name":[19],"type":["int"],"align":["right"]}],"data":[{"1":"1:10583","2":"rs58108140","3":"a","4":"g","5":"0.8411","6":"0","7":"0.8411","8":"0.8411","9":"0.0312","10":"0.0393","11":"0.42730","12":"?????????????+","13":"0","14":"0","15":"0","16":"1","17":"1:10583","18":"1","19":"10583"},{"1":"1:13302","2":"rs180734498","3":"t","4":"c","5":"0.9066","6":"0","7":"0.9066","8":"0.9066","9":"0.0065","10":"0.0508","11":"0.89820","12":"?????????????+","13":"0","14":"0","15":"0","16":"1","17":"1:13302","18":"1","19":"13302"},{"1":"1:13327","2":"rs2691329","3":"c","4":"g","5":"0.9703","6":"0","7":"0.9703","8":"0.9703","9":"0.1265","10":"0.0906","11":"0.16260","12":"?????????????+","13":"0","14":"0","15":"0","16":"1","17":"1:13327","18":"1","19":"13327"},{"1":"1:13327","2":"rs144762171","3":"c","4":"g","5":"0.9703","6":"0","7":"0.9703","8":"0.9703","9":"0.1265","10":"0.0906","11":"0.16260","12":"?????????????+","13":"0","14":"0","15":"0","16":"1","17":"1:13327","18":"1","19":"13327"},{"1":"1:30923","2":"rs806731","3":"t","4":"g","5":"0.2157","6":"0","7":"0.2157","8":"0.2157","9":"-0.0114","10":"0.0353","11":"0.74670","12":"?????????????-","13":"0","14":"0","15":"0","16":"1","17":"1:30923","18":"1","19":"30923"},{"1":"1:51479","2":"rs116400033","3":"a","4":"t","5":"0.8171","6":"0","7":"0.8171","8":"0.8171","9":"0.0711","10":"0.0370","11":"0.05465","12":"?????????????+","13":"0","14":"0","15":"0","16":"1","17":"1:51479","18":"1","19":"51479"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-<ul>
-<li>Allele columns are both lower case. Will make these upper case, to match other GWASs.</li>
-<li>Columns need renaming and can remove extra columns.</li>
-<li>Need to add an extra column for number of samples. Total N for study = 20,806 cases + 59,804 controls = 80610)</li>
-</ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ALS &lt;-
-<span class="st">  </span><span class="kw">fread</span>(file_path) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(CHR, BP, <span class="dt">SNP =</span> RefSNP_id, <span class="dt">A1 =</span> Allele1, <span class="dt">A2 =</span> Allele2, <span class="dt">MAF =</span> Freq1, <span class="dt">BETA =</span> Effect, <span class="dt">SE =</span> StdErr, P) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(
-    <span class="dt">N =</span> <span class="dv">59804</span> <span class="op">+</span><span class="st"> </span><span class="dv">20806</span>,
-    <span class="dt">A1 =</span> stringr<span class="op">::</span><span class="kw">str_to_upper</span>(A1),
-    <span class="dt">A2 =</span> stringr<span class="op">::</span><span class="kw">str_to_upper</span>(A2)
-  ) 
-    
-<span class="kw">fwrite</span>(ALS,
-  stringr<span class="op">::</span><span class="kw">str_c</span>(
-    gwas_dir,
-    <span class="st">&quot;ALS2018/ALS2018&quot;</span>,
-    lava_ext
-  ),
-  <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>
-)</code></pre></div>
-</div>
-<div id="ftd-meta" class="section level2">
-<h2><span class="header-section-number">3.3</span> FTD meta</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">file_path &lt;-
-<span class="st">  </span><span class="kw">file.path</span>(
-    gwas_dir,
-    <span class="st">&quot;FTD2014/FTD_GWAS_META.txt.gz&quot;</span>
-  )
-
-<span class="kw">fread</span>(file_path, <span class="dt">nrows =</span> <span class="dv">6</span>)</code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["marker"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Allele1"],"name":[2],"type":["chr"],"align":["left"]},{"label":["Allele2"],"name":[3],"type":["chr"],"align":["left"]},{"label":["beta1"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["SE"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["pValue"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["chr"],"name":[7],"type":["int"],"align":["right"]},{"label":["Bp"],"name":[8],"type":["int"],"align":["right"]}],"data":[{"1":"chr10:100004799","2":"a","3":"c","4":"0.3528","5":"0.2808","6":"0.20890","7":"10","8":"100004799"},{"1":"chr10:100011120","2":"a","3":"t","4":"0.0673","5":"0.2327","6":"0.77260","7":"10","8":"100011120"},{"1":"chr10:100011140","2":"a","3":"g","4":"0.3904","5":"0.2612","6":"0.13500","7":"10","8":"100011140"},{"1":"chr10:100011219","2":"t","3":"c","4":"0.2341","5":"0.2346","6":"0.31850","7":"10","8":"100011219"},{"1":"chr10:10002142","2":"a","3":"g","4":"-0.1597","5":"0.0796","6":"0.04487","7":"10","8":"10002142"},{"1":"chr10:100021672","2":"t","3":"c","4":"0.0558","5":"0.1017","6":"0.58320","7":"10","8":"100021672"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-<ul>
-<li>Allele columns are both lower case. Will make these upper case, to match other GWASs.</li>
-<li>Missing an N column. We will have to add this column. Total N of study = 2,154 cases + 4,308 controls = 6462).</li>
-<li>Marker column is a mix of RS IDs and genomic locations, thus, convert those rows without an RS ID. To do this, we will use <code>colochelpR::convert_loc_to_rs()</code>. This function, however, does not:
-<ol style="list-style-type: decimal">
-<li>Remove CHR:BP locations associated with more than one rs id</li>
-<li>Remove CHR:BP locations that do not have associated rs ids (left as NA)</li>
-</ol></li>
-<li>We will therefore have to ensure this is done in our code chunk.</li>
-</ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">FTD_meta &lt;-
-<span class="st">  </span><span class="kw">fread</span>(file_path) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(marker, <span class="dt">CHR =</span> chr, <span class="dt">BP =</span> Bp, <span class="dt">A1 =</span> Allele1, <span class="dt">A2 =</span> Allele2, <span class="dt">BETA =</span> beta1, SE, <span class="dt">P =</span> pValue) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(
-    <span class="dt">N =</span> <span class="dv">2154</span> <span class="op">+</span><span class="st"> </span><span class="dv">4308</span>,
-    <span class="dt">A1 =</span> stringr<span class="op">::</span><span class="kw">str_to_upper</span>(A1),
-    <span class="dt">A2 =</span> stringr<span class="op">::</span><span class="kw">str_to_upper</span>(A2),
-    <span class="dt">rs_present =</span> <span class="kw">str_detect</span>(marker, <span class="st">&quot;rs&quot;</span>)
-  ) <span class="op">%&gt;%</span>
-<span class="st">  </span>colochelpR<span class="op">::</span><span class="kw">convert_loc_to_rs</span>(
-    <span class="dt">df =</span> .,
-    dbsnp_<span class="dv">144</span>
-  ) <span class="co"># ends with 6042887 rows</span>
-
-
-<span class="co"># If SNP is NA, add in rs id from narker column</span>
-<span class="co"># Function colochelpR::convert_loc_to_rs does not remove CHR:BP associated with more than one rs id</span>
-<span class="co"># Nor does it remove CHR:BP locations that do not have associated rs ids (left as NA)</span>
-<span class="co"># Thus, will remove NAs and remove duplicated CHR:BP</span>
-FTD_meta &lt;-
-<span class="st">  </span>FTD_meta <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(
-    <span class="dt">SNP =</span>
-      <span class="kw">case_when</span>(<span class="kw">is.na</span>(SNP) <span class="op">&amp;</span><span class="st"> </span>rs_present <span class="op">==</span><span class="st"> </span>T <span class="op">~</span><span class="st"> </span>marker,
-                <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>SNP),
-    <span class="dt">CHR_BP =</span> stringr<span class="op">::</span><span class="kw">str_c</span>(CHR, <span class="st">&quot;:&quot;</span>, BP)
-  ) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(CHR_BP) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">any</span>(<span class="kw">row_number</span>() <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">drop_na</span>(SNP) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>CHR_BP, <span class="op">-</span>marker, <span class="op">-</span>rs_present) <span class="co"># ends with 6004064 rows</span>
-
-<span class="kw">fwrite</span>(FTD_meta,
-  stringr<span class="op">::</span><span class="kw">str_c</span>(
-    gwas_dir,
-    <span class="st">&quot;FTD2014/FTD2014&quot;</span>,
-    lava_ext
-  ),
-  <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>
-)</code></pre></div>
-</div>
 <div id="lbd" class="section level2">
-<h2><span class="header-section-number">3.4</span> LBD</h2>
+<h2><span class="header-section-number">3.2</span> LBD</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">file_path &lt;-
 <span class="st">  </span><span class="kw">file.path</span>(
     gwas_dir,
@@ -609,7 +490,7 @@ n_liftover &lt;-<span class="st"> </span>R.utils<span class="op">::</span><span 
 <pre><code>## [1] &quot;Number of lines in modified file: 7219240&quot;</code></pre>
 </div>
 <div id="pd" class="section level2">
-<h2><span class="header-section-number">3.5</span> PD</h2>
+<h2><span class="header-section-number">3.3</span> PD</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">file_path &lt;-
 <span class="st">  </span><span class="kw">file.path</span>(
     gwas_dir,
@@ -641,180 +522,140 @@ n_liftover &lt;-<span class="st"> </span>R.utils<span class="op">::</span><span 
   <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>
 )</code></pre></div>
 </div>
-<div id="pd-aoo" class="section level2">
-<h2><span class="header-section-number">3.6</span> PD AOO</h2>
+<div id="bip" class="section level2">
+<h2><span class="header-section-number">3.4</span> BIP</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">file_path &lt;-
 <span class="st">  </span><span class="kw">file.path</span>(
     gwas_dir,
-    <span class="st">&quot;PD2018_AOO/sorted_AAO_april3_18_final_discovery_mappedtoRS.txt.gz&quot;</span>
+    <span class="st">&quot;BIP2021/pgc-bip2021-all.vcf.tsv.gz&quot;</span>
   )
 
-<span class="kw">fread</span>(file_path, <span class="dt">nrows =</span> <span class="dv">6</span>)</code></pre></div>
+<span class="co"># First 72 lines are written text, therefore must remove these to format summary statistics</span>
+<span class="kw">fread</span>(file_path, <span class="dt">skip =</span> <span class="dv">72</span>, <span class="dt">nrow =</span> <span class="dv">6</span>)</code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["SNPloc"],"name":[1],"type":["chr"],"align":["left"]},{"label":["RefSNP_id"],"name":[2],"type":["chr"],"align":["left"]},{"label":["CHR"],"name":[3],"type":["int"],"align":["right"]},{"label":["BP"],"name":[4],"type":["int"],"align":["right"]},{"label":["Allele1"],"name":[5],"type":["chr"],"align":["left"]},{"label":["Allele2"],"name":[6],"type":["chr"],"align":["left"]},{"label":["Freq1"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["FreqSE"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["MinFreq"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["MaxFreq"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["Effect"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["StdErr"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["P-value"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["Direction"],"name":[14],"type":["chr"],"align":["left"]},{"label":["HetISq"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["HetChiSq"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["HetDf"],"name":[17],"type":["int"],"align":["right"]},{"label":["HetPVal"],"name":[18],"type":["dbl"],"align":["right"]}],"data":[{"1":"1:909221","2":"rs62639985","3":"1","4":"909221","5":"t","6":"c","7":"0.9580","8":"0.0057","9":"0.9454","10":"0.9694","11":"-0.4209","12":"0.3771","13":"0.2644","14":"-??---?+++--++--+","15":"0.0","16":"10.730","17":"13","18":"0.6334"},{"1":"1:914610","2":"rs145616017","3":"1","4":"914610","5":"t","6":"c","7":"0.0161","8":"0.0014","9":"0.0124","10":"0.0193","11":"0.6894","12":"0.6911","13":"0.3185","14":"+??+++??---+--+++","15":"0.0","16":"4.638","17":"12","18":"0.9690"},{"1":"1:918238","2":"rs28552711","3":"1","4":"918238","5":"c","6":"g","7":"0.7787","8":"0.0147","9":"0.7566","10":"0.8090","11":"-0.2288","12":"0.1758","13":"0.1932","14":"?-?-+-?+-++-+--?+","15":"28.9","16":"16.870","17":"12","18":"0.1546"},{"1":"1:919127","2":"rs28469033","3":"1","4":"919127","5":"t","6":"c","7":"0.7754","8":"0.0157","9":"0.7507","10":"0.8075","11":"-0.1925","12":"0.1762","13":"0.2747","14":"?-?-+-?+-++-+--?+","15":"26.0","16":"16.220","17":"12","18":"0.1814"},{"1":"1:920503","2":"rs28896913","3":"1","4":"920503","5":"a","6":"g","7":"0.1503","8":"0.0121","9":"0.1333","10":"0.1784","11":"-0.2612","12":"0.2146","13":"0.2236","14":"+-?-+-?+--+++--?-","15":"0.0","16":"11.676","17":"13","18":"0.5544"},{"1":"1:920640","2":"rs28869591","3":"1","4":"920640","5":"t","6":"c","7":"0.1642","8":"0.0132","9":"0.1443","10":"0.1932","11":"-0.1682","12":"0.2081","13":"0.4190","14":"+??-+-?+--+++--?-","15":"15.3","16":"14.176","17":"12","18":"0.2896"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["#CHROM"],"name":[1],"type":["int"],"align":["right"]},{"label":["POS"],"name":[2],"type":["int"],"align":["right"]},{"label":["ID"],"name":[3],"type":["chr"],"align":["left"]},{"label":["A1"],"name":[4],"type":["chr"],"align":["left"]},{"label":["A2"],"name":[5],"type":["chr"],"align":["left"]},{"label":["BETA"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["SE"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["PVAL"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["NGT"],"name":[9],"type":["int"],"align":["right"]},{"label":["FCAS"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["FCON"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["IMPINFO"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["NEFFDIV2"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["NCAS"],"name":[14],"type":["int"],"align":["right"]},{"label":["NCON"],"name":[15],"type":["int"],"align":["right"]},{"label":["DIRE"],"name":[16],"type":["chr"],"align":["left"]}],"data":[{"1":"10","2":"34258488","3":"rs11009607","4":"A","5":"G","6":"0.009395722","7":"0.0119","8":"0.42780","9":"25","10":"0.797","11":"0.798","12":"0.941","13":"50981.48","14":"41917","15":"371549","16":"+----++--+++++++---++-+-+++--++++++--+--+--+----+++-++-++"},{"1":"10","2":"34144725","3":"rs12217716","4":"A","5":"G","6":"0.005703703","7":"0.0096","8":"0.55680","9":"1","10":"0.596","11":"0.572","12":"0.971","13":"50981.48","14":"41917","15":"371549","16":"+--+-++++---+-+++---+--++--+--++-++-++-++++-+--+-+++-----"},{"1":"10","2":"38117570","3":"rs9417264","4":"A","5":"G","6":"0.013202463","7":"0.0134","8":"0.32690","9":"1","10":"0.860","11":"0.847","12":"0.990","13":"50981.48","14":"41917","15":"371549","16":"+++++--+--+-+-+++-+--+-+--+++----+-+-+++-+++-+-++-++++-++"},{"1":"10","2":"34459338","3":"rs2008617","4":"A","5":"T","6":"0.015400797","7":"0.0283","8":"0.58530","9":"1","10":"0.971","11":"0.967","12":"0.986","13":"49333.68","14":"40499","15":"366928","16":"-?++++?++--+++++--+---+-?-+--++?--++-+--+?-++-+-+++-??-??"},{"1":"10","2":"34437906","3":"rs2799453","4":"G","5":"A","6":"-0.007800344","7":"0.0097","8":"0.42130","9":"6","10":"0.381","11":"0.369","12":"0.977","13":"50981.48","14":"41917","15":"371549","16":"+-+-++-++-++++++---+++++-++----++-----+-+---+-+-+++-+-+++"},{"1":"10","2":"35471873","3":"rs12762493","4":"G","5":"A","6":"-0.017899240","7":"0.0098","8":"0.06622","9":"1","10":"0.651","11":"0.669","12":"1.000","13":"50981.48","14":"41917","15":"371549","16":"+-+--+--++++-+-+--++------++++++-++--+++---++++++-+-+-++-"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <ul>
-<li>Almost all columns are present, but a few need renaming.</li>
-<li>Allele columns are both lower case. Will make these upper case, to match other GWASs.</li>
-<li>Missing an N column. We will have to add this column (total N of study = 17996).</li>
+<li>All columns are present, but a few need renaming.</li>
+<li>Frequency of A1 not provided across all cohorts, but instead across cases and controls. Therefore, averaged the FCAS and FCON to get MAF.</li>
+<li>Number of samples currently split into cases and controls. These need to be summed to a total.</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">PD_AOO &lt;-
-<span class="st">  </span><span class="kw">fread</span>(file_path) <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">BIP &lt;-
+<span class="st">  </span><span class="kw">fread</span>(file_path, <span class="dt">skip =</span> <span class="dv">72</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(
-    <span class="dt">N =</span> <span class="dv">17996</span>,
-    <span class="dt">A1 =</span> stringr<span class="op">::</span><span class="kw">str_to_upper</span>(Allele1),
-    <span class="dt">A2 =</span> stringr<span class="op">::</span><span class="kw">str_to_upper</span>(Allele2)
-  ) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(CHR, BP, <span class="dt">SNP =</span> RefSNP_id, A1, A2, <span class="dt">MAF =</span> Freq1, <span class="dt">BETA =</span> Effect, <span class="dt">SE =</span> StdErr, <span class="dt">P =</span> <span class="st">`</span><span class="dt">P-value</span><span class="st">`</span>, N)
+    <span class="dt">MAF =</span> (FCAS <span class="op">+</span><span class="st"> </span>FCON)<span class="op">/</span><span class="dv">2</span>,
+    <span class="dt">N =</span> NCAS <span class="op">+</span><span class="st"> </span>NCON
+    ) <span class="op">%&gt;%</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(
+    <span class="dt">CHR =</span> <span class="st">`</span><span class="dt">#CHROM</span><span class="st">`</span>, 
+    <span class="dt">BP =</span> POS, 
+    <span class="dt">SNP =</span> ID, 
+    A1, A2, MAF, BETA, SE, 
+    <span class="dt">P =</span> PVAL, 
+    N
+    )
 
 <span class="kw">fwrite</span>(
-  PD_AOO,
+  BIP,
   stringr<span class="op">::</span><span class="kw">str_c</span>(
     gwas_dir,
-    <span class="st">&quot;PD2018_AOO/PD2018_AOO&quot;</span>,
+    <span class="st">&quot;BIP2021/BIP2021&quot;</span>,
     lava_ext
   ),
   <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>
 )</code></pre></div>
 </div>
-<div id="psp-progressionsurvival" class="section level2">
-<h2><span class="header-section-number">3.7</span> PSP progression/survival</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">file_path &lt;-<span class="st"> </span><span class="kw">file.path</span>(gwas_dir, <span class="st">&quot;PSP2019_Progression/PSP2019_Progression.txt&quot;</span>)
+<div id="mdd" class="section level2">
+<h2><span class="header-section-number">3.5</span> MDD</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">file_path &lt;-
+<span class="st">  </span><span class="kw">file.path</span>(
+    gwas_dir,
+    <span class="st">&quot;MDD2019_ex23andMe/PGC_UKB_depression_genome-wide.txt.gz&quot;</span>
+  )
 
-<span class="kw">fread</span>(file_path, <span class="dt">nrows =</span> <span class="dv">6</span>)</code></pre></div>
+<span class="kw">fread</span>(file_path, <span class="dt">nrow =</span> <span class="dv">6</span>)</code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["SNP"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Coeff"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["se"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Pvalue"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Cox.zphPVal"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["N"],"name":[6],"type":["int"],"align":["right"]},{"label":["ov.lik.ratio"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["logrank"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["r2"],"name":[9],"type":["dbl"],"align":["right"]}],"data":[{"1":"x1.752566.G.A_G_G","2":"-0.14167792","3":"0.06634948","4":"0.03273420","5":"0.6292251","6":"1002","7":"325.0541","8":"303.6878","9":"0.2770428"},{"1":"x1.752721.A.G_A_A","2":"-0.15912381","3":"0.06627403","4":"0.01635042","5":"0.6060845","6":"1000","7":"326.7168","8":"304.8001","9":"0.2787120"},{"1":"x1.753405.C.A_C_C","2":"-0.14366650","3":"0.07566661","4":"0.05760688","5":"0.3654706","6":"945","7":"295.4764","8":"276.6503","9":"0.2685112"},{"1":"x1.753541.G.A_A_A","2":"-0.16792809","3":"0.07594130","4":"0.02701590","5":"0.3232685","6":"941","7":"293.1573","8":"273.8818","9":"0.2676802"},{"1":"x1.754063.G.T_T_T","2":"-0.06076549","3":"0.15403135","4":"0.69321133","5":"0.6314111","6":"939","7":"293.5422","8":"275.9965","9":"0.2684659"},{"1":"x1.754105.C.T_T_T","2":"-0.06904090","3":"0.15564698","4":"0.65735086","5":"0.5648045","6":"939","7":"295.6542","8":"277.9037","9":"0.2701094"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["MarkerName"],"name":[1],"type":["chr"],"align":["left"]},{"label":["A1"],"name":[2],"type":["chr"],"align":["left"]},{"label":["A2"],"name":[3],"type":["chr"],"align":["left"]},{"label":["Freq"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["LogOR"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["StdErrLogOR"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["P"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"rs2326918","2":"a","3":"g","4":"0.8452","5":"0.0106","6":"0.0060","7":"0.0756100"},{"1":"rs7929618","2":"c","3":"g","4":"0.1314","5":"-0.0224","6":"0.0064","7":"0.0004804"},{"1":"rs66941928","2":"t","3":"c","4":"0.8031","5":"0.0003","6":"0.0055","7":"0.9502000"},{"1":"rs7190157","2":"a","3":"c","4":"0.3517","5":"0.0024","6":"0.0045","7":"0.5992000"},{"1":"rs12364336","2":"a","3":"g","4":"0.8685","5":"0.0075","6":"0.0064","7":"0.2450000"},{"1":"rs6977693","2":"t","3":"c","4":"0.8544","5":"0.0089","6":"0.0061","7":"0.1442000"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <ul>
-<li>Currently, MAFs are not attached to the GWAS, but in an adjoining file, which requires merging.</li>
-<li>Will need to split <code>SNP</code> into CHR, BP, A1 and A2. Column is in the format CHR.BP.REF.ALT, where A1 = ALT, and A2 = REF.</li>
-<li>Will need to attach RS ID using CHR and BP.</li>
+<li>Missing chromosome and base pair positions for SNPs,</li>
+<li>A1 and A2 are lowercase, so will change to upper case.</li>
+<li>N not defined for study, therefore will add column with N = 170,756 cases + 329,443 controls = 500199</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">PSP_prog &lt;-
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MDD &lt;-
+<span class="st">  </span><span class="kw">fread</span>(file_path) <span class="op">%&gt;%</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(
+    <span class="dt">A1 =</span> stringr<span class="op">::</span><span class="kw">str_to_upper</span>(A1),
+    <span class="dt">A2 =</span> stringr<span class="op">::</span><span class="kw">str_to_upper</span>(A2),
+    <span class="dt">N =</span> <span class="dv">170756</span> <span class="op">+</span><span class="st"> </span><span class="dv">329443</span>
+    ) <span class="op">%&gt;%</span>
+<span class="st">  </span>colochelpR<span class="op">::</span><span class="kw">convert_rs_to_loc</span>(
+    <span class="dt">SNP_column =</span> <span class="st">&quot;MarkerName&quot;</span>, 
+    <span class="dt">dbSNP =</span> dbsnp_<span class="dv">144</span>
+    ) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">separate</span>(
+    <span class="dt">col =</span> <span class="st">&quot;loc&quot;</span>,
+    <span class="dt">into =</span> <span class="kw">c</span>(<span class="st">&quot;CHR&quot;</span>, <span class="st">&quot;BP&quot;</span>)
+  ) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(
+    CHR, BP, 
+    <span class="dt">SNP =</span> MarkerName, 
+    A1, A2, 
+    <span class="dt">MAF =</span> Freq, 
+    <span class="dt">logOdds =</span> LogOR, 
+    <span class="dt">SE =</span> StdErrLogOR, 
+    P, N
+    )
+
+<span class="kw">fwrite</span>(
+  MDD,
+  stringr<span class="op">::</span><span class="kw">str_c</span>(
+    gwas_dir,
+    <span class="st">&quot;MDD2019_ex23andMe/MDD2019&quot;</span>,
+    lava_ext
+  ),
+  <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>
+)</code></pre></div>
+</div>
+<div id="scz" class="section level2">
+<h2><span class="header-section-number">3.6</span> SCZ</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">file_path &lt;-
+<span class="st">  </span><span class="kw">file.path</span>(
+    gwas_dir,
+    <span class="st">&quot;SCZ2018/RS_clozuk_pgc2.meta.sumstats.txt&quot;</span>
+  )
+
+<span class="kw">fread</span>(file_path, <span class="dt">nrow =</span> <span class="dv">6</span>)</code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["SNP"],"name":[1],"type":["chr"],"align":["left"]},{"label":["BP"],"name":[2],"type":["int"],"align":["right"]},{"label":["A1"],"name":[3],"type":["chr"],"align":["left"]},{"label":["A2"],"name":[4],"type":["chr"],"align":["left"]},{"label":["Freq.A1"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["CHR"],"name":[6],"type":["int"],"align":["right"]},{"label":["OR"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["SE"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["P"],"name":[9],"type":["dbl"],"align":["right"]}],"data":[{"1":"rs10000000","2":"40088896","3":"A","4":"T","5":"0.9414","6":"4","7":"1.00170","8":"0.0219730","9":"0.9394"},{"1":"rs1000000","2":"126890980","3":"G","4":"A","5":"0.7763","6":"12","7":"1.01950","8":"0.0115590","9":"0.0954"},{"1":"rs10000003","2":"57561647","3":"A","4":"G","5":"0.2972","6":"4","7":"0.99938","8":"0.0105050","9":"0.9528"},{"1":"rs10000005","2":"85161558","3":"G","4":"A","5":"0.4115","6":"4","7":"1.01050","8":"0.0098097","9":"0.2889"},{"1":"rs10000006","2":"108826383","3":"T","4":"C","5":"0.9761","6":"4","7":"0.96796","8":"0.0262540","9":"0.2149"},{"1":"rs10000008","2":"172776204","3":"C","4":"T","5":"0.9841","6":"4","7":"0.93949","8":"0.0440150","9":"0.1561"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<ul>
+<li><ul>
+<li>N not defined for study, therefore will add column with N = 40,675 cases + 64,643 controls = 105318</li>
+</ul></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">SCZ &lt;-
 <span class="st">  </span><span class="kw">fread</span>(file_path) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(
-    <span class="dt">SNP =</span> stringr<span class="op">::</span><span class="kw">str_replace</span>(SNP, <span class="st">&quot;_.*&quot;</span>, <span class="st">&quot;&quot;</span>)
+    <span class="dt">N =</span> <span class="dv">40675</span> <span class="op">+</span><span class="st"> </span><span class="dv">64643</span>
   ) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">inner_join</span>(
-    <span class="kw">fread</span>(<span class="st">&quot;/data/LDScore/GWAS/PSP2019_Progression/PSP2019_Progression_SNPfreq.txt&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">      </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(
-        <span class="dt">SNP =</span> stringr<span class="op">::</span><span class="kw">str_replace</span>(SNP, <span class="st">&quot;_.*&quot;</span>, <span class="st">&quot;&quot;</span>)
-      ),
-    <span class="dt">by =</span> <span class="st">&quot;SNP&quot;</span>
-  ) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">MarkerName =</span> SNP) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">separate</span>(<span class="dt">col =</span> <span class="st">&quot;MarkerName&quot;</span>, <span class="dt">into =</span> <span class="kw">c</span>(<span class="st">&quot;CHR&quot;</span>, <span class="st">&quot;BP&quot;</span>, <span class="st">&quot;A2&quot;</span>, <span class="st">&quot;A1&quot;</span>), <span class="dt">remove =</span> F) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(
-    <span class="dt">CHR =</span> <span class="kw">str_replace</span>(CHR, <span class="st">&quot;x&quot;</span>, <span class="st">&quot;&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">      </span><span class="kw">as.integer</span>(),
-    <span class="dt">BP =</span> <span class="kw">as.integer</span>(BP)
-  ) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>colochelpR<span class="op">::</span><span class="kw">convert_loc_to_rs</span>(
-    <span class="dt">df =</span> .,
-    dbsnp_<span class="dv">144</span>
-  ) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(MarkerName, CHR, BP, SNP, A1, A2, MAF, <span class="dt">BETA =</span> Coeff, <span class="dt">SE =</span> se, <span class="dt">P =</span> Pvalue, N) <span class="co"># ends with 4827258 rows</span>
-
-<span class="co"># Function colochelpR::convert_loc_to_rs does not remove CHR:BP associated with more than one rs id</span>
-<span class="co"># Nor does it remove CHR:BP locations that do not have associated rs ids (left as NA)</span>
-<span class="co"># Thus, will remove NAs and remove duplicated CHR:BP</span>
-PSP_prog &lt;-
-<span class="st">  </span>PSP_prog <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(MarkerName) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">any</span>(<span class="kw">row_number</span>() <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>MarkerName) <span class="op">%&gt;%</span>
-<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">drop_na</span>(SNP) <span class="co"># ends with 4779762</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(
+    CHR, BP, SNP, A1, A2, 
+    <span class="dt">MAF =</span> Freq.A1, 
+    OR, SE, P, N
+    )
 
 <span class="kw">fwrite</span>(
-  PSP_prog,
+  SCZ,
   stringr<span class="op">::</span><span class="kw">str_c</span>(
     gwas_dir,
-    <span class="st">&quot;PSP2019_Progression/PSP2019.Progression&quot;</span>,
-    lava_ext
-  ),
-  <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>
-)</code></pre></div>
-</div>
-<div id="rbd" class="section level2">
-<h2><span class="header-section-number">3.8</span> RBD</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">file_path &lt;-<span class="st"> </span><span class="kw">file.path</span>(gwas_dir, <span class="st">&quot;RBD2020/RBD2020.txt&quot;</span>)
-
-<span class="kw">fread</span>(file_path, <span class="dt">nrows =</span> <span class="dv">6</span>)</code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["MarkerName"],"name":[1],"type":["chr"],"align":["left"]},{"label":["A1"],"name":[2],"type":["chr"],"align":["left"]},{"label":["A2"],"name":[3],"type":["chr"],"align":["left"]},{"label":["MAF"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["beta"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["se"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["P-value"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["Direction"],"name":[8],"type":["chr"],"align":["left"]},{"label":["Zscore"],"name":[9],"type":["dbl"],"align":["right"]}],"data":[{"1":"1:155205634","2":"t","3":"c","4":"0.9965","5":"-1.0449","6":"0.1636","7":"1.683e-10","8":"--","9":"-6.3869200"},{"1":"10:100000625","2":"a","3":"g","4":"0.5670","5":"0.0300","6":"0.0282","7":"2.879e-01","8":"++","9":"1.0638300"},{"1":"10:100000645","2":"a","3":"c","4":"0.7955","5":"-0.0104","6":"0.0346","7":"7.634e-01","8":"+-","9":"-0.3005780"},{"1":"10:100001867","2":"t","3":"c","4":"0.0139","5":"-0.0118","6":"0.1407","7":"9.331e-01","8":"-+","9":"-0.0838664"},{"1":"10:100002464","2":"t","3":"c","4":"0.9861","5":"0.1270","6":"0.1440","7":"3.776e-01","8":"++","9":"0.8819440"},{"1":"10:100003242","2":"t","3":"g","4":"0.8824","5":"-0.0428","6":"0.0426","7":"3.154e-01","8":"--","9":"-1.0046900"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-<ul>
-<li>Will need to split <code>MarkerName</code> into CHR and BP. This can then be used to attach RS IDs.</li>
-<li>Will need to add on an N column. Total N for study = 2,843 cases + 139,363 controls = 142206.</li>
-<li>Allele columns are both lower case. Will make these upper case, to match other GWASs.</li>
-<li>A few columns will also need renaming.</li>
-</ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">RBD &lt;-
-<span class="st">  </span><span class="kw">fread</span>(file_path) <span class="op">%&gt;%</span>
-<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">separate</span>(<span class="dt">col =</span> <span class="st">&quot;MarkerName&quot;</span>, <span class="dt">into =</span> <span class="kw">c</span>(<span class="st">&quot;CHR&quot;</span>, <span class="st">&quot;BP&quot;</span>), <span class="dt">remove =</span> F) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(
-    <span class="dt">N =</span> <span class="dv">2843</span> <span class="op">+</span><span class="st"> </span><span class="dv">139363</span>,
-    <span class="dt">A1 =</span> stringr<span class="op">::</span><span class="kw">str_to_upper</span>(A1),
-    <span class="dt">A2 =</span> stringr<span class="op">::</span><span class="kw">str_to_upper</span>(A2)
-  ) <span class="op">%&gt;%</span>
-<span class="st">  </span>colochelpR<span class="op">::</span><span class="kw">convert_loc_to_rs</span>(
-    <span class="dt">df =</span> .,
-    dbsnp_<span class="dv">144</span>
-  ) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(MarkerName, CHR, BP, SNP, A1, A2, MAF, <span class="dt">BETA =</span> beta, <span class="dt">SE =</span> se, Zscore, <span class="dt">P =</span> <span class="st">`</span><span class="dt">P-value</span><span class="st">`</span>, N)
-
-<span class="co"># Function colochelpR::convert_loc_to_rs does not remove CHR:BP associated with more than one rs id</span>
-<span class="co"># Nor does it remove CHR:BP locations that do not have associated rs ids (left as NA)</span>
-<span class="co"># Thus, will remove NAs and remove duplicated CHR:BP</span>
-RBD &lt;-
-<span class="st">  </span>RBD <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(MarkerName) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">any</span>(<span class="kw">row_number</span>() <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>MarkerName) <span class="op">%&gt;%</span>
-<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">drop_na</span>(SNP)
-
-<span class="kw">fwrite</span>(
-  RBD,
-  stringr<span class="op">::</span><span class="kw">str_c</span>(
-    gwas_dir,
-    <span class="st">&quot;RBD2020/RBD2020&quot;</span>,
-    lava_ext
-  ),
-  <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>
-)</code></pre></div>
-</div>
-<div id="wmh" class="section level2">
-<h2><span class="header-section-number">3.9</span> WMH</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">file_path &lt;-<span class="st"> </span><span class="kw">file.path</span>(gwas_dir, <span class="st">&quot;WMH2018/WMH2018_GWAS.txt.zip&quot;</span>)
-
-<span class="kw">fread</span>(<span class="kw">unzip</span>(file_path) , <span class="dt">nrows =</span> <span class="dv">6</span>)</code></pre></div>
-<ul>
-<li>Will need to add on an N column. Total N for study N = 11,226.</li>
-<li>Allele columns are both lower case. Will make these upper case, to match other GWASs.</li>
-<li>A few columns will also need renaming.</li>
-</ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">WMH &lt;-
-<span class="st">  </span><span class="kw">fread</span>(<span class="kw">unzip</span>(file_path)) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(
-    <span class="dt">N =</span> <span class="dv">11226</span>,
-    <span class="dt">A1 =</span> stringr<span class="op">::</span><span class="kw">str_to_upper</span>(A1),
-    <span class="dt">A2 =</span> stringr<span class="op">::</span><span class="kw">str_to_upper</span>(A2)
-  ) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(CHR, BP, SNP, A1, A2, <span class="dt">BETA =</span> beta, SE, <span class="dt">P =</span> pval, N)
-
-<span class="kw">fwrite</span>(
-  WMH,
-  stringr<span class="op">::</span><span class="kw">str_c</span>(
-    gwas_dir,
-    <span class="st">&quot;WMH2018/WMH2018&quot;</span>,
+    <span class="st">&quot;SCZ2018/SCZ2018&quot;</span>,
     lava_ext
   ),
   <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>
@@ -831,14 +672,17 @@ RBD &lt;-
 )</code></pre></div>
 <pre><code>##  [1] &quot;AD2019/AD_sumstats_Jansenetal_2019sept.lava.gz&quot;      
 ##  [2] &quot;ALS2018/ALS2018.lava.gz&quot;                             
-##  [3] &quot;FTD2014/FTD2014.bv.lava.gz&quot;                          
-##  [4] &quot;FTD2014/FTD2014.meta.lava.gz&quot;                        
-##  [5] &quot;LBD2020/LBD2020_hg19_rsids.lava.gz&quot;                  
-##  [6] &quot;PD2018_AOO/PD2018_AOO.lava.gz&quot;                       
-##  [7] &quot;PD2019_meta5_ex23andMe/PD2019_ex23andMe_hg19.lava.gz&quot;
-##  [8] &quot;PSP2019_Progression/PSP2019.Progression.lava.gz&quot;     
-##  [9] &quot;RBD2020/RBD2020.lava.gz&quot;                             
-## [10] &quot;WMH2018/WMH2018.lava.gz&quot;</code></pre>
+##  [3] &quot;BIP2021/BIP2021.lava.gz&quot;                             
+##  [4] &quot;FTD2014/FTD2014.bv.lava.gz&quot;                          
+##  [5] &quot;FTD2014/FTD2014.meta.lava.gz&quot;                        
+##  [6] &quot;LBD2020/LBD2020_hg19_rsids.lava.gz&quot;                  
+##  [7] &quot;MDD2019_ex23andMe/MDD2019.lava.gz&quot;                   
+##  [8] &quot;PD2018_AOO/PD2018_AOO.lava.gz&quot;                       
+##  [9] &quot;PD2019_meta5_ex23andMe/PD2019_ex23andMe_hg19.lava.gz&quot;
+## [10] &quot;PSP2019_Progression/PSP2019.Progression.lava.gz&quot;     
+## [11] &quot;RBD2020/RBD2020.lava.gz&quot;                             
+## [12] &quot;SCZ2018/SCZ2018.lava.gz&quot;                             
+## [13] &quot;WMH2018/WMH2018.lava.gz&quot;</code></pre>
 </div>
 <div id="session-info" class="section level1">
 <h1><span class="header-section-number">5</span> Session info</h1>
@@ -858,7 +702,7 @@ RBD &lt;-
 ##  collate  en_GB.UTF-8                 
 ##  ctype    en_GB.UTF-8                 
 ##  tz       Europe/London               
-##  date     2021-06-09                  
+##  date     2021-06-16                  
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 ##  package                          * version    date       lib source                                

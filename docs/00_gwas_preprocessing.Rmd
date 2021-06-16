@@ -14,7 +14,7 @@ output:
     number_sections: true
 ---
 
-```{r setup, message = F}
+```{r setup, include = F, message = F}
 
 library(colochelpR) # Helper package with wrapper functions. See: https://github.com/RHReynolds/colochelpR.
 library(data.table) # Loaded for fread(), which permits fast loading of files with many rows
