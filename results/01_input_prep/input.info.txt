@@ -1,0 +1,7 @@
+phenotype	cases	controls	filename
+AD2019	71880	383378	/data/LDScore/GWAS/AD2019/AD_sumstats_Jansenetal_2019sept.lava.gz
+BIP2021	41917	371549	/data/LDScore/GWAS/BIP2021/BIP2021.lava.gz
+LBD2020	2591	4027	/data/LDScore/GWAS/LBD2020/LBD2020_hg19_rsids.lava.gz
+MDD2019	170756	329443	/data/LDScore/GWAS/MDD2019_ex23andMe/MDD2019.lava.gz
+PD2019.meta5.ex23andMe	33674	449056	/data/LDScore/GWAS/PD2019_meta5_ex23andMe/PD2019_ex23andMe_hg19.lava.gz
+SCZ2018	40675	64643	/data/LDScore/GWAS/SCZ2018/SCZ2018.lava.gz

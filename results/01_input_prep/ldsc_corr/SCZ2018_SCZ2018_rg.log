@@ -1,0 +1,65 @@
+*********************************************************************
+* LD Score Regression (LDSC)
+* Version 1.0.1
+* (C) 2014-2019 Brendan Bulik-Sullivan and Hilary Finucane
+* Broad Institute of MIT and Harvard / MIT Department of Mathematics
+* GNU General Public License v3
+*********************************************************************
+Call: 
+./ldsc.py \
+--ref-ld-chr /data/LDScore/Reference_Files/eur_w_ld_chr/ \
+--out /home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/01_input_prep/ldsc_corr/SCZ2018_SCZ2018_rg \
+--rg /data/LDScore/GWAS//SCZ2018/SCZ2018.sumstats.gz,/data/LDScore/GWAS//SCZ2018/SCZ2018.sumstats.gz \
+--w-ld-chr /data/LDScore/Reference_Files/eur_w_ld_chr/ 
+
+Beginning analysis at Fri Jun 11 13:55:20 2021
+Reading summary statistics from /data/LDScore/GWAS//SCZ2018/SCZ2018.sumstats.gz ...
+Read summary statistics for 1156183 SNPs.
+Reading reference panel LD Score from /data/LDScore/Reference_Files/eur_w_ld_chr/[1-22] ... (ldscore_fromlist)
+Read reference panel LD Scores for 1290028 SNPs.
+Removing partitioned LD Scores with zero variance.
+Reading regression weight LD Score from /data/LDScore/Reference_Files/eur_w_ld_chr/[1-22] ... (ldscore_fromlist)
+Read regression weight LD Scores for 1290028 SNPs.
+After merging with reference panel LD, 1149995 SNPs remain.
+After merging with regression SNP LD, 1149995 SNPs remain.
+Computing rg for phenotype 2/2
+Reading summary statistics from /data/LDScore/GWAS//SCZ2018/SCZ2018.sumstats.gz ...
+Read summary statistics for 1217311 SNPs.
+After merging with summary statistics, 1149995 SNPs remain.
+1149995 SNPs with valid alleles.
+
+Heritability of phenotype 1
+---------------------------
+Total Observed scale h2: 0.4217 (0.015)
+Lambda GC: 1.6831
+Mean Chi^2: 1.932
+Intercept: 1.0533 (0.0121)
+Ratio: 0.0572 (0.013)
+
+Heritability of phenotype 2/2
+-----------------------------
+Total Observed scale h2: 0.4217 (0.015)
+Lambda GC: 1.6831
+Mean Chi^2: 1.932
+Intercept: 1.0533 (0.0121)
+Ratio: 0.0572 (0.013)
+
+Genetic Covariance
+------------------
+Total Observed scale gencov: 0.4217 (0.015)
+Mean z1*z2: 1.932
+Intercept: 1.0533 (0.0121)
+
+Genetic Correlation
+-------------------
+Genetic Correlation: 1. (1.8166e-08)
+Z-score: 55047950.1835
+P: 0.
+
+
+Summary of Genetic Correlation Results
+                                              p1                                               p2  rg          se              z  p  h2_obs  h2_obs_se  h2_int  h2_int_se  gcov_int  gcov_int_se
+ /data/LDScore/GWAS//SCZ2018/SCZ2018.sumstats.gz  /data/LDScore/GWAS//SCZ2018/SCZ2018.sumstats.gz   1  1.8166e-08  55047950.1835  0  0.4217      0.015  1.0533     0.0121    1.0533       0.0121
+
+Analysis finished at Fri Jun 11 13:55:41 2021
+Total time elapsed: 21.33s

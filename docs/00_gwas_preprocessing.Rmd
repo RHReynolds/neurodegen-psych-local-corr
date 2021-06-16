@@ -1,0 +1,362 @@
+---
+title: "GWAS preprocessing"
+author: 
+- name: "Regina H. Reynolds"
+  affiliation: UCL
+output: 
+  html_document:
+    code_folding: show
+    theme: paper
+    highlight: kate
+    df_print: paged
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+```{r setup, message = F}
+
+library(colochelpR) # Helper package with wrapper functions. See: https://github.com/RHReynolds/colochelpR.
+library(data.table) # Loaded for fread(), which permits fast loading of files with many rows
+library(here) # For file path construction
+library(tidyverse) # For tidy manipulation of data
+library(SNPlocs.Hsapiens.dbSNP144.GRCh37) # Used to add rs ids to GRCh37 genomic locations
+library(stringr) # For string manipulation
+library(rutils) # Own package with common R utility functions, including liftover of genomic coords. See: https://github.com/RHReynolds/rutils.
+
+# Load dbsnp
+dbsnp_144 <- SNPlocs.Hsapiens.dbSNP144.GRCh37
+
+# Common file paths and extensions
+gwas_dir <- "/data/LDScore/GWAS/"
+lava_ext <- ".lava.gz"
+
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+```
+
+> Aim: preprocess GWASs for use with LAVA and LDSC
+
+# Install dependencies
+To run this .Rmd requires packages that are not available from CRAN/Bioconductor. These include `colochelpR` and `rutils`. If these are not already installed, run the code chunk below.
+
+```{r install-dependencies, eval = F}
+
+devtools::install_github("RHReynolds/colochelpR")
+devtools::install_github("RHReynolds/rutils")
+```
+
+# Requirements for summary statistics {.tabset}
+
+## LAVA
+
+- Summary statistics must have the following columns:
+    - **SNP / ID / SNPID_UKB/ SNPID / MarkerName / RSID / RSID_UKB**: SNP IDs
+    - **A1 / ALT**: effect allele
+    - **A2 / REF**: reference allele
+    - **N / NMISS / OBS_CT / N_analyzed**: number of samples
+    - **Z / T / STAT / Zscore**: if provided, no p-values or coefficients are needed; otherwise, please provide both:
+    - **B / BETA / OR / logOdds**: effect size coefficients
+    - **P**: p-values
+- In addition, if using CHR:BP-based locations, we must ensure that all of the summary statistics have the same genome build (i.e. GRCh37). 
+
+## LDSC 
+- Provided the appropriate columns are available for LAVA, prepped files should be valid to use with LDSC.
+- LDSC requires RS IDs in order to pre-process for LDSC, so ensure prepped files contain RS IDs.
+
+# Pre-processing GWASs {.tabset}
+
+- As both tools can use RS IDs and these are transferrable across genome builds (not to mention, many of the GWASs have already been prepped for LDSC using RS IDs), we will use RS IDs as our SNP column.
+- We will ensure there are CHR and BP columns to indicate genomic coordinates, which we may wish to overlap with the [LAVA partitions](https://github.com/cadeleeuw/lava-partitioning)).
+- Where to output these files?
+    - **We will save these LAVA-formatted GWASs using the suffix `.lava.gz` in the commmon GWAS folder (for lab re-use).** This will also make it easier to find their file paths later, using the `list.files()` function.
+    - **Remember to modify directory readmes to reflect addition of new files.**
+
+## AD
+```{r AD-check-cols}
+
+file_path <-
+  file.path(
+    gwas_dir,
+    "AD2019/AD_sumstats_Jansenetal_2019sept.txt.gz"
+  )
+
+# Read in first few rows to check data format
+fread(file_path, nrows = 6)
+```
+
+- All columns present. Just need to rename `Neff` to one of the accepted LAVA inputs.
+
+```{r AD-preprocess, eval = F}
+
+AD <-
+  fread(file_path) %>%
+  dplyr::select(CHR, BP, SNP, A1, A2, MAF = EAF, BETA, SE, Z, P, N = Neff)
+
+fwrite(AD,
+  file =
+    stringr::str_c(
+      gwas_dir,
+      "AD2019/AD_sumstats_Jansenetal_2019sept",
+      lava_ext
+    ),
+  sep = "\t"
+)
+```
+
+## LBD
+```{r LBD-check-cols}
+
+file_path <-
+  file.path(
+    gwas_dir,
+    "LBD2020/LBD2020.txt"
+  )
+
+fread(file_path, nrows = 6)
+```
+
+- Already know that this GWAS is based on GRCh38. Therefore, will need liftover from GRCh38 to GRCh37. To do this, we will use `rutils::liftover_coord()`.
+- Will also add a SNP column with RS ID. 
+- Finally, let's remove some of the extra columns to limit the output file size.
+
+```{r LBD-preprocess , eval = F}
+
+LBD <-
+  fread(file_path) %>%
+  dplyr::select(CHR = CHROM, BP = POS, A1, A2, MAF = A1_FREQ, BETA, SE, Z = Z_STAT, P, N = OBS_CT) %>%
+  dplyr::mutate(CHR = as.factor(CHR)) %>%
+  rutils::liftover_coord(
+    df = .,
+    path_to_chain = "/data/liftover/hg38/hg38ToHg19.over.chain"
+  ) %>%
+  colochelpR::convert_loc_to_rs(
+    df = .,
+    dbsnp_144
+  )
+
+# Function colochelpR::convert_loc_to_rs does not remove CHR:BP associated with more than one rs id
+# Nor does it remove CHR:BP locations that do not have associated rs ids (left as NA)
+# Thus, will remove NAs and remove duplicated CHR:BP
+LBD <-
+  LBD %>%
+  dplyr::mutate(CHR_BP = stringr::str_c(CHR, ":", BP)) %>%
+  dplyr::group_by(CHR_BP) %>%
+  dplyr::filter(!any(row_number() > 1))  %>%
+  dplyr::ungroup() %>%
+  dplyr::select(-CHR_BP) %>%
+  tidyr::drop_na(SNP)
+
+fwrite(LBD,
+  stringr::str_c(
+    gwas_dir,
+    "LBD2020/LBD2020_hg19_rsids",
+    lava_ext
+  ),
+  sep = "\t"
+)
+```
+
+- It's worth noting that both processes may result in some loss of SNPs (see comparison of file line count below). This may result from:
+    1. A location not being lifted over between builds.
+    2. A location may not have an associated RS ID.
+
+```{r LBD-check-n-lines}
+
+n_original <- R.utils::countLines("/data/LDScore/GWAS/LBD2020/LBD2020.txt")
+n_liftover <- R.utils::countLines("/data/LDScore/GWAS/LBD2020/LBD2020_hg19_rsids.lava.gz")
+
+print(str_c("Number of lines in original file: ", n_original))
+print(str_c("Number of lines in modified file: ", n_liftover))
+```
+
+## PD
+```{r PD-check-cols}
+
+file_path <-
+  file.path(
+    gwas_dir,
+    "PD2019_meta5_ex23andMe/PD2019_ex23andMe_hg19.txt.gz"
+  )
+
+fread(file_path, nrows = 6)
+```
+
+- All columns are present, but a few need renaming.
+- Number of samples currently split into cases and controls. These need to be summed to a total.
+
+```{r PD-preprocess, eval = F}
+
+PD <-
+  fread(file_path) %>%
+  dplyr::mutate(N = N_cases + N_controls) %>%
+  dplyr::select(CHR, BP, SNP, A1, A2, MAF = freq, BETA = b, SE = se, P = p, N)
+
+fwrite(
+  PD,
+  stringr::str_c(
+    gwas_dir,
+    "PD2019_meta5_ex23andMe/PD2019_ex23andMe_hg19",
+    lava_ext
+  ),
+  sep = "\t"
+)
+```
+
+## BIP
+```{r BIP-check-cols}
+
+file_path <-
+  file.path(
+    gwas_dir,
+    "BIP2021/pgc-bip2021-all.vcf.tsv.gz"
+  )
+
+# First 72 lines are written text, therefore must remove these to format summary statistics
+fread(file_path, skip = 72, nrow = 6)
+```
+
+- All columns are present, but a few need renaming.
+- Frequency of A1 not provided across all cohorts, but instead across cases and controls. Therefore, averaged the FCAS and FCON to get MAF.
+- Number of samples currently split into cases and controls. These need to be summed to a total.
+
+```{r BIP-preprocess, eval = F}
+
+BIP <-
+  fread(file_path, skip = 72) %>%
+  dplyr::mutate(
+    MAF = (FCAS + FCON)/2,
+    N = NCAS + NCON
+    ) %>%
+  dplyr::select(
+    CHR = `#CHROM`, 
+    BP = POS, 
+    SNP = ID, 
+    A1, A2, MAF, BETA, SE, 
+    P = PVAL, 
+    N
+    )
+
+fwrite(
+  BIP,
+  stringr::str_c(
+    gwas_dir,
+    "BIP2021/BIP2021",
+    lava_ext
+  ),
+  sep = "\t"
+)
+```
+
+## MDD
+```{r MDD-check-cols}
+
+file_path <-
+  file.path(
+    gwas_dir,
+    "MDD2019_ex23andMe/PGC_UKB_depression_genome-wide.txt.gz"
+  )
+
+fread(file_path, nrow = 6)
+```
+
+- Missing chromosome and base pair positions for SNPs, 
+- A1 and A2 are lowercase, so will change to upper case.
+- N not defined for study, therefore will add column with N = 170,756 cases +	329,443 controls = `r c(170756 + 329443) %>% format(scientific = F)`
+
+```{r MDD-preprocess, eval = F}
+
+MDD <-
+  fread(file_path) %>%
+  dplyr::mutate(
+    A1 = stringr::str_to_upper(A1),
+    A2 = stringr::str_to_upper(A2),
+    N = 170756 + 329443
+    ) %>%
+  colochelpR::convert_rs_to_loc(
+    SNP_column = "MarkerName", 
+    dbSNP = dbsnp_144
+    ) %>% 
+  tidyr::separate(
+    col = "loc",
+    into = c("CHR", "BP")
+  ) %>% 
+  dplyr::select(
+    CHR, BP, 
+    SNP = MarkerName, 
+    A1, A2, 
+    MAF = Freq, 
+    logOdds = LogOR, 
+    SE = StdErrLogOR, 
+    P, N
+    )
+
+fwrite(
+  MDD,
+  stringr::str_c(
+    gwas_dir,
+    "MDD2019_ex23andMe/MDD2019",
+    lava_ext
+  ),
+  sep = "\t"
+)
+```
+
+## SCZ
+```{r SCZ-check-cols}
+
+file_path <-
+  file.path(
+    gwas_dir,
+    "SCZ2018/RS_clozuk_pgc2.meta.sumstats.txt"
+  )
+
+fread(file_path, nrow = 6)
+```
+
+- - N not defined for study, therefore will add column with N = 40,675 cases + 64,643 controls = `r c(40675 + 64643) %>% format(scientific = F)`
+
+
+```{r SCZ-preprocess, eval = F}
+
+SCZ <-
+  fread(file_path) %>% 
+  dplyr::mutate(
+    N = 40675 + 64643
+  ) %>% 
+  dplyr::select(
+    CHR, BP, SNP, A1, A2, 
+    MAF = Freq.A1, 
+    OR, SE, P, N
+    )
+
+fwrite(
+  SCZ,
+  stringr::str_c(
+    gwas_dir,
+    "SCZ2018/SCZ2018",
+    lava_ext
+  ),
+  sep = "\t"
+)
+```
+
+# Listing available LAVA files
+```{r list-lava-files}
+
+list.files(
+  path = gwas_dir,
+  full.names = F,
+  recursive = T,
+  pattern = lava_ext
+)
+```
+
+# Session info
+```{r session-info}
+# Session info
+library("sessioninfo")
+
+options(width = 120)
+
+session_info()
+```

@@ -1,0 +1,65 @@
+*********************************************************************
+* LD Score Regression (LDSC)
+* Version 1.0.1
+* (C) 2014-2019 Brendan Bulik-Sullivan and Hilary Finucane
+* Broad Institute of MIT and Harvard / MIT Department of Mathematics
+* GNU General Public License v3
+*********************************************************************
+Call: 
+./ldsc.py \
+--ref-ld-chr /data/LDScore/Reference_Files/eur_w_ld_chr/ \
+--out /home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/01_input_prep/ldsc_corr/SCZ2018_MDD2019_rg \
+--rg /data/LDScore/GWAS//SCZ2018/SCZ2018.sumstats.gz,/data/LDScore/GWAS//MDD2019_ex23andMe/MDD2019.sumstats.gz \
+--w-ld-chr /data/LDScore/Reference_Files/eur_w_ld_chr/ 
+
+Beginning analysis at Fri Jun 11 13:54:41 2021
+Reading summary statistics from /data/LDScore/GWAS//SCZ2018/SCZ2018.sumstats.gz ...
+Read summary statistics for 1156183 SNPs.
+Reading reference panel LD Score from /data/LDScore/Reference_Files/eur_w_ld_chr/[1-22] ... (ldscore_fromlist)
+Read reference panel LD Scores for 1290028 SNPs.
+Removing partitioned LD Scores with zero variance.
+Reading regression weight LD Score from /data/LDScore/Reference_Files/eur_w_ld_chr/[1-22] ... (ldscore_fromlist)
+Read regression weight LD Scores for 1290028 SNPs.
+After merging with reference panel LD, 1149995 SNPs remain.
+After merging with regression SNP LD, 1149995 SNPs remain.
+Computing rg for phenotype 2/2
+Reading summary statistics from /data/LDScore/GWAS//MDD2019_ex23andMe/MDD2019.sumstats.gz ...
+Read summary statistics for 1217311 SNPs.
+After merging with summary statistics, 1149995 SNPs remain.
+1131288 SNPs with valid alleles.
+
+Heritability of phenotype 1
+---------------------------
+Total Observed scale h2: 0.4214 (0.0147)
+Lambda GC: 1.6869
+Mean Chi^2: 1.9401
+Intercept: 1.0546 (0.0118)
+Ratio: 0.058 (0.0125)
+
+Heritability of phenotype 2/2
+-----------------------------
+Total Observed scale h2: 0.0605 (0.0025)
+Lambda GC: 1.453
+Mean Chi^2: 1.5942
+Intercept: 0.9985 (0.0103)
+Ratio < 0 (usually indicates GC correction).
+
+Genetic Covariance
+------------------
+Total Observed scale gencov: 0.0525 (0.0041)
+Mean z1*z2: 0.2641
+Intercept: 0.037 (0.0078)
+
+Genetic Correlation
+-------------------
+Genetic Correlation: 0.3289 (0.0216)
+Z-score: 15.236
+P: 2.0393e-52
+
+
+Summary of Genetic Correlation Results
+                                              p1                                                         p2      rg      se       z           p  h2_obs  h2_obs_se  h2_int  h2_int_se  gcov_int  gcov_int_se
+ /data/LDScore/GWAS//SCZ2018/SCZ2018.sumstats.gz  /data/LDScore/GWAS//MDD2019_ex23andMe/MDD2019.sumstats.gz  0.3289  0.0216  15.236  2.0393e-52  0.0605     0.0025  0.9985     0.0103     0.037       0.0078
+
+Analysis finished at Fri Jun 11 13:54:57 2021
+Total time elapsed: 16.71s

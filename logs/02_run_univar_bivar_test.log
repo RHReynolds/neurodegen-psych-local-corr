@@ -1,0 +1,113 @@
+nohup: ignoring input
+here() starts at /home/rreynolds/misc_projects/neurodegen-psych-local-corr
+Running LAVA version 0.0.6
+-- Attaching packages --------------------------------------- tidyverse 1.3.0 --
+v ggplot2 3.3.2     v purrr   0.3.4
+v tibble  3.0.3     v dplyr   1.0.2
+v tidyr   1.1.1     v stringr 1.4.0
+v readr   1.4.0     v forcats 0.5.1
+-- Conflicts ------------------------------------------ tidyverse_conflicts() --
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()
+$ref_prefix
+[1] "/tools/MAGMA/reference_files/g1000_eur/g1000_eur"
+
+$loc_file
+[1] "/home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/01_input_prep/gwas_filtered.loci"
+
+$info_file
+[1] "/home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/01_input_prep/input.info.txt"
+
+$sample_overlap_file
+[1] "/home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/01_input_prep/sample_overlap.txt"
+
+$phenotypes
+[1] "AD2019"                 "BIP2021"                "LBD2020"               
+[4] "MDD2019"                "PD2019.meta5.ex23andMe" "SCZ2018"               
+
+$output_filename
+[1] "AD2019:BIP2021:LBD2020:MDD2019:PD2019.meta5.ex23andMe:SCZ2018"
+
+[1] "...Reading in sumstats"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "~ 6095761 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 920068 SNPs which could not be aligned, 5175693 remaining"
+[1] "Starting LAVA analysis for 300 loci"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020', 'SCZ2018' in locus 106; Dropping these as they cannot be analysed"
+[1] "..5%"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 131; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'BIP2021' in locus 133; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 195; Dropping these as they cannot be analysed"
+[1] "..10%"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 279; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020', 'SCZ2018' in locus 327; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 375; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020', 'MDD2019' in locus 378; Dropping these as they cannot be analysed"
+[1] "..15%"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 457; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'MDD2019' in locus 470; Dropping these as they cannot be analysed"
+[1] "..20%"
+[1] "Warning: Negative variance estimate for phenotype(s) 'SCZ2018' in locus 559; Dropping these as they cannot be analysed"
+[1] "..25%"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 814; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 815; Dropping these as they cannot be analysed"
+[1] "Fewer than 2 SNPs in locus 816"
+[1] "Warning: Negative variance estimate for phenotype(s) 'MDD2019' in locus 827; Dropping these as they cannot be analysed"
+[1] "..30%"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 950; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 951; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020', 'PD2019.meta5.ex23andMe' in locus 953; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'PD2019.meta5.ex23andMe' in locus 954; Dropping these as they cannot be analysed"
+[1] "..35%"
+[1] "Fewer than 2 SNPs in locus 955"
+[1] "Fewer than 2 SNPs in locus 956"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020', 'PD2019.meta5.ex23andMe' in locus 957; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'MDD2019', 'SCZ2018' in locus 958; Dropping these as they cannot be analysed"
+[1] "Fewer than 2 SNPs in locus 959"
+[1] "Warning: Negative variance estimate for phenotype(s) 'PD2019.meta5.ex23andMe' in locus 960; Dropping these as they cannot be analysed"
+[1] "Fewer than 2 SNPs in locus 962"
+[1] "Fewer than 2 SNPs in locus 963"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020', 'MDD2019', 'PD2019.meta5.ex23andMe' in locus 965; Dropping these as they cannot be analysed"
+[1] "Fewer than 2 SNPs in locus 966"
+[1] "Warning: Negative variance estimate for phenotype(s) 'MDD2019', 'PD2019.meta5.ex23andMe', 'SCZ2018' in locus 968; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 969; Dropping these as they cannot be analysed"
+[1] "..40%"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020', 'PD2019.meta5.ex23andMe', 'SCZ2018' in locus 998; Dropping these as they cannot be analysed"
+[1] "..45%"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 1176; Dropping these as they cannot be analysed"
+[1] "..50%"
+[1] "Warning: Negative variance estimate for phenotype(s) 'MDD2019' in locus 1219; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 1259; Dropping these as they cannot be analysed"
+[1] "..55%"
+[1] "Warning: Negative variance estimate for phenotype(s) 'MDD2019' in locus 1339; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 1392; Dropping these as they cannot be analysed"
+[1] "Fewer than 2 SNPs in locus 1484"
+[1] "..60%"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 1668; Dropping these as they cannot be analysed"
+[1] "..65%"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 1670; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020', 'MDD2019' in locus 1691; Dropping these as they cannot be analysed"
+[1] "..70%"
+[1] "Warning: Negative variance estimate for phenotype(s) 'SCZ2018' in locus 1780; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 1840; Dropping these as they cannot be analysed"
+[1] "..75%"
+[1] "Warning: Negative variance estimate for phenotype(s) 'SCZ2018' in locus 1920; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'MDD2019' in locus 1991; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 2029; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'MDD2019' in locus 2051; Dropping these as they cannot be analysed"
+[1] "..80%"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 2084; Dropping these as they cannot be analysed"
+[1] "..85%"
+[1] "Warning: Negative variance estimate for phenotype(s) 'MDD2019' in locus 2146; Dropping these as they cannot be analysed"
+[1] "Fewer than 2 SNPs in locus 2172"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 2191; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'BIP2021' in locus 2192; Dropping these as they cannot be analysed"
+[1] "Warning: Negative variance estimate for phenotype(s) 'BIP2021' in locus 2207; Dropping these as they cannot be analysed"
+[1] "..90%"
+[1] "Warning: Negative variance estimate for phenotype(s) 'MDD2019' in locus 2217; Dropping these as they cannot be analysed"
+[1] "..95%"
+[1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus 2402; Dropping these as they cannot be analysed"
+[1] "..100%"
+[1] "Done! Analysis output written to /home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/02_univar_bivar_test/AD2019:BIP2021:LBD2020:MDD2019:PD2019.meta5.ex23andMe:SCZ2018.*.lava"

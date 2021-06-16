@@ -1,0 +1,326 @@
+---
+title: "Preparing inputs"
+author: 
+- name: "Regina H. Reynolds"
+  affiliation: UCL
+output: 
+  bookdown::html_document2:
+    figure_caption: yes
+    code_folding: hide
+    theme: paper
+    highlight: kate
+    df_print: paged
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+```{r setup, include = F, message = F}
+
+library(data.table) # Loaded for fread(), which permits fast loading of files with many rows
+library(ggplot2) # For plotting
+library(here) # For file path construction
+library(tidyverse) # For tidy manipulation of data
+library(stringr) # For string manipulation
+
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+
+# Common file paths and extensions
+gwas_dir <- "/data/LDScore/GWAS"
+
+# Set defaults for ggplots 
+theme_rhr <- theme_set(
+  theme_bw(base_family = "Helvetica",
+           base_size = 10) + 
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "top",
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        axis.title.y = element_text(vjust = 0.6),
+        panel.spacing = unit(0.1, "lines"))
+)
+
+```
+
+> Aim: create input files required to run LAVA
+
+# Background
+To run LAVA requires that a number of files have been generated, most important of which are (i) the loci of interest (as defined based either on genomic coordinates or RS ID) and (ii) the sample overlap matrix. As described by the authors in their [pre-print](https://www.biorxiv.org/content/10.1101/2020.12.31.424652v2), loci can be defined in (i) a targeted manner (e.g. follow up of a smaller subset of loci highlighted through GWAS) or (ii) a more agnostic manner (e.g. scanning multiple traits across the entire genome). Our interest stems from (i) the pathological overlap between neurodegenerative diseases pathologically classified by the deposition of specific proteins (i.e. amyloid-$\beta$ in AD, $\alpha$-synuclein in PD and the combination of both in Lewy body dementia); (ii) the higher prevalence of depression in individuals with dementia compared to those without dementia (clinically significant in 35% of the PD population, PMID: [17987654](https://pubmed.ncbi.nlm.nih.gov/17987654/), [30536144](https://pubmed.ncbi.nlm.nih.gov/30536144/)); and (iii) the higher risk of dementia diagnoses in individuals with schizophrenia versus individuals without a history of serious mental illness (PMID: [33688938](https://pubmed.ncbi.nlm.nih.gov/33688938/), [26444987](https://pubmed.ncbi.nlm.nih.gov/26444987/)). Thus, we will begin by evaluating genome-wide significant loci from three neurodenerative disorders (Alzheimer's disease, AD; Lewy body dementia, LBD; and Parkinson's disease, PD), and three neuropsychiatric disorders (bipolar disorder, BIP; major depressive disorder, MDD; and schizophrenia, SCZ). The sample overlap matrix is important as it sample overlap can result in an upward bias of the estimated correlation.
+
+# Methods 
+
+# Install dependencies
+To run some of the scripts within this .Rmd requires packages that are not available from CRAN/Bioconductor. These include `LDSCforRyten`. If these are not already installed, run the code chunk below.
+
+```{r install-dependencies, eval = F}
+
+devtools::install_github("RHReynolds/LDSCforRyten")
+```
+
+## Deriving loci
+
+Genome-wide significant loci (p < 5 x $10^{-8}$) were derived from the latest publicly-available AD, BIP, LBD, MDD, PD and SCZ GWASs. Genome-wide significant loci were overlapped with LD blocks generated in the original LAVA [pre-print](https://www.biorxiv.org/content/10.1101/2020.12.31.424652v2). These LD blocks represent approximately equal sized, semi-independent blocks of SNPs, with a minimum size requirement of 2500 SNPs (resulting in an average block size of around 1Mb). The advantage of using these blocks is that the method used to derive them attempts to determine the most suitable breakpoint in a block of LD (i.e. the point at which LD is the lowest), ensuring that the loci we eventually test are not "breaking" LD chunks in an inappropriate manner. Only those LD blocks containing PD loci were carried forward in downstream analyses.   
+
+## Sample overlap
+Due to the potential sample overlap between some GWASs and its impact on any estimated correlations, we used cross-trait LDSC ([PMID:25642630](https://pubmed.ncbi.nlm.nih.gov/25642630/); [PMID:26414676](https://pubmed.ncbi.nlm.nih.gov/26414676/)) to obtain an estimate of the sample overlap. Summary statistics for each phenotype were pre-processed using LDSC's `munge_sumstats.py` using HapMap Project Phase 3 SNPs ([PMID:20811451](https://pubmed.ncbi.nlm.nih.gov/20811451/)). For the LD reference panel, 1000 Genomes Project Phase 3 European population SNPs were used ([PMID:23128226](https://pubmed.ncbi.nlm.nih.gov/23128226/)). Any shared variance due to sample overlap was modelled as a residual genetic covariance. As described in the LAVA [pre-print](https://www.biorxiv.org/content/10.1101/2020.12.31.424652v2), genetic covariance derived from cross-trait LDSC was used to create a symmetric matrix, with diagonals populated by comparisons of each phenotype with itself. This was then converted to a correlation matrix.
+
+# Supplementary code {.tabset}
+
+Following section includes any intermediary code used in this `.Rmd`.
+
+## Get test loci 
+Note: running this script requires an internet connection, in order to load the LD blocks from from the [LAVA-partitioning](https://github.com/cadeleeuw/lava-partitioning) GitHub repository.
+
+```{r find-overlaps, eval = F}
+
+source(here::here("scripts", "01a_get_test_loci.R"))
+
+```
+
+All LD blocks containing genome-wide signficiant loci are shown below. 
+
+```{r ld-blocks-table}
+
+loci <- 
+  read_delim(
+    file = here::here("results", "01_input_prep", "gwas_filtered.loci"),
+    delim = "\t")
+
+loci %>% 
+  DT::datatable(rownames = FALSE,
+                options = list(scrollX = TRUE),
+                class = 'white-space: nowrap')
+
+```
+
+## Get sample overlap
+
+```{r get-sample-overlaps, eval = F}
+
+source(here::here("scripts", "01b_get_sample_overlaps.R"))
+
+```
+
+Sample overlap matrix shown below.
+
+```{r load-sample-overlap}
+
+sample_overlap <-
+  read.table(
+    file = here::here("results", "01_input_prep", "sample_overlap.txt")
+    )
+
+sample_overlap %>% 
+  as.matrix()
+
+```
+
+## Prepare input info file
+
+```{r get-input-info, eval = F}
+
+phenotypes <- c("AD2019", "LBD2020", "PD2019.meta5.ex23andMe", "BIP2021", "MDD2019", "SCZ2018") %>% sort()
+
+gwas_details <- 
+  readxl::read_xlsx(path = "/data/LDScore/GWAS/LDSC_GWAS_details.xlsx") %>% 
+  dplyr::mutate(
+    Original_name = Original_name %>% 
+      stringr::str_replace_all("_", "\\.")
+    ) %>% 
+  dplyr::select(Original_name, 
+                cases = N_case,
+                controls = N_ctrl)
+
+input_info <- 
+  tibble(
+    phenotype = 
+      list.files(
+        path = gwas_dir,
+        full.names = F,
+        recursive = T,
+        pattern = ".lava.gz"
+      ) %>% 
+      stringr::str_remove("/.*") %>% 
+      stringr::str_replace_all("_", "\\."),
+    filename = 
+      list.files(
+        path = gwas_dir,
+        full.names = T,
+        recursive = T,
+        pattern = ".lava.gz"
+      )
+  ) %>% 
+  dplyr::mutate(
+    phenotype =
+      case_when(phenotype == "MDD2019.ex23andMe" ~ "MDD2019",
+                TRUE ~ phenotype)
+  ) %>% 
+  dplyr::filter(phenotype %in% phenotypes) %>% 
+  dplyr::inner_join(
+    gwas_details,
+    by = c("phenotype" = "Original_name")) %>% 
+  # Continuous phenotypes should have cases = 1 and controls = 0
+  # Continuous phenotypes will have NA in controls
+  # Can use this as conditional criteria
+  dplyr::mutate(
+    cases = 
+      case_when(is.na(controls) ~ 1,
+                TRUE ~ readr::parse_number(cases)),
+    controls = 
+      case_when(is.na(controls) ~ 0,
+                TRUE ~ readr::parse_number(controls))
+  ) %>% 
+  dplyr::select(phenotype, cases, controls, filename)
+
+write_delim(
+  input_info,
+  path = file.path(here::here("results", "01_input_prep"),
+                   "input.info.txt"),
+  delim = "\t"
+)
+
+```
+
+Input info shown below.
+
+```{r load-input-info}
+read_delim(
+  file = file.path(here::here("results", "01_input_prep"),
+                   "input.info.txt"),
+  delim = "\t"
+)
+```
+
+# Results {.tabset}
+
+## Distribution of LD blocks across chromosomes {.tabset}
+
+### Text
+- A total of `r nrow(loci)` LD blocks were found to contain a genome-wide significant locus. 
+- The median block width was `r loci %>% dplyr::mutate(width = STOP-START) %>% .[["width"]] %>% median() %>% as.integer()` base pairs, although this varied across chromosomes (Figure \@ref(fig:ld-blocks-width)).
+- Of the 22 possible chromosomes, `r loci$CHR %>% unique() %>% length()` contained LD blocks with overlapping loci, with the highest number of LD blocks located in chromosome 1 and 6 (Figure \@ref(fig:ld-blocks-chr)). 
+
+### Figures
+
+```{r ld-blocks-width, fig.cap = "Width of LD blocks containing genome-wide significant AD, BIP, LBD, MDD, PD and SCZ loci."}
+
+loci %>% 
+  dplyr::mutate(width = STOP - START) %>% 
+  ggplot(
+    aes(
+      x = as.factor(CHR),
+      y = width)
+    ) +
+  geom_boxplot() +
+  scale_y_sqrt(n.breaks = 10) +
+  labs(x = "Chromosome",
+       y = "Locus width (bp, square root scale)")
+```
+
+```{r ld-blocks-chr, fig.cap = "Number of LD blocks containing genome-wide significant loci per chromosome. Chromosomes have been ordered by the total number of LD blocks in each chromosome."}
+
+loci %>% 
+  dplyr::count(CHR) %>% 
+  ggplot(
+    aes(
+      x = forcats::fct_reorder(.f = as.factor(CHR), 
+                               .x = n, 
+                               .fun = median, 
+                               .desc = TRUE),
+      y = n)
+    ) +
+  geom_col() +
+  labs(x = "Chromosome",
+       y = "Number of LD blocks")
+```
+
+
+## Distribution of genome-wide signficant SNPs across LD blocks {.tabset}
+
+### Text
+- A total of `r readRDS(here::here("results", "01_input_prep", "gwas_filtered_loci.rds")) %>% dplyr::distinct(GWAS_SNP) %>% nrow()` genome-wide significant SNPs were found to overlap an LD block.
+- The number of AD, BIP, LBD, MDD, PD and SCZ SNPs across LD blocks (Figure \@ref(fig:loci-per-block)) and chromosomes (Figure \@ref(fig:loci-per-chr)) was not equally distributed. 
+- It is worth noting that `r readRDS(here::here("results", "01_input_prep", "gwas_filtered_loci.rds")) %>% dplyr::group_by(GWAS, LD_LOC) %>% dplyr::count() %>% dplyr::filter(n <= 5) %>% nrow()` LD blocks were overlapped by $\leq$ 5 genome-wide significant SNPs.
+
+### Figures
+
+```{r loci-per-block, fig.height = 9, fig.cap = "Number of genome-wide significant AD, BIP, LBD, MDD, PD and SCZ SNPs per LD block. Loci have been ordered by the total number of SNPs within the block. Only the top 25 loci (some of which were tied) are shown."}
+
+gwas_loci <- 
+  readRDS(here::here("results", "01_input_prep", "gwas_filtered_loci.rds")) %>% 
+  dplyr::mutate(
+    GWAS = 
+      fct_relevel(
+          GWAS,
+          c("ad", "lbd", "pd", "bip", "mdd", "scz")
+        )
+  )
+
+gwas_loci %>% 
+  dplyr::count(LD_CHR, LD_LOC, GWAS) %>% 
+  dplyr::inner_join(
+    gwas_loci %>% 
+      dplyr::count(LD_CHR, LD_LOC, name = "n_total")
+  ) %>% 
+  dplyr::mutate(
+    LD_LOC = as.factor(LD_LOC)
+  ) %>% 
+  dplyr::slice_max(order_by = n_total, n = 50) %>% 
+  ggplot(
+    aes(
+      x = n,
+      y = forcats::fct_reorder(.f = LD_LOC, 
+                               .x = n, 
+                               .fun = sum, 
+                               .desc = FALSE),
+      fill = GWAS) 
+    ) +
+  geom_col(colour = "black") +
+  scale_fill_brewer(
+    palette = "BrBG",
+    type = "div",
+    name = "GWAS"
+  ) +
+  guides(fill = guide_legend(nrow = 2, byrow = TRUE)) +
+  labs(x = "Number of SNPs",
+       y = "LD block")
+
+```
+
+```{r loci-per-chr, fig.height = 8, fig.cap = "Number of genome-wide significant AD, BIP, LBD, MDD, PD and SCZ SNPs per chromosome."}
+
+gwas_loci %>% 
+  dplyr::count(LD_CHR, GWAS) %>% 
+  dplyr::mutate(
+    LD_CHR = as.factor(LD_CHR)
+  ) %>% 
+  ggplot(
+    aes(
+      x = fct_rev(LD_CHR),
+      y = n,
+      fill = GWAS
+    )
+  ) +
+  geom_col(
+    position = position_dodge2(preserve = "single"),
+    colour = "black"
+    ) +
+  scale_fill_brewer(
+    palette = "BrBG",
+    type = "div"
+  ) +
+  guides(fill = guide_legend(nrow = 2, byrow = TRUE)) +
+  labs(x = "Chromosome",
+       y = "Number of SNPs") + 
+  coord_flip()
+
+```
+
+# Session info
+```{r session-info}
+# Session info
+library("sessioninfo")
+
+options(width = 120)
+
+session_info()
+```
