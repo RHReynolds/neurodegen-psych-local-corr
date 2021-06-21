@@ -127,7 +127,7 @@ global <-
 # Methods {.tabset}
 
 ## Running univariate and bivariate tests
-The detection of valid and interpretable local genetic corrlation ($r_{g}$) requires the presence of sufficient local genetic signal. For this reason, a univariate test was performed as a filtering step for bivariate local $r_{g}$ analyses. Bivariate local correlations were only performed for pairs of traits which both exhibited a significant univariate local genetic signal (p < 0.05/`r nrow(loci)`), where the denominator represents the total number of tested loci). This resulted in a total of **`r nrow(results$bivar)`** bivariate tests spanning **`r results$bivar %>% .[["locus"]] %>% unique() %>% length()`** distinct loci. 
+The detection of valid and interpretable local genetic corrlation ($r_{g}$) requires the presence of sufficient local genetic signal. For this reason, a univariate test was performed as a filtering step for bivariate local $r_{g}$ analyses. Bivariate local correlations were only performed for pairs of traits which both exhibited a significant univariate local genetic signal (p < 0.05/`r nrow(loci)`, where the denominator represents the total number of tested loci). This resulted in a total of **`r nrow(results$bivar)`** bivariate tests spanning **`r results$bivar %>% .[["locus"]] %>% unique() %>% length()`** distinct loci. 
 
 # Results 
 
@@ -568,9 +568,8 @@ circlize::circos.track(
 ## Dissecting loci with signficant phenotype correlations {.tabset}
 
 ### Text
-- The loci with the highest number of significant bivariate local $r_{g}$'s, locus 758 and 1719, were positioned on chromosome 4 and 11, respectively (Figure @\ref(fig:corr-plot)). 
-- The locus on chromosome 4 contains three protein-coding genes (*GPM6A*, *WDR17* and *SPATA4*), while the locus on chromosome 11 contains ten protein-coding genes, one of which includes *DRD2*, which encodes dopamine receptor D2. As perhaps expected, all three neuropsychiatric disorders positively correlate with one another at locus 1719. Somewhat unexpected is the significant negative correlation between LBD and SCZ at locus 1719. 
-- 
+- The loci with the highest number of significant bivariate local $r_{g}$'s, locus 758 and 1719, were positioned on chromosome 4 and 11, respectively (Figure \@ref(fig:corr-plot)). 
+- The locus on chromosome 4 contains three protein-coding genes (*GPM6A*, *WDR17* and *SPATA4*), while the locus on chromosome 11 contains ten protein-coding genes, one of which includes *DRD2*, which encodes dopamine receptor D2. As perhaps expected, all three neuropsychiatric disorders positively correlate with one another at locus 1719. Somewhat unexpected is the significant negative correlation between LBD and SCZ at locus 1719.
 
 ```{r bivar-correlations-locus-count}
 
