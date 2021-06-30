@@ -48,14 +48,6 @@ To run LAVA requires that a number of files have been generated, most important 
 
 # Methods 
 
-# Install dependencies
-To run some of the scripts within this .Rmd requires packages that are not available from CRAN/Bioconductor. These include `LDSCforRyten`. If these are not already installed, run the code chunk below.
-
-```{r install-dependencies, eval = F}
-
-devtools::install_github("RHReynolds/LDSCforRyten")
-```
-
 ## Deriving loci
 
 Genome-wide significant loci (p < 5 x $10^{-8}$) were derived from the latest publicly-available AD, BIP, LBD, MDD, PD and SCZ GWASs. Genome-wide significant loci were overlapped with LD blocks generated in the original LAVA [pre-print](https://www.biorxiv.org/content/10.1101/2020.12.31.424652v2). These LD blocks represent approximately equal sized, semi-independent blocks of SNPs, with a minimum size requirement of 2500 SNPs (resulting in an average block size of around 1Mb). The advantage of using these blocks is that the method used to derive them attempts to determine the most suitable breakpoint in a block of LD (i.e. the point at which LD is the lowest), ensuring that the loci we eventually test are not "breaking" LD chunks in an inappropriate manner. Only those LD blocks containing PD loci were carried forward in downstream analyses.   
@@ -66,6 +58,14 @@ Due to the potential sample overlap between some GWASs and its impact on any est
 # Supplementary code {.tabset}
 
 Following section includes any intermediary code used in this `.Rmd`.
+
+## Install dependencies
+To run some of the scripts within this .Rmd requires packages that are not available from CRAN/Bioconductor. These include `LDSCforRyten`. If these are not already installed, run the code chunk below.
+
+```{r install-dependencies, eval = F}
+
+devtools::install_github("RHReynolds/LDSCforRyten")
+```
 
 ## Get test loci 
 Note: running this script requires an internet connection, in order to load the LD blocks from from the [LAVA-partitioning](https://github.com/cadeleeuw/lava-partitioning) GitHub repository.
