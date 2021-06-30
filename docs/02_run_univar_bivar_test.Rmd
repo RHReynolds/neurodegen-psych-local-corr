@@ -19,11 +19,11 @@ output:
 
 library(circlize) # For chord diagram
 library(ggplot2) # For plotting
+library(ggraph) # For edge diagrams
 library(LAVA) # For LAVA-related functions
 library(tidyverse) # For tidy manipulation of data
 library(stringr) # For string manipulation
 library(rtracklayer) # For loading of reference gtf
-
 
 knitr::opts_chunk$set(echo = T, warning = F, message = F)
 
@@ -120,7 +120,8 @@ results <-
 global <- 
   read_delim(
     file = here::here("results", "01_input_prep", "ldsc_corr", "ldsc_correlations.txt"),
-    delim = "\t") 
+    delim = "\t"
+    ) 
 
 ```
 
@@ -128,6 +129,15 @@ global <-
 
 ## Running univariate and bivariate tests
 The detection of valid and interpretable local genetic corrlation ($r_{g}$) requires the presence of sufficient local genetic signal. For this reason, a univariate test was performed as a filtering step for bivariate local $r_{g}$ analyses. Bivariate local correlations were only performed for pairs of traits which both exhibited a significant univariate local genetic signal (p < 0.05/`r nrow(loci)`, where the denominator represents the total number of tested loci). This resulted in a total of **`r nrow(results$bivar)`** bivariate tests spanning **`r results$bivar %>% .[["locus"]] %>% unique() %>% length()`** distinct loci. 
+
+## Loading plotting functions
+
+```{r load-plot-func}
+
+source(here::here("R", "plots.R"))
+
+```
+
 
 # Results 
 
@@ -318,64 +328,10 @@ phen_count
 
 ```{r global-corr, fig.cap = "Global genetic correlations between pairs of phenotypes. Significant negative and positive correlations are indicated by blue and red fill, respectively. Non-significant correlations (p >= 0.05/n_tests) have a grey fill."}
 
-# Only need first half of matrix, thus must extract appropriate rows from dataframe
-n <- 6
-
-for(i in 1:n){
-  
-  # General formula for extracting appropriate indices
-  index <- (i*n- (n-i)):(i*n)
-  
-  if(i == 1){
-    
-    indices <- index
-    
-  } else{
-    
-    indices <- c(indices, index)
-    
-  }
-  
-}
-
-global %>% 
-  dplyr::mutate(
-    fdr = p.adjust(p, method = "fdr"),
-    rg_fill = 
-      case_when(
-        p < 0.05/nrow(combn) ~ round(rg, 2)
-      ),
-    p1 = p1 %>% 
-      str_replace_all("[:digit:]", "") %>% 
-      str_remove("\\..*"),
-    p2 = p2 %>% 
-      str_replace_all("[:digit:]", "") %>% 
-      str_remove("\\..*")
-    ) %>% 
-  dplyr::slice(indices) %>% 
-  ggplot(
-    aes(
-      x = p1,
-      y = p2 %>% fct_rev(),
-      fill = rg_fill,
-      label = round(rg, 2)
-    )
-  ) +
-  geom_tile(colour = "black") + 
-  geom_text(
-    size = 3
-    ) +
-  coord_fixed() +
-  labs(x = "", y = "", fill = "Global correlation (rg)") +
-  scale_fill_distiller(palette = "RdYlBu", limits = c(-1,1)) +
-  scale_colour_manual(values = c("black", "white")) +
-  guides(colour = F) +
-  theme_rhr +
-  theme( 
-    panel.border = element_blank(),
-    panel.grid = element_blank(),
-    axis.ticks = element_blank()
-  )
+plot_global_corr(
+  global_corr = global,
+  n_phenotypes = 6
+)
 
 ```
 
@@ -428,147 +384,22 @@ bivar_bonf %>%
     ) +
   theme_rhr
 
+```
+
+```{r chord-diagram-rho, fig.height = 6, fig.cap = "Chord diagram showing the number of significant bivariate local genetic correlations (p < 0.05/n_tests) between each of the phenotypes across all loci. Positive and negative correlations are coloured red and blue, respectively."}
+
+plot_bivar_chord_diagram(
+  bivar_corr = bivar_bonf,
+  fct_phen = fct_disease,
+  palette = RColorBrewer::brewer.pal(n = 6, name = "BrBG")
+)
 
 ```
 
-
-```{r chord-diagram, eval = F, fig.height = 6, fig.cap = "Chord diagram showing the number of significant (FDR < 0.05) bivariate local genetic correlations between each of the phenotypes across all loci."}
-
-circos.par(
-  gap.after = 
-    setNames(
-      object = rep(x = 2, 6),
-      nm = results$univ$phen %>% levels()
-    )
-)
-
-phen_count %>% 
-  dplyr::mutate(
-    phen1 = phen1 %>% 
-      fct_relevel(
-        fct_disease
-      ),
-    phen2 = phen2 %>% 
-      fct_relevel(
-        fct_disease
-      )
-  ) %>% 
-  dplyr::arrange(phen1, phen2) %>% 
-  dplyr::rename(from = phen1,
-                to = phen2,
-                value = n) %>% 
-  circlize::chordDiagram(
-    annotationTrack = "grid", 
-    preAllocateTracks = 1, 
-    grid.col = RColorBrewer::brewer.pal(n = 6, name = "BrBG")
-    )
-
-circlize::circos.trackPlotRegion(
-  track.index = 1, panel.fun = function(x, y) {
-    xlim = circlize::get.cell.meta.data("xlim")
-    ylim = circlize::get.cell.meta.data("ylim")
-    sector.name = circlize::get.cell.meta.data("sector.index")
-    circlize::circos.text(
-      mean(xlim), 
-      ylim[1] + 0.2, 
-      cex = 0.75, 
-      sector.name, 
-      facing = "clockwise", 
-      niceFacing = TRUE, 
-      adj = c(0, 0.5)
-    )
-    circlize::circos.axis(
-      h = "top", 
-      major.at = seq(from = 0, to = 50, by = 1),
-      labels = FALSE,
-      labels.cex = 0.5, 
-      minor.ticks = 0,
-      sector.index = sector.name, 
-      major.tick.percentage = 1,
-      labels.niceFacing = TRUE,
-      track.index = 2
-    )
-  }, 
-  bg.border = NA
-  )
-
-```
-
-```{r chord-diagram-rho, fig.height = 6, fig.cap = "Chord diagram showing the number of significant (FDR < 0.05) bivariate local genetic correlations between each of the phenotypes across all loci. Positive and negative correlations are coloured red and blue, respectively."}
-data_to_plot <- 
-  bivar_bonf %>% 
-  dplyr::mutate(
-    phen1 = phen1 %>% 
-      fct_relevel(
-        fct_disease
-      ),
-    phen2 = phen2 %>% 
-      fct_relevel(
-        fct_disease
-      )
-  ) %>% 
-  dplyr::arrange(phen1, rho) %>% 
-  dplyr::select(phen1, phen2, rho)
-
-circos.par(
-  gap.after = 
-    setNames(
-      object = rep(x = 2, 6),
-      nm = results$univ$phen %>% levels()
-    )
-)
-
-data_to_plot %>% 
-  dplyr::select(phen1, phen2) %>% 
-  dplyr::mutate(n = 1) %>% 
-  dplyr::rename(from = phen1,
-                to = phen2,
-                value = n) %>% 
-  circlize::chordDiagram(
-    list(
-      track.height = 
-        c(
-          rownames(data_to_plot),
-          colnames(data_to_plot)
-        ) %>% 
-        length()
-      ),
-    annotationTrack = "grid", 
-    preAllocateTracks = 1,
-    grid.col = RColorBrewer::brewer.pal(n = 6, name = "BrBG"),
-    col = ifelse(data_to_plot$rho > 0, "#de2d26", "#3182bd")
-    )
-
-circlize::circos.track(
-  track.index = 1, panel.fun = function(x, y) {  # Add text labels
-    sector.name = circlize::get.cell.meta.data("sector.index")
-    circlize::circos.text(CELL_META$xcenter, 
-                          CELL_META$ylim[1], 
-                          CELL_META$sector.index, 
-                          facing = "clockwise", # Direction of text
-                          niceFacing = TRUE,
-                          adj = c(-0.1, 0.5),
-                          cex = 1)
-    circlize::circos.axis(
-      h = "top", 
-      major.at = seq(from = 0, to = 50, by = 1),
-      labels = FALSE,
-      labels.cex = 0.5, 
-      minor.ticks = 0,
-      sector.index = sector.name, 
-      major.tick.percentage = 1,
-      labels.niceFacing = TRUE,
-      track.index = 2
-    )
-  }, 
-  bg.border = NA
-)
-```
-
-## Dissecting loci with signficant phenotype correlations {.tabset}
+## Signficant phenotype correlations at locus level {.tabset}
 
 ### Text
-- The loci with the highest number of significant bivariate local $r_{g}$'s, locus 758 and 1719, were positioned on chromosome 4 and 11, respectively (Figure \@ref(fig:corr-plot)). 
+- The loci with the highest number of significant bivariate local $r_{g}$'s, locus 758 and 1719, were positioned on chromosome 4 and 11, respectively (Figure \@ref(fig:corr-plot), \@ref(fig:edge-diagram)). 
 - The locus on chromosome 4 contains three protein-coding genes (*GPM6A*, *WDR17* and *SPATA4*), while the locus on chromosome 11 contains ten protein-coding genes, one of which includes *DRD2*, which encodes dopamine receptor D2. As perhaps expected, all three neuropsychiatric disorders positively correlate with one another at locus 1719. Somewhat unexpected is the significant negative correlation between LBD and SCZ at locus 1719.
 
 ```{r bivar-correlations-locus-count}
@@ -589,7 +420,7 @@ bivar_bonf %>%
 
 ### Figures
 
-```{r corr-plot, fig.height=16, fig.cap = "Heatmaps showing the standardised coefficient for genetic correlation (rho) for each association within the loci with significant bivariate local genetic correlations. Significant negative and positive correlations are indicated by blue and red fill, respectively. Non-significant correlations (FDR >= 0.05) have a grey fill. "}
+```{r corr-plot, fig.height=16, fig.cap = "Heatmaps showing the standardised coefficient for genetic correlation (rho) for each association within the loci with significant bivariate local genetic correlations (p < 0.05/n_tests). Significant negative and positive correlations are indicated by blue and red fill, respectively. Non-significant correlations have a grey fill."}
 
 results$bivar %>% 
   dplyr::filter(locus %in% unique(bivar_bonf$locus)) %>% 
@@ -617,9 +448,18 @@ results$bivar %>%
   
 ```
 
-```{r individual-locus-plots, message = F, fig.height = 8}
+```{r, edge-diagram, fig.height = 16, fig.cap = "Edge diagrams for each locus showing the standardised coefficient for genetic correlation (rho) for each significant bivariate local genetic correlations (p < 0.05/n_tests). Significant negative and positive correlations are indicated by blue and red colour, respectively."}
 
-source(here::here("R", "plot_locus.R"))
+plot_edge_diagram(
+  bivar_corr = 
+    bivar_bonf,
+  phen = fct_disease,
+  ncol = 3
+)
+
+```
+
+```{r individual-locus-plots, message = F, fig.height = 8}
 
 ref <- import("/data/references/ensembl/gtf_gff3/v87/Homo_sapiens.GRCh37.87.gtf")
 ref <- ref %>% keepSeqlevels(c(1:22), pruning.mode = "coarse") 
