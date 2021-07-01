@@ -1,0 +1,417 @@
+---
+title: "Dissecting individual loci using partial correlation/multiple regression"
+author: 
+- name: "Regina H. Reynolds"
+  affiliation: UCL
+output: 
+  bookdown::html_document2:
+    figure_caption: yes
+    code_folding: hide
+    theme: paper
+    highlight: kate
+    df_print: paged
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+```{r setup, include = FALSE}
+
+library(ggplot2) # For plotting
+library(tidyverse) # For tidy manipulation of data
+library(stringr) # For string manipulation
+
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+
+# Set defaults for ggplots 
+theme_rhr <- 
+  theme_bw(base_family = "Helvetica",
+           base_size = 10) + 
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "top",
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        axis.title.y = element_text(vjust = 0.6),
+        panel.spacing = unit(0.1, "lines")
+        )
+
+
+```
+
+> Aim: run partial correlations and multiple regression on select loci
+<br><br>
+
+# Background
+
+What is the background for running this analysis?
+
+# Methods {.tabset}
+
+## Partial correlations
+
+For loci with >= 2 significant bivariate results between the three neuropsychiatric phenotypes, we hypothesised that a shared genetic signal with a third neuropsychiatric phenotype could account for some of the overlap between two neuropyschiatric phenotypes (e.g. local $r_{g}$ between BIP and SCZ could be partially accounted for by a shared genetic signal with MDD). Thus, we used partial correlations to compute the partial genetic correlation between two phenotypes while accounting for the third.
+
+## Multiple regression
+
+For select loci with significant bivariate results between a phenotype and at least 2 others, multiple regression was used to determine the extent to which the genetic component of the outcome phenotype could be explained by the genetic components of multiple predictor phenotypes. This permitted exploration of  (i) the independent effects of predictor phenotypes on the outcome phenotype and (ii) collinearity between predictor phenotypes. 
+
+# Supplementary code {.tabset}
+
+Following section includes any intermediary code used in this `.Rmd`.
+
+## Partial correlations between neuropsychiatric phenotypes
+This can either be sourced directly:
+
+```{r run-partial-corr, eval = F}
+
+source(here::here("scripts", "03a_partial_corr.R"))
+
+```
+
+Alternatively, for many phenotypes/loci it can be worth running this script directly on the cluster, using `nohup`, as performed below:
+
+```{bash bash-run-partial-corr, eval = F}
+# Have to navigate to root project folder for script to work (as it uses here package)
+cd /home/rreynolds/misc_projects/neurodegen-psych-local-corr
+
+nohup Rscript \
+/home/rreynolds/misc_projects/neurodegen-psych-local-corr/scripts/03a_run_partial_corr.R \
+&>/home/rreynolds/misc_projects/neurodegen-psych-local-corr/logs/03a_run_partial_corr.log&
+
+```
+
+## Multiple regression
+
+This can either be sourced directly:
+
+```{r run-multireg, eval = F}
+
+source(here::here("scripts", "03b_run_multi_reg.R"))
+
+```
+
+Alternatively, for many phenotypes/loci it can be worth running this script directly on the cluster, using `nohup`, as performed below:
+
+```{bash bash-run-multireg, eval = F}
+# Have to navigate to root project folder for script to work (as it uses here package)
+cd /home/rreynolds/misc_projects/neurodegen-psych-local-corr
+
+nohup Rscript \
+/home/rreynolds/misc_projects/neurodegen-psych-local-corr/scripts/03b_run_multi_reg.R \
+&>/home/rreynolds/misc_projects/neurodegen-psych-local-corr/logs/03b_run_multi_reg.log&
+
+```
+
+## Loading results
+Once run, results can be loaded using the following code chunk:
+
+```{r load-results}
+
+pcorr <-
+  list.files(
+    here::here(
+      "results", 
+      "03_partial_corr_multi_reg"
+      ),
+    pattern = ".partcorr.lava.rds", 
+    full.names = T
+  ) %>% 
+  readRDS() %>% 
+  lapply(., function(list){
+    
+    list %>% 
+      qdapTools::list_df2df(col1 = "list_name")
+    
+  }) %>% 
+  qdapTools::list_df2df(col1 = "list_name_2") %>% 
+  dplyr::select(-contains("list_name")) %>% 
+  as_tibble()
+  
+multireg <-
+  list.files(
+    here::here(
+      "results", 
+      "03_partial_corr_multi_reg"
+      ),
+    pattern = ".multireg.lava.rds", 
+    full.names = T
+  ) %>% 
+  readRDS() %>% 
+  lapply(., function(x){
+    
+    x %>% 
+      lapply(., function(y){
+        
+        y %>% 
+          lapply(., function(z){
+            
+            z %>% 
+              qdapTools::list_df2df(col1 = "model_number")
+            
+          }) %>% 
+          qdapTools::list_df2df(col1 = "list_name")
+        
+      }) %>% 
+      qdapTools::list_df2df()
+    
+  }) %>% 
+    qdapTools::list_df2df(col1 = "locus") %>% 
+    dplyr::select(-X1) %>% 
+    dplyr::mutate(
+      model_type = 
+        case_when(
+          locus == 1719 & list_name == "L1" ~ "intermediate",
+          locus == 1719 & list_name == "L2" ~ "full",
+          TRUE ~ "full"
+          )
+    ) %>% 
+    dplyr::select(
+      locus, contains("model"), 
+      outcome, predictors, 
+      everything(), -contains("list")
+      )
+
+```
+
+## Loading plotting functions
+
+```{r load-plot-func}
+
+source(here::here("R", "plots.R"))
+
+```
+
+
+# Results 
+
+## Partial correlation {.tabset}
+
+### Text
+
+- In loci with >= 2 significant bivariate $r_{g}$ between the three neuropsychiatric phenotypes, BIP, MDD and SCZ, we computed partial $r_{g}$'s between phenotypes pairs, accounting for the local $r_{g}$ with the neuropsychiatric phenotype not included in the pair.
+- In all cases, conditioning resulted in a decrease in the local $r_{g}$ between paired phenotypes, and in many cases, the 95% confidence intervals for the partial $r_{g}$'s included 0, indicating that the correlation between paired phenotypes was no longer significant (Figure \@ref(fig:plot-partial-corr)). 
+- For example, in locus 758 and 951, accounting for the neuropsychiatric phenotype not included in a pair resulted in non-significant partial $r_{g}$'s for all 3 neuropsychiatric phenotype pairs, despite these being significant in the unconditioned model. This suggests that within these loci, genetic variants associated with any of BIP, MDD or SCZ confer a general susceptibility to the three neuropsychiatric disorders.
+- In some loci, one phenotype pair remained significant following conditioning on the neuropsychiatric phenotype not included in the pair. 
+    - For example, in locus 952, which contains several genes encoding linker histone genes and zinc-finger transcript factors, a significant positive partial $r_{g}$ was observed between BIP and MDD when conditioned on SCZ. By contrast, partial correlations between (i) BIP and SCZ (conditioned on MDD) and (ii) MDD and SCZ (conditioned on BIP) were non-significant. This suggests that in the case of locus 952, while variants associated with BIP or MDD may confer susceptibility for one another, variants associated with MDD do not confer susceptibility for BIP or SCZ. 
+    - This is confirmed with multiple regression, where BIP was a significant predictor of MDD in a model jointly modelling BIP and SCZ, and likewise, MDD was a significant predictor of BIP in a model jointly modelling MDD and SCZ (Figure \@ref(fig:plot-multireg)). 
+
+### Figures
+
+```{r plot-partial-corr, fig.cap = "Heatmap demonstrating the effect of conditioning on a third neuropsychiatric phenotype when estimating the local genetic correlation between two neuropsychiatric phenotypes. The top heatmaps show the unconditioned bivariate local rg, while the bottom heatmaps show the partial bivariate local rgs conditioned on the neuropsychiatric phenotype that is not within the bivariate relationship (e.g. MDD and BIP conditioned on SCZ). The significance threshold for unconditioned bivariate local rgs was set to p < 0.05/n_bivar_tests, while for conditioned bivariate local rgs it was set to p < 0.05. Significant negative and positive correlations are indicated by blue and red fill, respectively. Non-significant correlations have a grey fill."}
+
+bivar_results <-
+  readRDS(
+    list.files(
+      here::here("results", "02_univar_bivar_test"),
+      pattern = "bivar.lava.rds",
+      full.names = T
+    )
+  ) %>%
+  purrr::discard(is.null) %>%
+  qdapTools::list_df2df() %>%
+  dplyr::select(-X1)
+
+data_to_plot <-
+  pcorr %>% 
+  dplyr::filter(!is.na(pcor)) %>% 
+  dplyr::select(
+    locus, phen1, phen2, pcor, p_cond = p
+  ) %>% 
+  dplyr::inner_join(
+    bivar_results %>% 
+      dplyr::select(
+        locus, contains("phen"), rho, p_uncond = p
+      ), 
+    by = c("locus", "phen1", "phen2")
+  ) %>% 
+  tidyr::pivot_longer(
+    cols = c("pcor", "p_cond", "rho", "p_uncond")
+  ) %>% 
+  dplyr::mutate(
+    model = 
+      case_when(
+        name %in% c("pcor", "p_cond") ~ "Conditioned",
+        TRUE ~ "Unconditioned"
+      ) %>% 
+      fct_rev(),
+    coef = 
+      case_when(
+        name %in% c("pcor", "rho") ~ "corr",
+        TRUE ~ "p"
+      )
+  ) %>% 
+  dplyr::select(-name) %>% 
+  tidyr::pivot_wider(
+    names_from = c("coef"),
+    values_from = c("value")
+  )
+
+data_to_plot %>% 
+  dplyr::mutate(
+    rg_fill =
+      dplyr::case_when(
+        # Different p-value cut-offs depending on conditioning
+        p < 0.05 & model == "Conditioned" ~ round(corr, 2),
+        p < 0.05/nrow(bivar_results) & model == "Unconditioned" ~ round(corr, 2)
+      ),
+    p1 = phen1 %>%
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*"),
+    p2 = phen2 %>%
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*")
+  ) %>%
+  ggplot2::ggplot(
+    ggplot2::aes(
+      x = p1,
+      y = p2 %>% fct_rev(),
+      fill = rg_fill,
+      label = round(corr, 2)
+    )
+  ) +
+  ggplot2::geom_tile(colour = "black") +
+  ggplot2::geom_text(
+    size = 3
+  ) +
+  ggplot2::facet_grid(rows = vars(model), cols = vars(locus)) +
+  ggplot2::coord_fixed() +
+  ggplot2::labs(x = "", y = "", fill = "Local genetic correlation (rg)") +
+  ggplot2::scale_fill_distiller(
+    palette = "RdYlBu",
+    limits = c(-1, 1)
+  ) +
+  ggplot2::scale_colour_manual(values = c("black", "white")) +
+  ggplot2::guides(colour = F) +
+  theme_rhr +
+  ggplot2::theme(
+    panel.border = element_blank(),
+    panel.grid = element_blank(),
+    axis.ticks = element_blank()
+  )
+
+```
+
+## Multiple regression {.tabset}
+
+### Text
+- All loci modelling a neuropsychiatric phenotype using other neuropsychiatric phenotypes as predictors had very high multivariate $r^2$, with upper confidence intervals including 1 (Figure \@ref(fig:plot-multireg)). This suggests that, for these loci, the proportion of local heritability for the neuropsychiatric outcome is not independent of the predictor phenotypes. 
+- In contrast, the multivariate $r^2$ in locus 2351, which was modelled with LBD as the outcome and AD and PD as predictors, was 0.43 (95% confidence interval: `r multireg %>% dplyr::filter(locus == 2351) %>% dplyr::mutate(CI = str_c(round(r2.lower,2), "-", round(r2.upper,2))) %>% .[["CI"]] %>% unique()`). Thus, while AD and PD jointly explained 43% of the local heritability of LBD, there was also a proportion of the local heritability for LBD which was independent of AD and PD.
+- As observed in bivariate correlations, AD is positively associated with LBD, while PD is negatively associated.
+
+
+### Figures
+
+```{r plot-multireg, fig.height = 6, fig.cap = "Results for multiple regression models across loci with significant bivariate results between a phenotype and at least 2 others. For both plots, only those multiple regression models with at least one significant predictor (p < 0.05) are shown. (a) Mulivariate r2 for each locus and model, where multivariate r2 represents the proportion of variance in genetic signal for the outcome phenotype explained by all predictor phenotypes simultaneously. Whiskers span the 95% confidence interval for the r2. (b) Plots of standardised coefficients for each predictor in multiple regression models across several loci, with whiskers spanning the 95% confidence interval for the coefficients. 3 asterisks, p < 0.001; 2 asterisks, p < 0.01; 1 asterisk, p < 0.05."}
+
+multireg_w_signif_pred <- 
+  multireg %>% 
+  dplyr::filter(
+    p < 0.05
+  ) %>% 
+  dplyr::select(locus, contains("model"), outcome) %>% 
+  dplyr::distinct()
+  
+data_to_plot <-   
+  multireg_w_signif_pred %>% 
+  dplyr::inner_join(
+    multireg,
+    c("locus", "model_number", "model_type", "outcome")
+  ) %>% 
+  dplyr::mutate(
+    predictors = predictors %>%
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*"),
+    outcome = outcome %>% 
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*"),
+    p_text = case_when(
+      p < 0.001 ~ "***",
+      p < 0.01 ~ "**",
+      p < 0.05 ~ "*"
+    ),
+    locus = 
+      as.numeric(locus)
+  )
+
+data_to_plot <- 
+  data_to_plot %>% 
+  dplyr::inner_join(
+    data_to_plot %>% 
+      dplyr::group_by(outcome, locus) %>% 
+      dplyr::summarise(predictors = str_c(predictors, collapse = " + ")) %>% 
+      dplyr::mutate(model = str_c(outcome, " ~ ", predictors)) %>% 
+      dplyr::select(outcome, locus, model)
+  )
+
+a <- 
+  data_to_plot %>% 
+  dplyr::mutate(
+    locus_model =
+      str_c(locus, model, sep = "\n")
+  ) %>% 
+  dplyr::distinct(
+    locus, locus_model, r2, r2.lower, r2.upper
+  ) %>% 
+  ggplot2::ggplot(
+    ggplot2::aes(
+      x = locus_model %>% 
+        fct_reorder(., .x = as.numeric(locus), .fun = max),
+      y = r2,
+      ymin = r2.lower,
+      ymax = r2.upper
+    )
+  ) +
+  geom_col() + 
+  geom_errorbar(width=.2) +
+  labs(
+    x = "Locus and model",
+    y = "Multivariate r2"
+  ) +
+  theme_rhr
+
+b <- 
+  data_to_plot %>% 
+  ggplot2::ggplot(
+    ggplot2::aes(
+      x = predictors, 
+      y = gamma, 
+      ymin = gamma.lower, 
+      ymax = gamma.upper
+      )
+    ) +
+  ggplot2::geom_pointrange(
+    colour = "#888888", fatten = 0.25
+    ) +
+  ggplot2::geom_hline(yintercept = 0, linetype = "dashed") +
+  ggplot2::geom_text(
+    aes(
+      y = gamma.upper + (0.1 * gamma.upper), 
+      label = p_text
+      )
+    ) +
+  ggplot2::facet_wrap(
+    vars(locus, model), 
+    scales = "free_x",
+    nrow = 1
+    ) +
+  ggplot2::labs(x = "Predictors", y = "Standardised multiple\nregression coefficient") +
+  theme_rhr
+
+cowplot::plot_grid(
+  a,b, 
+  ncol = 1, 
+  axis = "lr", 
+  align = "v"
+)
+
+```
+
+<br><br>
+
+# Session info
+
+```{r reproducibility, echo = FALSE}
+# Session info
+library("sessioninfo")
+options(width = 120)
+session_info()
+```

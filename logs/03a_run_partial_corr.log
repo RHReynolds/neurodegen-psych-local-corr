@@ -1,0 +1,146 @@
+nohup: ignoring input
+here() starts at /home/rreynolds/misc_projects/neurodegen-psych-local-corr
+Running LAVA version 0.0.6
+── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──
+✔ ggplot2 3.3.2     ✔ purrr   0.3.4
+✔ tibble  3.0.3     ✔ dplyr   1.0.2
+✔ tidyr   1.1.1     ✔ stringr 1.4.0
+✔ readr   1.4.0     ✔ forcats 0.5.1
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+$ref_prefix
+[1] "/tools/MAGMA/reference_files/g1000_eur/g1000_eur"
+
+$loc_file
+[1] "/home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/01_input_prep/gwas_filtered.loci"
+
+$info_file
+[1] "/home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/01_input_prep/input.info.txt"
+
+$sample_overlap_file
+[1] "/home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/01_input_prep/sample_overlap.txt"
+
+$phenotypes
+[1] "BIP2021" "MDD2019" "SCZ2018"
+
+$output_filename
+[1] "BIP2021:MDD2019:SCZ2018"
+
+`summarise()` ungrouping output (override with `.groups` argument)
+Warning message:
+The `x` argument of `as_tibble.matrix()` must have unique column names if `.name_repair` is omitted as of tibble 2.0.0.
+Using compatibility `.name_repair`.
+This warning is displayed once every 8 hours.
+Call `lifecycle::last_warnings()` to see where this warning was generated. 
+[1] "...Reading in sumstats"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "~ 6853526 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 1030051 SNPs which could not be aligned, 5823475 remaining"
+[1] "2021-06-29 09:00:27 BST"
+[1] "Locus: 758"
+[1] "2021-06-29 09:01:29 BST"
+[1] "Correlating: BIP2021 MDD2019"
+[1] "Adjusting for: SCZ2018"
+[1] "~ Running partial correlation for 'BIP2021' and 'MDD2019', conditioned on 'SCZ2018'"
+[1] "2021-06-29 09:01:35 BST"
+[1] "Correlating: BIP2021 SCZ2018"
+[1] "Adjusting for: MDD2019"
+[1] "~ Running partial correlation for 'BIP2021' and 'SCZ2018', conditioned on 'MDD2019'"
+[1] "2021-06-29 09:01:41 BST"
+[1] "Correlating: MDD2019 SCZ2018"
+[1] "Adjusting for: BIP2021"
+[1] "~ Running partial correlation for 'MDD2019' and 'SCZ2018', conditioned on 'BIP2021'"
+[1] "2021-06-29 09:01:45 BST"
+[1] "Locus: 951"
+[1] "2021-06-29 09:02:44 BST"
+[1] "Correlating: BIP2021 MDD2019"
+[1] "Adjusting for: SCZ2018"
+[1] "~ Running partial correlation for 'BIP2021' and 'MDD2019', conditioned on 'SCZ2018'"
+[1] "2021-06-29 09:02:48 BST"
+[1] "Correlating: BIP2021 SCZ2018"
+[1] "Adjusting for: MDD2019"
+[1] "~ Running partial correlation for 'BIP2021' and 'SCZ2018', conditioned on 'MDD2019'"
+[1] "2021-06-29 09:02:54 BST"
+[1] "Correlating: MDD2019 SCZ2018"
+[1] "Adjusting for: BIP2021"
+[1] "~ Running partial correlation for 'MDD2019' and 'SCZ2018', conditioned on 'BIP2021'"
+[1] "2021-06-29 09:03:00 BST"
+[1] "Locus: 952"
+[1] "2021-06-29 09:04:05 BST"
+[1] "Correlating: BIP2021 MDD2019"
+[1] "Adjusting for: SCZ2018"
+[1] "~ Running partial correlation for 'BIP2021' and 'MDD2019', conditioned on 'SCZ2018'"
+[1] "2021-06-29 09:04:10 BST"
+[1] "Correlating: BIP2021 SCZ2018"
+[1] "Adjusting for: MDD2019"
+[1] "~ Running partial correlation for 'BIP2021' and 'SCZ2018', conditioned on 'MDD2019'"
+[1] "2021-06-29 09:04:15 BST"
+[1] "Correlating: MDD2019 SCZ2018"
+[1] "Adjusting for: BIP2021"
+[1] "~ Running partial correlation for 'MDD2019' and 'SCZ2018', conditioned on 'BIP2021'"
+[1] "2021-06-29 09:04:21 BST"
+[1] "Locus: 1719"
+[1] "2021-06-29 09:06:04 BST"
+[1] "Correlating: BIP2021 MDD2019"
+[1] "Adjusting for: SCZ2018"
+[1] "~ Running partial correlation for 'BIP2021' and 'MDD2019', conditioned on 'SCZ2018'"
+[1] "2021-06-29 09:06:10 BST"
+[1] "Correlating: BIP2021 SCZ2018"
+[1] "Adjusting for: MDD2019"
+[1] "~ Running partial correlation for 'BIP2021' and 'SCZ2018', conditioned on 'MDD2019'"
+[1] "2021-06-29 09:06:15 BST"
+[1] "Correlating: MDD2019 SCZ2018"
+[1] "Adjusting for: BIP2021"
+[1] "~ Running partial correlation for 'MDD2019' and 'SCZ2018', conditioned on 'BIP2021'"
+[1] "2021-06-29 09:06:20 BST"
+[1] "Locus: 2001"
+[1] "2021-06-29 09:08:24 BST"
+[1] "Correlating: BIP2021 MDD2019"
+[1] "Adjusting for: SCZ2018"
+[1] "~ Running partial correlation for 'BIP2021' and 'MDD2019', conditioned on 'SCZ2018'"
+Warning: Estimates too far out of bounds (+-1.25) for phenotype(s) BIP2021 ~ MDD2019 (-1.798) in locus 2001. Values will be set to NA. To change this threshold, modify the 'param.lim' argument
+[1] "2021-06-29 09:08:30 BST"
+[1] "Correlating: BIP2021 SCZ2018"
+[1] "Adjusting for: MDD2019"
+[1] "~ Running partial correlation for 'BIP2021' and 'SCZ2018', conditioned on 'MDD2019'"
+Warning: Estimates too far out of bounds (+-1.25) for phenotype(s) BIP2021 ~ SCZ2018 (1.298) in locus 2001. Values will be set to NA. To change this threshold, modify the 'param.lim' argument
+[1] "2021-06-29 09:08:34 BST"
+[1] "Correlating: MDD2019 SCZ2018"
+[1] "Adjusting for: BIP2021"
+[1] "~ Running partial correlation for 'MDD2019' and 'SCZ2018', conditioned on 'BIP2021'"
+Warning: Estimates too far out of bounds (+-1.25) for phenotype(s) MDD2019 ~ SCZ2018 (1.386) in locus 2001. Values will be set to NA. To change this threshold, modify the 'param.lim' argument
+[1] "2021-06-29 09:08:40 BST"
+[1] "Locus: 2117"
+[1] "2021-06-29 09:10:48 BST"
+[1] "Correlating: BIP2021 MDD2019"
+[1] "Adjusting for: SCZ2018"
+[1] "~ Running partial correlation for 'BIP2021' and 'MDD2019', conditioned on 'SCZ2018'"
+[1] "2021-06-29 09:10:53 BST"
+[1] "Correlating: BIP2021 SCZ2018"
+[1] "Adjusting for: MDD2019"
+[1] "~ Running partial correlation for 'BIP2021' and 'SCZ2018', conditioned on 'MDD2019'"
+[1] "2021-06-29 09:10:58 BST"
+[1] "Correlating: MDD2019 SCZ2018"
+[1] "Adjusting for: BIP2021"
+[1] "~ Running partial correlation for 'MDD2019' and 'SCZ2018', conditioned on 'BIP2021'"
+[1] "2021-06-29 09:11:03 BST"
+[1] "Locus: 2281"
+[1] "2021-06-29 09:13:08 BST"
+[1] "Correlating: BIP2021 MDD2019"
+[1] "Adjusting for: SCZ2018"
+[1] "~ Running partial correlation for 'BIP2021' and 'MDD2019', conditioned on 'SCZ2018'"
+[1] "2021-06-29 09:13:13 BST"
+[1] "Correlating: BIP2021 SCZ2018"
+[1] "Adjusting for: MDD2019"
+[1] "~ Running partial correlation for 'BIP2021' and 'SCZ2018', conditioned on 'MDD2019'"
+[1] "2021-06-29 09:13:19 BST"
+[1] "Correlating: MDD2019 SCZ2018"
+[1] "Adjusting for: BIP2021"
+[1] "~ Running partial correlation for 'MDD2019' and 'SCZ2018', conditioned on 'BIP2021'"
+Warning message:
+In dir.create(out_dir, showWarnings = T) :
+  '/home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/03_partial_corr_multi_reg' already exists
+[1] "Done! Analysis output written to /home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/03_partial_corr_multi_reg/BIP2021:MDD2019:SCZ2018.partcorr.lava.rds"
