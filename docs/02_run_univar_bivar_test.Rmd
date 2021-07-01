@@ -125,11 +125,6 @@ global <-
 
 ```
 
-# Methods {.tabset}
-
-## Running univariate and bivariate tests
-The detection of valid and interpretable local genetic corrlation ($r_{g}$) requires the presence of sufficient local genetic signal. For this reason, a univariate test was performed as a filtering step for bivariate local $r_{g}$ analyses. Bivariate local correlations were only performed for pairs of traits which both exhibited a significant univariate local genetic signal (p < 0.05/`r nrow(loci)`, where the denominator represents the total number of tested loci). This resulted in a total of **`r nrow(results$bivar)`** bivariate tests spanning **`r results$bivar %>% .[["locus"]] %>% unique() %>% length()`** distinct loci. 
-
 ## Loading plotting functions
 
 ```{r load-plot-func}
@@ -138,6 +133,10 @@ source(here::here("R", "plots.R"))
 
 ```
 
+# Methods {.tabset}
+
+## Running univariate and bivariate tests
+The detection of valid and interpretable local genetic corrlation ($r_{g}$) requires the presence of sufficient local genetic signal. For this reason, a univariate test was performed as a filtering step for bivariate local $r_{g}$ analyses. Bivariate local correlations were only performed for pairs of traits which both exhibited a significant univariate local genetic signal (p < 0.05/`r nrow(loci)`, where the denominator represents the total number of tested loci). This resulted in a total of **`r nrow(results$bivar)`** bivariate tests spanning **`r results$bivar %>% .[["locus"]] %>% unique() %>% length()`** distinct loci. 
 
 # Results 
 
