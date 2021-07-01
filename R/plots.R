@@ -48,8 +48,9 @@ theme_rhr <-
 
 plot_global_corr <-
   function(
-           global_corr,
-           n_phenotypes) {
+    global_corr,
+    n_phenotypes
+  ) {
 
     # Only need first half of matrix, thus must extract appropriate rows from dataframe
     n <- n_phenotypes
@@ -70,10 +71,8 @@ plot_global_corr <-
     n_combn <-
       length(indices) - n_phenotypes
 
-
     global_corr %>%
       dplyr::mutate(
-        fdr = p.adjust(p, method = "fdr"),
         rg_fill =
           dplyr::case_when(
             p < 0.05 / n_combn ~ round(rg, 2)
