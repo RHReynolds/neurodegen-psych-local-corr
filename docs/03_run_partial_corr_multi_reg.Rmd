@@ -42,7 +42,7 @@ theme_rhr <-
 
 # Background
 
-What is the background for running this analysis?
+Given that bivariate local $r_{g}$ analyses revealed several loci where significant $r_{g}$'s were found between multiple trait pairs, we followed up with partial local $r_{g}$ analyses and multiple regression to obtain conditional genetic associations.  
 
 # Methods {.tabset}
 
@@ -193,6 +193,7 @@ source(here::here("R", "plots.R"))
 - In some loci, one phenotype pair remained significant following conditioning on the neuropsychiatric phenotype not included in the pair. 
     - For example, in locus 952, which contains several genes encoding linker histone genes and zinc-finger transcript factors, a significant positive partial $r_{g}$ was observed between BIP and MDD when conditioned on SCZ. By contrast, partial correlations between (i) BIP and SCZ (conditioned on MDD) and (ii) MDD and SCZ (conditioned on BIP) were non-significant. This suggests that in the case of locus 952, while variants associated with BIP or MDD may confer susceptibility for one another, variants associated with MDD do not confer susceptibility for BIP or SCZ. 
     - This is confirmed with multiple regression, where BIP was a significant predictor of MDD in a model jointly modelling BIP and SCZ, and likewise, MDD was a significant predictor of BIP in a model jointly modelling MDD and SCZ (Figure \@ref(fig:plot-multireg)). 
+    - A similar phenomenon is observed in locus 2281, where a significant positive partial $r_{g}$ was observed between BIP and SCZ when conditioned on MDD By contrast, the partial correlations between SCZ and MDD (conditioned on BIP) was non-significant. In other words, while variants associated with BIP and SCZ may confer susceptibility for one another, variants associated with MDD do not confer susceptibility for SCZ. This is confirmed in multiple regression where BIP was a significant predictor of SCZ in a model jointly modelling BIP and MDD, while MDD was not.  
 
 ### Table
 ```{r}

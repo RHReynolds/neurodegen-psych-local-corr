@@ -20,7 +20,7 @@ output:
 library(circlize) # For chord diagram
 library(ggplot2) # For plotting
 library(ggraph) # For edge diagrams
-library(LAVA) # For LAVA-related functions
+library(janitor) # For cleaning dirty data
 library(tidyverse) # For tidy manipulation of data
 library(stringr) # For string manipulation
 library(rtracklayer) # For loading of reference gtf
@@ -137,8 +137,9 @@ source(here::here("R", "plots.R"))
 
 ## Running univariate and bivariate tests
 The detection of valid and interpretable local genetic corrlation ($r_{g}$) requires the presence of sufficient local genetic signal. For this reason, a univariate test was performed as a filtering step for bivariate local $r_{g}$ analyses. Bivariate local correlations were only performed for pairs of traits which both exhibited a significant univariate local genetic signal (p < 0.05/`r nrow(loci)`, where the denominator represents the total number of tested loci). This resulted in a total of **`r nrow(results$bivar)`** bivariate tests spanning **`r results$bivar %>% .[["locus"]] %>% unique() %>% length()`** distinct loci. 
+<br><br>
 
-# Results 
+# Results {.tabset}
 
 ## Tabular results {.tabset}
 
@@ -447,7 +448,7 @@ results$bivar %>%
   
 ```
 
-```{r, edge-diagram, fig.height = 16, fig.cap = "Edge diagrams for each locus showing the standardised coefficient for genetic correlation (rho) for each significant bivariate local genetic correlations (p < 0.05/n_tests). Significant negative and positive correlations are indicated by blue and red colour, respectively."}
+```{r, edge-diagram, fig.height = 14, fig.cap = "Edge diagrams for each locus showing the standardised coefficient for genetic correlation (rho) for each significant bivariate local genetic correlations (p < 0.05/n_tests). Significant negative and positive correlations are indicated by blue and red colour, respectively."}
 
 plot_edge_diagram(
   bivar_corr = 
