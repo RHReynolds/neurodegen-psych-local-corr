@@ -224,26 +224,23 @@ plot_bivar_chord_diagram <-
 
     circlize::circos.track(
       track.index = 1, panel.fun = function(x, y) { # Add text labels
-        sector.name <- circlize::get.cell.meta.data("sector.index")
-        circlize::circos.text(CELL_META$xcenter,
-                              CELL_META$ylim[1],
-                              CELL_META$sector.index,
-                              facing = "clockwise", # Direction of text
-                              niceFacing = TRUE,
-                              adj = c(-0.1, 0.5),
-                              cex = 1
-        )
         circlize::circos.axis(
           h = "top",
           major.at = seq(from = 0, to = nrow(data_to_plot), by = 1),
           labels = FALSE,
-          labels.cex = 0.5,
           minor.ticks = 0,
-          sector.index = sector.name,
           major.tick.percentage = 1,
-          labels.niceFacing = TRUE,
           track.index = 2
         )
+        circlize::circos.text(CELL_META$xcenter,
+                              CELL_META$ylim[1] + mm_y(5),
+                              CELL_META$sector.index,
+                              facing = "clockwise", # Direction of text
+                              niceFacing = TRUE,
+                              adj = c(0, 0.5),
+                              cex = 0.7
+        )
+
       },
       bg.border = NA
     )
@@ -270,6 +267,9 @@ plot_bivar_chord_diagram <-
 #'   results by. Default is NULL.
 #' @param phen `character` vector indicating phenotypes present.
 #' @param ncol `integer` vector indicating number of columns in facet.
+#' @param seed `integer` vector indicating seed to be used for generating the
+#'   layout of the graph (i.e. how nodes are placed on the plot), which is
+#'   random by default. Setting a seed ensures the same output each time.
 #'
 #' @return edge diagram displaying the bivariate local genetic correlations
 #'   between phenotypes at each locus with more than one bivariate correlation.
@@ -283,7 +283,8 @@ plot_edge_diagram <-
     bivar_corr,
     p_threshold = NULL,
     phen,
-    ncol = 3
+    ncol = 3,
+    seed = 89
   ) {
 
     # If p-value threshold set, filter by threshold
@@ -334,7 +335,7 @@ plot_edge_diagram <-
       )
 
     # Set seed so that same graph drawn everytime
-    set.seed(89)
+    set.seed(seed)
 
     ggraph::ggraph(
       edge_tbl_graph,
@@ -393,6 +394,11 @@ plot_edge_diagram <-
 #'   \item locus - locus identifier.
 #'   }
 #' @param ref gr. Granges object containing reference ensembl gtf.
+#' @param highlight_gene `character` vector with genes (as ensembl IDs) to
+#'   highlight in locus. Highlighted genes will be coloured blue and labelled
+#'   "TRUE".
+#' @param highlight_gene_label `character` vector with label to use for
+#'   `highlight_gene` legend.
 #'
 #' @return ggplot2 plot of genes (of biotype "protein_coding", "antisense", and
 #'   "lincRNA") within locus.
@@ -402,8 +408,11 @@ plot_edge_diagram <-
 
 plot_locus <-
   function(
-           locus_gr,
-           ref) {
+    locus_gr,
+    ref,
+    highlight_gene = NULL,
+    highlight_gene_label = NULL
+  ) {
 
     overlap <-
       GenomicRanges::findOverlaps(locus_gr, ref) %>%
@@ -457,34 +466,77 @@ plot_locus <-
             )
       )
 
-    ggplot2::ggplot(
-      data = coords_to_plot
-    ) +
-      ggplot2::geom_linerange(
-        ggplot2::aes(
-          x = start,
-          y = forcats::fct_reorder(
-            gene_name,
-            -start
-          ),
-          xmin = start,
-          xmax = end
-          # colour = gene_biotype
-        ),
-        size = 1
-      ) +
-      ggplot2::labs(title = stringr::str_c("Locus: ", locus_gr$locus)) +
-      ggplot2::scale_fill_manual(
-        values = c(
-          "locus" = "#868686FF",
-          "protein_coding" = "#0073C2FF",
-          "antisense" = "#EFC000FF",
-          "lincRNA" = "#CD534CFF"
+    if(!is.null(highlight_gene)){
+
+      coords_to_plot <-
+        coords_to_plot %>%
+        dplyr::mutate(
+          gene_highlight =
+            case_when(
+              gene_id %in% highlight_gene ~ TRUE,
+              TRUE ~ FALSE
+            )
         )
-      ) +
+
+      plot <-
+        ggplot2::ggplot(
+          data = coords_to_plot
+        ) +
+        ggplot2::geom_linerange(
+          ggplot2::aes(
+            x = start,
+            y = forcats::fct_reorder(
+              gene_name,
+              -start
+            ),
+            xmin = start,
+            xmax = end,
+            colour = gene_highlight
+          ),
+          size = 1
+        ) +
+        ggplot2::scale_colour_manual(
+          values =
+            c(
+              "TRUE" = "#00BFC4",
+              "FALSE" = "black"
+            )
+        ) +
+        ggplot2::labs(
+          colour = highlight_gene_label
+        ) +
+        theme(
+          legend.position = "top"
+        )
+
+
+    } else{
+
+      plot <-
+        ggplot2::ggplot(
+          data = coords_to_plot
+        ) +
+        ggplot2::geom_linerange(
+          ggplot2::aes(
+            x = start,
+            y = forcats::fct_reorder(
+              gene_name,
+              -start
+            ),
+            xmin = start,
+            xmax = end
+          ),
+          size = 1
+        )
+
+    }
+
+    plot +
+      ggplot2::labs(title = stringr::str_c("Locus: ", locus_gr$locus)) +
       ggplot2::scale_x_continuous(labels = scales::comma) +
       ggplot2::labs(
-        x = stringr::str_c("Chromosome ", c(coords_to_plot$chr %>% unique()))
+        x = stringr::str_c("Chromosome ", c(coords_to_plot$chr %>% unique())),
+        y = ""
       ) +
       ggplot2::facet_grid(
         rows = vars(gene_biotype),
@@ -497,4 +549,207 @@ plot_locus <-
       ggplot2::theme(
         strip.text.y = element_text(angle = 0)
       )
+
+  }
+
+#' Plot edge diagrams for bivariate GWAS-eQTL correlations
+#'
+#' @description This function will plot significant bivariate local genetic
+#'   correlations between GWAS and eQTLs as an edge diagram for each gene
+#'   locus/eQTL dataset. Connections between phenotypes will be coloured by the
+#'   direction of the correlation i.e. positive correlations = red, negative
+#'   correlations = blue. Nodes will be coloured by the phenotype type i.e.
+#'   gwas/disease trait = grey, eQTL = white.
+#'
+#' @param bivar_corr a `data.frame` or [tibble][tibble::tbl_df-class] object,
+#'   with the following columns (most of which are output by LAVA's bivariate
+#'   test):
+#'   \itemize{
+#'   \item `ld_block`: name of LD block in which gene locus is located
+#'   \item `eqtl_dataset`: name of eQTL dataset from which gene locus is derived
+#'   \item `gene_locus`: ensembl gene id (used as gene locus identifier)
+#'   \item `gene_name`: HGNC gene symbol
+#'   \item `phen1`: name of phenotype 1
+#'   \item `phen2`: name of phenotype 2
+#'   \item `rho`: the estimated genetic correlation
+#'   \item `rho.lower`: lower 95% confidence estimate for rho
+#'   \item `rho.upper`: upper 95% confidence estimate for rho
+#'   \item `p`: p-value of the genetic correlation
+#'   }
+#' @param p_threshold `numeric` vector indicating p-value threshold to filter
+#'   results by. Default is NULL.
+#' @param phen `character` vector indicating GWAS phenotypes present.
+#' @param seed `integer` vector indicating seed to be used for generating the
+#'   layout of the graph (i.e. how nodes are placed on the plot), which is
+#'   random by default. Setting a seed ensures the same output each time.
+#'   Default is 89.
+#'
+#' @return list of plots with edge diagrams displaying the bivariate local
+#'   genetic correlations between gwas and eQTL phenotypes at each locus with
+#'   (i) more than one bivariate correlation and (ii) with a bivariate
+#'   correlation that includes an eQTL. Negative and positive correlations are
+#'   indicated by blue and red, respectively. GWAS and eQTL nodes are indicated
+#'   by grey and white fill, respectively.
+#' @export
+#'
+
+plot_qtl_edge_diagram <-
+  function(
+    bivar_corr_qtl,
+    p_threshold = NULL,
+    phen,
+    seed = 89
+  ) {
+
+    # If p-value threshold set, filter by threshold
+    if (!is.null(p_threshold)) {
+      bivar_corr_qtl <-
+        bivar_corr_qtl %>%
+        dplyr::filter(
+          p < p_threshold
+        )
+    }
+
+    # Filter for loci with more than one bivariate correlation
+    # Filter for loci where there is a bivariate correlation with an eQTL
+    bivar_corr_qtl <-
+      bivar_corr_qtl %>%
+      dplyr::group_by(eqtl_dataset, gene_locus) %>%
+      dplyr::filter(n() > 1) %>%
+      dplyr::inner_join(
+        bivar_corr_qtl %>%
+          dplyr::filter(
+            str_detect(phen2, "ENSG")
+          ) %>%
+          dplyr::distinct(eqtl_dataset, gene_locus),
+        by = c("eqtl_dataset", "gene_locus")
+      ) %>%
+      dplyr::mutate(
+        phen_type =
+          case_when(
+            str_detect(phen2, "ENSG") ~ "eQTL",
+            TRUE ~ "GWAS"
+          ),
+        phen2 =
+          case_when(
+            str_detect(phen2, "ENSG") ~ gene_name,
+            TRUE ~ phen2
+          )
+      ) %>%
+      dplyr::ungroup()
+
+    bivar_corr_list <-
+      setNames(
+        object =
+          bivar_corr_qtl %>%
+          dplyr::group_split(gene_name, eqtl_dataset),
+        nm =
+          bivar_corr_qtl %>%
+          dplyr::arrange(gene_name, eqtl_dataset) %>%
+          dplyr::mutate(
+            list_name = str_c(gene_name, ":", eqtl_dataset)
+          ) %>%
+          .[["list_name"]] %>%
+          unique()
+      )
+
+    plots <-
+      bivar_corr_list %>%
+      lapply(., function(x){
+
+        edges <-
+          x %>%
+          # Add confidence intervals in case want to use these in the figure
+          dplyr::mutate(
+            display_rho =
+              sprintf(
+                "%.2f [%.2f, %.2f]" ,
+                rho,
+                rho.lower,
+                rho.upper
+              )
+          ) %>%
+          # phen1 and phen2 (i.e. to and from) need to be first two columns
+          dplyr::select(
+            contains("phen"), ld_block, rho, display_rho, eqtl_dataset, gene_name
+          )
+
+        nodes <-
+          tibble::tibble(
+            name =
+              unique(c(edges$phen1, edges$phen2))
+          ) %>%
+          dplyr::mutate(
+            id = row_number()
+          )
+
+        edge_tbl_graph <-
+          tidygraph::as_tbl_graph(
+            x = edges,
+            nodes = nodes,
+            directed = T
+          )
+
+        fill <-
+          as_tibble(
+            edge_tbl_graph
+          ) %>%
+          dplyr::mutate(
+            fill =
+              case_when(
+                name %in% phen ~ "grey",
+                TRUE ~ "white"
+              )
+          )
+
+        # Set seed so that same graph drawn everytime
+        set.seed(seed)
+
+        ggraph::ggraph(
+          edge_tbl_graph,
+          layout = "igraph",
+          algorithm = "fr"
+        ) +
+          ggraph::geom_edge_link(
+            ggplot2::aes(
+              colour = rho,
+              label = round(rho, 2)
+            ),
+            angle_calc = 'along',
+            label_dodge = unit(1.5, 'mm'),
+            label_size = 2,
+            width = 1
+          ) +
+          ggraph::geom_node_label(
+            ggplot2::aes(
+              label = name
+            ),
+            force = 0,
+            repel = T,
+            color = 'black',
+            fill = fill$fill,
+            size = 3
+          ) +
+          ggplot2::scale_y_reverse() +
+          ggraph::scale_edge_colour_distiller(
+            palette = "RdYlBu",
+            limits = c(-1,1),
+            direction = -1
+          ) +
+          ggraph::facet_edges(
+            vars(eqtl_dataset, gene_name)
+          ) +
+          ggplot2::theme_bw() +
+          ggplot2::theme(
+            axis.title = element_blank(),
+            axis.text = element_blank(),
+            axis.ticks = element_blank(),
+            panel.grid = element_blank(),
+            legend.position = "top"
+          )
+
+      })
+
+    return(plots)
+
   }
