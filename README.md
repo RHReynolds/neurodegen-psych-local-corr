@@ -2,7 +2,7 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 # Background
 
-This repository contains code used for project looking at local and global genetic correlations between several neurodegenerative and neuropsychiatric disorders with LAVA and LDSC, respectively.
+This repository contains code to determine local and global genetic correlations between several neurodegenerative and neuropsychiatric disorders with LAVA and LDSC, respectively.
 
 # License
 

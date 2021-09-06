@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 ```
 
 # Background
-This repository contains code used for project looking at local and global genetic correlations between several neurodegenerative and neuropsychiatric disorders with LAVA and LDSC, respectively.
+This repository contains code to determine local and global genetic correlations between several neurodegenerative and neuropsychiatric disorders with LAVA and LDSC, respectively.
 
 # License
 The code in this repository is released under an MIT license. This repository is distributed in the hope that it will be useful to the wider community, but without any warranty of any kind. Please see the [LICENSE](LICENSE) file for more details. 
