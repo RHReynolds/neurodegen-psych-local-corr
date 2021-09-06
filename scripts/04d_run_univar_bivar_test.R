@@ -1,7 +1,10 @@
+# Description: run univariate and bivariate tests for eQTL/GWAS traits
+
 # Load packages -----------------------------------------------------------
 
-library(doParallel)
+library(doSNOW)
 library(foreach)
+library(gtools)
 library(here)
 library(LAVA)
 library(tidyverse)
@@ -28,19 +31,15 @@ args <-
     info_file = here::here("results", "04_eqtl_univar_bivar", "input.info.txt"),
     sample_overlap_file = here::here("results", "04_eqtl_univar_bivar", "sample_overlap.txt"),
     phenotypes = c(""),
-    output_filename = c("")
+    output_filename = c(""),
+    path_to_log = here::here("logs", "04d_run_univar_bivar_test_foreach.log"),
+    # Bivariate threshold from previous analyses (02_run_univar_bivar_test.rmd)
+    # Used to filter bivariate results to include only phenos with significant local rg
+    # These phenos will then be used together with the eQTL
+    bivar_threshold = 0.05/1603, # n bivariate tests
+    # Set eQTL univariate threshold to liberal 0.05
+    univar_threshold = 0.05
   )
-
-print(args)
-
-# Bivariate threshold from previous analyses (02_run_univar_bivar_test.rmd)
-# Used to filter bivariate results to include only phenos with significant local rg
-# These phenos will then be used together with the eQTL
-bivar_threshold <- 0.05/1603 # n bivariate tests
-
-# Set univariate threshold to liberal 0.05
-univar_threshold <-
-  0.05
 
 # Set up for parallel run -------------------------------------------------
 
@@ -49,16 +48,15 @@ out_dir %>%
   lapply(., function(x) dir.create(x, showWarnings = T))
 
 # Run in parallel
-cl <- parallel::makeCluster(args$cores)
+cl <- parallel::makeCluster(args$cores, outfile = args$path_to_log)
 
 # Register clusters
-doParallel::registerDoParallel(cl)
-foreach::getDoParWorkers()
+doSNOW::registerDoSNOW(cl)
 
 # Load data ---------------------------------------------------------------
 
 loci <-
-  LAVA::read.loci(args$loc_file) %>%
+  read.loci(args$loc_file) %>%
   dplyr::arrange(LOC)
 
 gene_filtered_loci <-
@@ -96,19 +94,21 @@ results <-
   qdapTools::list_df2df(col1 = "list_name") %>%
   dplyr::filter(
     locus %in% gene_filtered_loci$locus,
-    p < bivar_threshold
+    p < args$bivar_threshold
   )
 
 # Main --------------------------------------------------------------------
 
 print(str_c(Sys.time(), " - Starting LAVA analysis for ", nrow(loci), " genes"))
 
-# LAVA looks for common SNPs across all phenotypes when processing input
-# Thus, must load separately for each gene/eqtl dataset otherwise no common SNPs will be found
+print(str_c(Sys.time(), " - Log file of foreach parallelisation outputted here: ", args$path_to_log))
+
 foreach::foreach(
   i = 1:nrow(loci),
   .verbose = TRUE,
-  .packages = c("LAVA", "tidyverse", "stringr")
+  .packages = c("LAVA", "tidyverse", "stringr"),
+  .errorhandling = "pass",
+  .combine = "list"
 ) %dopar% {
 
   gene <- loci$LOC[i]
@@ -131,7 +131,14 @@ foreach::foreach(
 
     eqtl_gene <- str_c(eqtls[j], "_", gene)
 
-    if(!eqtl_gene %in% input_info$phenotype) next
+    if(!eqtl_gene %in% input_info$phenotype){
+
+      cat("Chunk", i," -- no gene-eqtl for", eqtl_gene, "\n")
+      next
+
+    }
+
+    cat("Chunk", i, "-- processing locus for", eqtl_gene,"\n")
 
     # Update args
     args$phenotypes <-
@@ -163,6 +170,8 @@ foreach::foreach(
     # The !is.null(locus) check is necessary before calling the analysis functions.
     if (!is.null(locus)) {
 
+      cat("Chunk", i, "-- running univariate for", eqtl_gene,"\n")
+
       # extract some general locus info for the output
       loc_info <-
         data.frame(
@@ -182,16 +191,27 @@ foreach::foreach(
         )
 
       # Run the univariate and bivariate tests seperately
-      # Only run bivariate if p-value for eqtl_gene is < univar_threshold
+      # Only run bivariate if p-value is not NULL/NA and is < univar_threshold
       loc_out[["univ"]] <-
         LAVA::run.univ(locus)
 
-      if(loc_out[["univ"]] %>%
-         dplyr::filter(phen == eqtl_gene) %>%
-         .[["p"]] < univar_threshold){
+      eqtl_univ_p <-
+        loc_out[["univ"]] %>%
+        dplyr::filter(phen == eqtl_gene) %>%
+        .[["p"]]
+
+      if(!gtools::invalid(eqtl_univ_p) &&
+         is.numeric(eqtl_univ_p) &&
+         eqtl_univ_p < args$univar_threshold){
+
+        cat("Chunk", i, " -- running bivariate for", eqtl_gene,"\n")
 
         loc_out[["bivar"]] <-
           LAVA::run.bivar(locus)
+
+      } else{
+
+        cat("Chunk ", i, " -- no bivariate test run for ", eqtl_gene, ". Univariate p-value =", eqtl_univ_p, "\n", sep = "")
 
       }
 
@@ -221,6 +241,10 @@ foreach::foreach(
         }
 
       }
+
+    } else {
+
+      cat("Chunk", i, "-- after processing locus is null for", eqtl_gene, "\n")
 
     }
 

@@ -1,7 +1,7 @@
 nohup: ignoring input
 Loading required package: foreach
 Loading required package: iterators
-Loading required package: parallel
+Loading required package: snow
 here() starts at /home/rreynolds/misc_projects/neurodegen-psych-local-corr
 Running LAVA version 0.0.6
 -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
@@ -14,34 +14,12 @@ x purrr::accumulate() masks foreach::accumulate()
 x dplyr::filter()     masks stats::filter()
 x dplyr::lag()        masks stats::lag()
 x purrr::when()       masks foreach::when()
-$cores
-[1] 10
-
-$ref_prefix
-[1] "/tools/MAGMA/reference_files/g1000_eur/g1000_eur"
-
-$loc_file
-[1] "/home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/04_eqtl_univar_bivar/gene_filtered.loci"
-
-$info_file
-[1] "/home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/04_eqtl_univar_bivar/input.info.txt"
-
-$sample_overlap_file
-[1] "/home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/04_eqtl_univar_bivar/sample_overlap.txt"
-
-$phenotypes
-[1] ""
-
-$output_filename
-[1] ""
-
 $univ
 [1] TRUE
 
 $bivar
 [1] TRUE
 
-[1] 10
 Rows: 140 Columns: 4
 -- Column specification --------------------------------------------------------
 Delimiter: "\t"
@@ -50,304 +28,924 @@ dbl (2): cases, controls
 
 i Use `spec()` to retrieve the full column specification for this data.
 i Specify the column types or set `show_col_types = FALSE` to quiet this message.
-[1] "2021-08-12 16:46:47 - Starting LAVA analysis for 92 genes"
+[1] "2021-09-01 15:35:17 - Starting LAVA analysis for 92 genes"
+[1] "2021-09-01 15:35:17 - Log file of foreach parallelisation outputted here: /home/rreynolds/misc_projects/neurodegen-psych-local-corr/logs/04d_run_univar_bivar_test_foreach.log"
 discovered package(s): 
 automatically exporting the following variables from the local environment:
-  args, eqtls, gene_filtered_loci, input_info, loci, out_dir, results, univar_threshold 
+  args, eqtls, gene_filtered_loci, input_info, loci, out_dir, results 
 explicitly exporting package(s): LAVA, tidyverse, stringr
-numValues: 92, numResults: 0, stopped: TRUE
-got results for task 1
-accumulate got an error result
-numValues: 92, numResults: 1, stopped: TRUE
+numValues: 11, numResults: 1, stopped: FALSE
+returning status FALSE
+numValues: 12, numResults: 2, stopped: FALSE
+returning status FALSE
+numValues: 13, numResults: 3, stopped: FALSE
+returning status FALSE
+numValues: 14, numResults: 4, stopped: FALSE
+returning status FALSE
+numValues: 15, numResults: 5, stopped: FALSE
+returning status FALSE
+numValues: 16, numResults: 6, stopped: FALSE
+first call to combine function
+evaluating call object to combine results:
+  fun(result.1, result.2)
+returning status FALSE
+numValues: 17, numResults: 7, stopped: FALSE
+returning status FALSE
+numValues: 18, numResults: 8, stopped: FALSE
+returning status FALSE
+numValues: 19, numResults: 9, stopped: FALSE
+returning status FALSE
+numValues: 20, numResults: 10, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.3)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.4)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.5)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.6)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.7)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.8)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.9)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.10)
+returning status FALSE
+numValues: 21, numResults: 11, stopped: FALSE
+returning status FALSE
+numValues: 22, numResults: 12, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.11)
+returning status FALSE
+numValues: 23, numResults: 13, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.12)
+returning status FALSE
+numValues: 24, numResults: 14, stopped: FALSE
+returning status FALSE
+numValues: 25, numResults: 15, stopped: FALSE
+returning status FALSE
+numValues: 26, numResults: 16, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.13)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.14)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.15)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.16)
+returning status FALSE
+numValues: 27, numResults: 17, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.17)
+returning status FALSE
+numValues: 28, numResults: 18, stopped: FALSE
+returning status FALSE
+numValues: 29, numResults: 19, stopped: FALSE
+returning status FALSE
+numValues: 30, numResults: 20, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.18)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.19)
+returning status FALSE
+numValues: 31, numResults: 21, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.20)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.21)
+returning status FALSE
+numValues: 32, numResults: 22, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.22)
+returning status FALSE
+numValues: 33, numResults: 23, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.23)
+returning status FALSE
+numValues: 34, numResults: 24, stopped: FALSE
+returning status FALSE
+numValues: 35, numResults: 25, stopped: FALSE
+returning status FALSE
+numValues: 36, numResults: 26, stopped: FALSE
+returning status FALSE
+numValues: 37, numResults: 27, stopped: FALSE
+returning status FALSE
+numValues: 38, numResults: 28, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.24)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.25)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.26)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.27)
+returning status FALSE
+numValues: 39, numResults: 29, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.28)
+returning status FALSE
+numValues: 40, numResults: 30, stopped: FALSE
+returning status FALSE
+numValues: 41, numResults: 31, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.29)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.30)
+returning status FALSE
+numValues: 42, numResults: 32, stopped: FALSE
+returning status FALSE
+numValues: 43, numResults: 33, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.31)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.32)
+returning status FALSE
+numValues: 44, numResults: 34, stopped: FALSE
+returning status FALSE
+numValues: 45, numResults: 35, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.33)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.34)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.35)
 returning status FALSE
-got results for task 2
-numValues: 92, numResults: 2, stopped: TRUE
+numValues: 46, numResults: 36, stopped: FALSE
+returning status FALSE
+numValues: 47, numResults: 37, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.36)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.37)
+returning status FALSE
+numValues: 48, numResults: 38, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.38)
+returning status FALSE
+numValues: 49, numResults: 39, stopped: FALSE
+returning status FALSE
+numValues: 50, numResults: 40, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.39)
+returning status FALSE
+numValues: 51, numResults: 41, stopped: FALSE
+returning status FALSE
+numValues: 52, numResults: 42, stopped: FALSE
+returning status FALSE
+numValues: 53, numResults: 43, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.40)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.41)
+returning status FALSE
+numValues: 54, numResults: 44, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.42)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.43)
+returning status FALSE
+numValues: 55, numResults: 45, stopped: FALSE
+returning status FALSE
+numValues: 56, numResults: 46, stopped: FALSE
+returning status FALSE
+numValues: 57, numResults: 47, stopped: FALSE
+returning status FALSE
+numValues: 58, numResults: 48, stopped: FALSE
+returning status FALSE
+numValues: 59, numResults: 49, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.44)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.45)
+returning status FALSE
+numValues: 60, numResults: 50, stopped: FALSE
+returning status FALSE
+numValues: 61, numResults: 51, stopped: FALSE
+returning status FALSE
+numValues: 62, numResults: 52, stopped: FALSE
+returning status FALSE
+numValues: 63, numResults: 53, stopped: FALSE
+returning status FALSE
+numValues: 64, numResults: 54, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.46)
+returning status FALSE
+numValues: 65, numResults: 55, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.47)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.48)
+returning status FALSE
+numValues: 66, numResults: 56, stopped: FALSE
+returning status FALSE
+numValues: 67, numResults: 57, stopped: FALSE
+returning status FALSE
+numValues: 68, numResults: 58, stopped: FALSE
+returning status FALSE
+numValues: 69, numResults: 59, stopped: FALSE
+returning status FALSE
+numValues: 70, numResults: 60, stopped: FALSE
+returning status FALSE
+numValues: 71, numResults: 61, stopped: FALSE
+returning status FALSE
+numValues: 72, numResults: 62, stopped: FALSE
+returning status FALSE
+numValues: 73, numResults: 63, stopped: FALSE
+returning status FALSE
+numValues: 74, numResults: 64, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.49)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.50)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.51)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.52)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.53)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.54)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.55)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.56)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.57)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.58)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.59)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.60)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.61)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.62)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.63)
+returning status FALSE
+numValues: 75, numResults: 65, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.64)
+returning status FALSE
+numValues: 76, numResults: 66, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.65)
+returning status FALSE
+numValues: 77, numResults: 67, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.66)
+returning status FALSE
+numValues: 78, numResults: 68, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.67)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.68)
+returning status FALSE
+numValues: 79, numResults: 69, stopped: FALSE
+returning status FALSE
+numValues: 80, numResults: 70, stopped: FALSE
+returning status FALSE
+numValues: 81, numResults: 71, stopped: FALSE
+returning status FALSE
+numValues: 82, numResults: 72, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.69)
+returning status FALSE
+numValues: 83, numResults: 73, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.70)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.71)
+returning status FALSE
+numValues: 84, numResults: 74, stopped: FALSE
+returning status FALSE
+numValues: 85, numResults: 75, stopped: FALSE
+returning status FALSE
+numValues: 86, numResults: 76, stopped: FALSE
+returning status FALSE
+numValues: 87, numResults: 77, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.72)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.73)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.74)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.75)
+returning status FALSE
+numValues: 88, numResults: 78, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.76)
+returning status FALSE
+numValues: 89, numResults: 79, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.77)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.78)
+returning status FALSE
+numValues: 90, numResults: 80, stopped: FALSE
+returning status FALSE
+numValues: 91, numResults: 81, stopped: FALSE
+returning status FALSE
+numValues: 92, numResults: 82, stopped: FALSE
 returning status FALSE
-got results for task 3
-numValues: 92, numResults: 3, stopped: TRUE
-returning status FALSE
-got results for task 4
-numValues: 92, numResults: 4, stopped: TRUE
-returning status FALSE
-got results for task 5
-numValues: 92, numResults: 5, stopped: TRUE
-returning status FALSE
-got results for task 6
-numValues: 92, numResults: 6, stopped: TRUE
-returning status FALSE
-got results for task 7
-numValues: 92, numResults: 7, stopped: TRUE
-returning status FALSE
-got results for task 8
-numValues: 92, numResults: 8, stopped: TRUE
-returning status FALSE
-got results for task 9
-numValues: 92, numResults: 9, stopped: TRUE
-returning status FALSE
-got results for task 10
-numValues: 92, numResults: 10, stopped: TRUE
-returning status FALSE
-got results for task 11
-numValues: 92, numResults: 11, stopped: TRUE
-returning status FALSE
-got results for task 12
-numValues: 92, numResults: 12, stopped: TRUE
-returning status FALSE
-got results for task 13
-numValues: 92, numResults: 13, stopped: TRUE
-returning status FALSE
-got results for task 14
-numValues: 92, numResults: 14, stopped: TRUE
-returning status FALSE
-got results for task 15
-numValues: 92, numResults: 15, stopped: TRUE
-returning status FALSE
-got results for task 16
-numValues: 92, numResults: 16, stopped: TRUE
-returning status FALSE
-got results for task 17
-numValues: 92, numResults: 17, stopped: TRUE
-returning status FALSE
-got results for task 18
-numValues: 92, numResults: 18, stopped: TRUE
-returning status FALSE
-got results for task 19
-numValues: 92, numResults: 19, stopped: TRUE
-returning status FALSE
-got results for task 20
-numValues: 92, numResults: 20, stopped: TRUE
-returning status FALSE
-got results for task 21
-numValues: 92, numResults: 21, stopped: TRUE
-returning status FALSE
-got results for task 22
-numValues: 92, numResults: 22, stopped: TRUE
-returning status FALSE
-got results for task 23
-numValues: 92, numResults: 23, stopped: TRUE
-returning status FALSE
-got results for task 24
-numValues: 92, numResults: 24, stopped: TRUE
-returning status FALSE
-got results for task 25
-numValues: 92, numResults: 25, stopped: TRUE
-returning status FALSE
-got results for task 26
-numValues: 92, numResults: 26, stopped: TRUE
-returning status FALSE
-got results for task 27
-numValues: 92, numResults: 27, stopped: TRUE
-returning status FALSE
-got results for task 28
-numValues: 92, numResults: 28, stopped: TRUE
-returning status FALSE
-got results for task 29
-numValues: 92, numResults: 29, stopped: TRUE
-returning status FALSE
-got results for task 30
-numValues: 92, numResults: 30, stopped: TRUE
-returning status FALSE
-got results for task 31
-numValues: 92, numResults: 31, stopped: TRUE
-returning status FALSE
-got results for task 32
-numValues: 92, numResults: 32, stopped: TRUE
-returning status FALSE
-got results for task 33
-numValues: 92, numResults: 33, stopped: TRUE
-returning status FALSE
-got results for task 34
-numValues: 92, numResults: 34, stopped: TRUE
-returning status FALSE
-got results for task 35
-numValues: 92, numResults: 35, stopped: TRUE
-returning status FALSE
-got results for task 36
-numValues: 92, numResults: 36, stopped: TRUE
-returning status FALSE
-got results for task 37
-numValues: 92, numResults: 37, stopped: TRUE
-returning status FALSE
-got results for task 38
-numValues: 92, numResults: 38, stopped: TRUE
-returning status FALSE
-got results for task 39
-numValues: 92, numResults: 39, stopped: TRUE
-returning status FALSE
-got results for task 40
-numValues: 92, numResults: 40, stopped: TRUE
-returning status FALSE
-got results for task 41
-numValues: 92, numResults: 41, stopped: TRUE
-returning status FALSE
-got results for task 42
-numValues: 92, numResults: 42, stopped: TRUE
-returning status FALSE
-got results for task 43
-numValues: 92, numResults: 43, stopped: TRUE
-returning status FALSE
-got results for task 44
-numValues: 92, numResults: 44, stopped: TRUE
-returning status FALSE
-got results for task 45
-numValues: 92, numResults: 45, stopped: TRUE
-returning status FALSE
-got results for task 46
-numValues: 92, numResults: 46, stopped: TRUE
-returning status FALSE
-got results for task 47
-numValues: 92, numResults: 47, stopped: TRUE
-returning status FALSE
-got results for task 48
-numValues: 92, numResults: 48, stopped: TRUE
-returning status FALSE
-got results for task 49
-numValues: 92, numResults: 49, stopped: TRUE
-returning status FALSE
-got results for task 50
-numValues: 92, numResults: 50, stopped: TRUE
-returning status FALSE
-got results for task 51
-numValues: 92, numResults: 51, stopped: TRUE
-returning status FALSE
-got results for task 52
-numValues: 92, numResults: 52, stopped: TRUE
-returning status FALSE
-got results for task 53
-numValues: 92, numResults: 53, stopped: TRUE
-returning status FALSE
-got results for task 54
-numValues: 92, numResults: 54, stopped: TRUE
-returning status FALSE
-got results for task 55
-numValues: 92, numResults: 55, stopped: TRUE
-returning status FALSE
-got results for task 56
-numValues: 92, numResults: 56, stopped: TRUE
-returning status FALSE
-got results for task 57
-numValues: 92, numResults: 57, stopped: TRUE
-returning status FALSE
-got results for task 58
-numValues: 92, numResults: 58, stopped: TRUE
-returning status FALSE
-got results for task 59
-numValues: 92, numResults: 59, stopped: TRUE
-returning status FALSE
-got results for task 60
-numValues: 92, numResults: 60, stopped: TRUE
-returning status FALSE
-got results for task 61
-numValues: 92, numResults: 61, stopped: TRUE
-returning status FALSE
-got results for task 62
-numValues: 92, numResults: 62, stopped: TRUE
-returning status FALSE
-got results for task 63
-numValues: 92, numResults: 63, stopped: TRUE
-returning status FALSE
-got results for task 64
-numValues: 92, numResults: 64, stopped: TRUE
-returning status FALSE
-got results for task 65
-numValues: 92, numResults: 65, stopped: TRUE
-returning status FALSE
-got results for task 66
-numValues: 92, numResults: 66, stopped: TRUE
-returning status FALSE
-got results for task 67
-numValues: 92, numResults: 67, stopped: TRUE
-returning status FALSE
-got results for task 68
-numValues: 92, numResults: 68, stopped: TRUE
-returning status FALSE
-got results for task 69
-numValues: 92, numResults: 69, stopped: TRUE
-returning status FALSE
-got results for task 70
-numValues: 92, numResults: 70, stopped: TRUE
-returning status FALSE
-got results for task 71
-numValues: 92, numResults: 71, stopped: TRUE
-returning status FALSE
-got results for task 72
-numValues: 92, numResults: 72, stopped: TRUE
-returning status FALSE
-got results for task 73
-numValues: 92, numResults: 73, stopped: TRUE
-returning status FALSE
-got results for task 74
-numValues: 92, numResults: 74, stopped: TRUE
-returning status FALSE
-got results for task 75
-numValues: 92, numResults: 75, stopped: TRUE
-returning status FALSE
-got results for task 76
-numValues: 92, numResults: 76, stopped: TRUE
-returning status FALSE
-got results for task 77
-numValues: 92, numResults: 77, stopped: TRUE
-returning status FALSE
-got results for task 78
-numValues: 92, numResults: 78, stopped: TRUE
-returning status FALSE
-got results for task 79
-numValues: 92, numResults: 79, stopped: TRUE
-returning status FALSE
-got results for task 80
-numValues: 92, numResults: 80, stopped: TRUE
-returning status FALSE
-got results for task 81
-numValues: 92, numResults: 81, stopped: TRUE
-returning status FALSE
-got results for task 82
 numValues: 92, numResults: 82, stopped: TRUE
-returning status FALSE
-got results for task 83
 numValues: 92, numResults: 83, stopped: TRUE
 returning status FALSE
-got results for task 84
 numValues: 92, numResults: 84, stopped: TRUE
 returning status FALSE
-got results for task 85
 numValues: 92, numResults: 85, stopped: TRUE
 returning status FALSE
-got results for task 86
 numValues: 92, numResults: 86, stopped: TRUE
 returning status FALSE
-got results for task 87
 numValues: 92, numResults: 87, stopped: TRUE
 returning status FALSE
-got results for task 88
 numValues: 92, numResults: 88, stopped: TRUE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.79)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.80)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.81)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.82)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.83)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.84)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.85)
 returning status FALSE
-got results for task 89
 numValues: 92, numResults: 89, stopped: TRUE
 returning status FALSE
-got results for task 90
 numValues: 92, numResults: 90, stopped: TRUE
 returning status FALSE
-got results for task 91
 numValues: 92, numResults: 91, stopped: TRUE
 returning status FALSE
-got results for task 92
 numValues: 92, numResults: 92, stopped: TRUE
 calling combine function
 evaluating call object to combine results:
-  fun(accum, result.2, result.3, result.5, result.6, result.8, 
-    result.10, result.11, result.12, result.13, result.14, result.15, 
-    result.16, result.17, result.18, result.19, result.20, result.21, 
-    result.22, result.23, result.24, result.25, result.26, result.27, 
-    result.28, result.29, result.32, result.34, result.35, result.36, 
-    result.37, result.38, result.40, result.41, result.42, result.43, 
-    result.44, result.45, result.46, result.47, result.48, result.49, 
-    result.50, result.51, result.52, result.53, result.54, result.55, 
-    result.57, result.58, result.59, result.60, result.61, result.62, 
-    result.63, result.64, result.68, result.69, result.70, result.71, 
-    result.72, result.73, result.74, result.76, result.77, result.78, 
-    result.79, result.80, result.81, result.82, result.83, result.85, 
-    result.87, result.88, result.89, result.90, result.91)
+  fun(accum, result.86)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.87)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.88)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.89)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.90)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.91)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.92)
 returning status TRUE
-Error in { : task 1 failed - "argument is of length zero"
-Calls: %dopar% -> <Anonymous>
-Execution halted
+[[1]]
+[[1]][[1]]
+[[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[1]][[2]]
+NULL
+
+
+[[1]][[1]][[2]]
+NULL
+
+
+[[1]][[2]]
+NULL
+
+
+[[2]]
+NULL
+
+[1] "2021-09-01 17:06:10 - Analysis done!"
