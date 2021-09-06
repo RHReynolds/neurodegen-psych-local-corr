@@ -1,5 +1,5 @@
 ---
-title: "Title"
+title: "Dissecting individual loci with eQTLs"
 author: 
 - name: "Regina H. Reynolds"
   affiliation: UCL
@@ -236,6 +236,8 @@ source(here::here("R", "plots.R"))
 
 # Methods {.tabset}
 
+![](../man/figures/figure_lava_eqtl_workflow.png)
+
 ## Deriving loci for eQTL analyses
 
 Firstly, we determined a number of LD blocks of interest from the LD blocks highlighted by bivariate local $r_{g}$ analyses. LD blocks included:
@@ -442,7 +444,7 @@ results$univ %>%
   facet_wrap(vars(phen)) +
   labs(
     x = "Number of SNPs within the locus (logarithmic scale)",
-    y = "Observed local heritability"
+    y = "-log10(p-value)"
   ) +
   theme_rhr
 
@@ -456,14 +458,26 @@ results$univ %>%
 - Locus 681
     - Across the entire LD block, a negative local $r_{g}$ was observed between AD and PD.
     - When locus 681 was subsetted by gene locus, a significant negative $r_{g}$ between AD and PD was only observed in the *SNCA* gene locus. 
-    - In addition, a significant negative $r_{g}$ was observed between PD and eQTLGen-derived *SNCA* eQTLs (implying that increased PD risk is correlated with decreased *SNCA* expression). This is contrary to expectation, given that *SNCA* triplication causes familial PD. Worth noting that the $r^2$ (proportion of variance in genetic signal for one phenotype explained by the other) was $r^2$ = `r results$bivar %>% dplyr::filter(ld_block == 681, phen1== "PD", phen2 == "ENSG00000145335") %>% .[["r2"]] %>% round(digits = 2)` (as compared to the $r^2$ between AD and PD at this locus, which was $r^2$ = `r results$bivar %>% dplyr::filter(ld_block == 681, gene_locus == "ENSG00000145335", phen1== "AD", phen2 == "PD") %>% .[["r2"]] %>% round(digits = 2)`). 
+    - In addition, a significant negative $r_{g}$ was observed between PD and eQTLGen-derived *SNCA* eQTLs (implying that increased PD risk is correlated with decreased *SNCA* expression). 
+        - While initially this may seem contrary to expectation, given that *SNCA* duplication/triplication events cause familial PD, it is important to bear in mind that this correlation is using blood-derived *SNCA* eQTLs. *SNCA* transcript counts in circulating blood cells have been observed to be reduced in early PD, an association that was seen in two PD case-control studies (Harvard Biomarker Study and the multicentre PROBE study) and a study of patients near disease onset (PPMI; PMID: [26220939](https://pubmed.ncbi.nlm.nih.gov/26220939/)). Importantly, this reduction in indviduals with PD remained significant after adjusting for covariates of gender, white and red blood cell counts.
+        - Worth noting that the $r^2$ (proportion of variance in genetic signal for one phenotype explained by the other) was $r^2$ = `r results$bivar %>% dplyr::filter(ld_block == 681, phen1== "PD", phen2 == "ENSG00000145335") %>% .[["r2"]] %>% round(digits = 2)` (as compared to the $r^2$ between AD and PD at this locus, which was $r^2$ = `r results$bivar %>% dplyr::filter(ld_block == 681, gene_locus == "ENSG00000145335", phen1== "AD", phen2 == "PD") %>% .[["r2"]] %>% round(digits = 2)`). 
 - Locus 1273
     - Across the entire LD block, a positive local $r_{g}$ was observed between AD and PD.
     - When locus 1273 was subsetted by gene locus, a significant positive local $r_{g}$ was observed between AD and PD in `r results$bivar %>% dplyr::filter(ld_block == 1273, phen1== "AD", phen2 == "PD", fdr < 0.05, rho > 0) %>% .[["gene_locus"]] %>% unique() %>% length()` out of `r gene_filtered_loci %>% dplyr::filter(locus == 1273) %>% nrow()` gene loci (in the remaining gene loci, local $r_{g}$'s between AD and PD were non-significant). This included the *SCARA5* gene locus, where significant negative local $r_{g}$'s were observed between AD and eQTLGen-derived *SCARA5* eQTLs, as well as, PD and eQTLGen-derived *SCARA5* eQTLs.
+        - *SCARA5* is a ferritin receptor that internalises ferritin (protein that stores iron), after which iron is liberated and transported to the cytosol. It is important for non-transferrin iron delivery (PMID: [19154717](https://pubmed.ncbi.nlm.nih.gov/19154717/)). 
+        - This is notable, as ferritin has found to be increased in AD and PD and, more generally, several studies have implicated cellular iron overload and iron-induced oxidative stress in AD, PD and other neurodegenerative diseases (as reviewed in PMID: [28154410](https://pubmed.ncbi.nlm.nih.gov/28154410/)).
+    - A significant positive local $r_{g}$ was also observed at the *ELP3* gene locus, together with a positive local $r_{g}$ between PD and eQTLGen-derived *ELP3* eQTLs. *ELP3* is a component of the RNA polymerase II elongator complex (specifically it is the catalytic tRNA acetyltransferase subunit), which is required for multiple tRNA modifications. It is thought to be involved in neurogenesis (PMID: [19185337](https://pubmed.ncbi.nlm.nih.gov/19185337/)). Emil Gustavsson mentioned that ELP3 was a PD candidate risk gene he had been working on, but was unable to link to PD risk. 
     - Notably, while no local $r_{g}$ was observed between AD and PD in the *CLU* locus, a significant positive local $r_{g}$ was observed between AD and eQTLGen-derived *CLU* eQTLs and a negative local $r_{g}$ was observed between PD and eQTLGen-derived *CLU* eQTLs. *CLU* has been associated with AD (PMID: [30872998](https://pubmed.ncbi.nlm.nih.gov/30872998/)), although the mechanism by which it might confer risk or protection is not known.
 - Locus 1719
     - Across the entire LD block, a positive local $r_{g}$ was observed between BIP, MDD and SCZ and a negative local $r_{g}$ between SCZ and LBD.
-    - This relationship was almost entirely replicated in the NCAM1 locus, the exception being that no positive local $r_{g}$ was observed between BIP and MDD. In this locus, however, a significant positive local $r_{g}$ was observed between BIP and eQTLGen-derived *NCAM1* eQTLs. Genetic variation in *NCAM1* has previously been associated with increased risk of BIP in Japanese individuals (PMID: [15050861](https://pubmed.ncbi.nlm.nih.gov/15050861/)) 
+    - This relationship was almost entirely replicated in the *NCAM1* locus, the exception being that no positive local $r_{g}$ was observed between BIP and MDD. In this locus, however, a significant positive local $r_{g}$ was observed between BIP and eQTLGen-derived *NCAM1* eQTLs. 
+        - *NCAM1* is a cell adhesion protein, which is a member of the immunoglobulin superfamily, and is involved in cell-to-cell interactions as well as cell-matrix interactions during development and differentiation. It is best known as a marker of neural lineages, but is also expressed in the hematopoietic system (PMID: [28791027](https://pubmed.ncbi.nlm.nih.gov/28791027/)).
+        - Genetic variation in *NCAM1* has previously been associated with increased risk of BIP in Japanese individuals (PMID: [15050861](https://pubmed.ncbi.nlm.nih.gov/15050861/)).
+    - The positive local $r_{g}$ observed between BIP, MDD and SCZ was also replicated in the *ANKK1* locus. In addition, a significant negative local $r_{g}$ was observed between all three neuropsychiatric disorders and eQTLGen-derived *ANKK1* eQTLs, an observation which was replicated for MDD and SCZ using *ANKK1* PsychENCODE-derived eQTLs.
+        - *ANKK1* encodes a protein belonging to the Ser/Thr protein kinase family. 
+        - This gene is closely linked to *DRD2* gene, and a well-studied restriction fragment length polymorphism designated *TaqIA*, was originally associated with the DRD2 gene, however, later was determined to be located in exon 8 of ANKK1 gene, where it causes a nonconservative amino acid substitution (PMID: [15146457](https://pubmed.ncbi.nlm.nih.gov/15146457/), [18621654](https://pubmed.ncbi.nlm.nih.gov/18621654/)).
+        - *TaqIA* polymorphism thought to be a marker of both *DRD2* and *ANKK1* genetic variant. Has been linked to: alcoholism, antisocial traits, schizophrenia, eating disorders, and some behavioral childhood disorders (PMID: [19526298](https://pubmed.ncbi.nlm.nih.gov/19526298/)). 
+    - Worth noting that *DRD2* is not expressed in whole blood (GTEx v8, median TPM = 0, n = 755), which would explain why no eQTLs were found to regulate *DRD2* in the eQTLGen dataset. In the PsychENCODE dataset, eQTLs were detected and had sufficient local heritability ($h^2$ = `r results$univ %>% dplyr::filter(phen == "ENSG00000149295") %>% .[["h2.obs"]] %>% round(digits = 3)`, p = `r results$univ %>% dplyr::filter(phen == "ENSG00000149295") %>% .[["p"]] %>% round(digits = 4)`), but no significant local $r_{g}$'s were detected.
 - Locus 2281
     - Across the entire LD block, a positive local $r_{g}$ was observed between (i) BIP and SCZ, (ii) MDD and SCZ and (iii) AD and PD.
     - The positive local $r_{g}$ observed between (i) BIP and SCZ and (ii) MDD and SCZ was replicated in the *TCF4* gene locus. In addition, a significant negative local $r_{g}$ was observed between (i) MDD and eQTLGen-derived *TCF4* eQTLs and (ii) AD and eQTLGen-derived *TCF4* eQTLs.
@@ -473,7 +487,9 @@ results$univ %>%
     - While each of these correlations was not replicated in every gene locus with a significant local $r_{g}$ between a disease phenotype and eQTL, where they were, they shared the same direction of effect as the local $r_{g}$ observed across the entire LD block. 
     - A total of `r bivar_sign %>% dplyr::filter(ld_block == 2351, str_detect(phen2, "ENSG")) %>% .[["gene_locus"]] %>% unique() %>% length()` gene loci contained a local $r_{g}$ between a disease phenotype and eQTL. 
     - No significant local $r_{g}$ was observed between *APOE* eQTLs and any of the disease traits. In part this was because there was insufficient heritability in the region using PsychENCODE eQTLs (univariate p-value = `r results$univ %>% dplyr::filter(gene_name == "APOE", str_detect(phen, "ENSG"), eqtl_dataset == "PSYCHENCODE") %>% .[["p"]] %>% round(digits = 2)`). While there was sufficient heritability using eQTLGen eQTLs (univariate p-value = `r results$univ %>% dplyr::filter(gene_name == "APOE", str_detect(phen, "ENSG"), eqtl_dataset == "EQTLGEN") %>% .[["p"]]`), bivariate p-values did not pass FDR-correction (AD-APOE, rho = `r results$bivar %>% dplyr::filter(gene_name == "APOE", phen1 == "AD", str_detect(phen2, "ENSG")) %>% .[["rho"]] %>% round(digits = 2)`, p = `r results$bivar %>% dplyr::filter(gene_name == "APOE", phen1 == "AD", str_detect(phen2, "ENSG")) %>% .[["p"]] %>% round(digits = 3)`; LBD-APOE, rho = `r results$bivar %>% dplyr::filter(gene_name == "APOE", phen1 == "LBD", str_detect(phen2, "ENSG")) %>% .[["rho"]] %>% round(digits = 2)`, p = `r results$bivar %>% dplyr::filter(gene_name == "APOE", phen1 == "LBD", str_detect(phen2, "ENSG")) %>% .[["p"]] %>% round(digits = 3)`; PD-APOE, rho = `r results$bivar %>% dplyr::filter(gene_name == "APOE", phen1 == "PD", str_detect(phen2, "ENSG")) %>% .[["rho"]] %>% round(digits = 2)`, p = `r results$bivar %>% dplyr::filter(gene_name == "APOE", phen1 == "PD", str_detect(phen2, "ENSG")) %>% .[["p"]] %>% round(digits = 3)`). However, as seen at the level of LD block, AD and LBD were positively correlated, while (i) AD and PD and (ii) LBD and PD were negatively correlated. 
-    - At the *TOMM40* gene locus (which is adjacent to the *APOE* gene locus), disease phenotypes were correlated as observed at the level of LD block. In addition significant positive local $r_{g}$'s were observed between eQTLGen-derived *TOMM40* eQTLs and both AD and LBD. Similar local $r_{g}$ patterns were seen at the *PVRL2* gene locus, which is adjacent to the *TOMM40* gene locus.
+    - At the *TOMM40* gene locus (which is adjacent to the *APOE* gene locus), disease phenotypes were correlated as observed at the level of LD block. In addition significant positive local $r_{g}$'s were observed between eQTLGen-derived *TOMM40* eQTLs and both AD and LBD (*TOMM40* has been previously associated with AD). Similar local $r_{g}$ patterns were seen at the *PVRL2* gene locus, which is adjacent to the *TOMM40* gene locus. Notably, haplotypes in the *PVRL2* have been found to exert risk effects on AD in an APOE-E4 and APOE-E2 genotype-independent manner (PMID: [31346172](https://pubmed.ncbi.nlm.nih.gov/31346172/))
+    - Other notable eQTL-trait associations include:
+        - A positive correlation between AD and *GEMIN7* eQTLs (across both eQTLGen and PyschENCODE, albeit stronger in PsychENCODE).  *GEMIN7* is a component of the core SMN complex (PMID: [12065586](https://pubmed.ncbi.nlm.nih.gov/12065586/)), which is required for pre-mRNA splicing in the nucleus.
     
 ### Figures
 
