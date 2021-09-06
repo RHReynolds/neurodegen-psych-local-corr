@@ -1,3 +1,5 @@
+# Description: run partial correlations for GWAS traits
+
 # Load packages -----------------------------------------------------------
 
 library(here)

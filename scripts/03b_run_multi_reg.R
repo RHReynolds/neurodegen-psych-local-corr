@@ -1,3 +1,5 @@
+# Description: run multiple regressions for GWAS traits
+
 # Load packages -----------------------------------------------------------
 
 library(here)

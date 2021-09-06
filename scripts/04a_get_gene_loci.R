@@ -1,3 +1,5 @@
+# Description: get gene loci from LD blocks of interest
+
 # Load packages -----------------------------------------------------------
 
 library(GenomicRanges)

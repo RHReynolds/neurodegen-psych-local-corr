@@ -1,3 +1,5 @@
+# Description: get sample overlaps between GWAS traits
+
 # Load packages -----------------------------------------------------------
 
 library(tidyverse)

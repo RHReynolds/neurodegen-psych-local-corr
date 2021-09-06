@@ -1,3 +1,5 @@
+# Description: pre-process eQTLs in gene loci of interest
+
 # Load packages -----------------------------------------------------------
 
 library(data.table)

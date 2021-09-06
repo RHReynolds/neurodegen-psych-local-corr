@@ -1,3 +1,5 @@
+# Description: get sample overlaps for eQTL/GWAS traits
+
 # Load packages -----------------------------------------------------------
 
 library(tidyverse)
