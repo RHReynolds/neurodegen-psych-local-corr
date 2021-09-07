@@ -33,7 +33,7 @@ Within this repository you will find:
 <td>For any scripts that were run outside of an <code>.Rmd</code> (e.g. scripts from the <a href="scripts" class="uri">scripts</a> directory), a log file was recorded and can be accessed here.</td>
 </tr>
 <tr class="odd">
-<td><a href="manuscript">man</a></td>
+<td><a href="man" class="uri">man</a></td>
 <td>Figures used in <code>.Rmd</code>s.</td>
 </tr>
 <tr class="even">
