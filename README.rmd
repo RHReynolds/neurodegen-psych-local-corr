@@ -27,7 +27,7 @@ Within this repository you will find:
 | --------- | --------------------------------------------------------------------------- |
 | [docs](docs) | Contains all `.Rmd`s and their corresponding `.html`s describing analyses performed for this project. These can be view interactively at: [https://rhreynolds.github.io/neurodegen-psych-local-corr/](https://rhreynolds.github.io/neurodegen-psych-local-corr/)|
 | [logs](logs) | For any scripts that were run outside of an `.Rmd` (e.g. scripts from the [scripts](scripts) directory), a log file was recorded and can be accessed here. |
-| [man](manuscript) | Figures used in `.Rmd`s. |
+| [man](man) | Figures used in `.Rmd`s. |
 | [R](R)| Various functions called in [docs](docs) and [scripts](scripts). |
 | [results](results) | Results from all analyses. |
 | [scripts](scripts) | Contains analysis scripts. Each script contains a one-line description and is also referenced in its corresponding `.Rmd`. |
