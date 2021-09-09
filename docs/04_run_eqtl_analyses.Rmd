@@ -385,7 +385,7 @@ bivar_sign %>%
 
 - We detect a total of `r bivar_sign %>% nrow()` significant bivariate local $r_{g}$'s across `r bivar_sign %>% dplyr::distinct(gene_locus) %>% nrow()` distinct gene loci. When pairs of disease phenotypes (which were tested across multiple genes within an LD block) are collapsed within an LD block, we detect a total of `r bivar_sign %>% dplyr::distinct(ld_block, phen1, phen2) %>% nrow()` significant bivariate local $r_{g}$'s.
 - Of the two eQTL datasets, the dataset with the highest number of gene loci (i.e. a gene where eQTLs were detected) was PsychENCODE (eQTLGen, n gene loci = `r results$univ %>% dplyr::distinct(eqtl_dataset, gene_locus) %>% dplyr::count(eqtl_dataset) %>% dplyr::filter(eqtl_dataset == "EQTLGEN") %>% .[["n"]]`; PsychENCODE, n gene loci = `r results$univ %>% dplyr::distinct(eqtl_dataset, gene_locus) %>% dplyr::count(eqtl_dataset) %>% dplyr::filter(eqtl_dataset == "PSYCHENCODE") %>% .[["n"]]`). In spite of this, the eQTL dataset with highest number of significant bivariate local $r_{g}$'s was eQTLGen (Figure \@ref(fig:chord-diagram-rho)).
-- Given that gene loci might vary in size, we plotted the number of SNPs within a locus and the p-value from the univariate test to determine. There was no apparent relationship between the two (as determined by visual inspection, Figure \@ref(fig:nsnps-univ-pvalue)).
+- Given that gene loci might vary in size, we plotted the number of SNPs within a locus and the p-value from the univariate test to determine whether there was a relationship between locus size and univariate p-value. There was no apparent relationship between the two (as determined by visual inspection, Figure \@ref(fig:nsnps-univ-pvalue)).
 
 ### Figures
 
