@@ -6,7 +6,7 @@ here() starts at /home/rreynolds/misc_projects/neurodegen-psych-local-corr
 Running LAVA version 0.0.6
 -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
 v ggplot2 3.3.5     v purrr   0.3.4
-v tibble  3.1.3     v dplyr   1.0.7
+v tibble  3.1.4     v dplyr   1.0.7
 v tidyr   1.1.3     v stringr 1.4.0
 v readr   2.0.0     v forcats 0.5.1
 -- Conflicts ------------------------------------------ tidyverse_conflicts() --
@@ -15,11 +15,16 @@ x dplyr::filter()     masks stats::filter()
 x dplyr::lag()        masks stats::lag()
 x purrr::when()       masks foreach::when()
 $univ
-[1] TRUE
+[1] FALSE
 
 $bivar
-[1] TRUE
+[1] FALSE
 
+Warning messages:
+1: In dir.create(x, showWarnings = T) :
+  '/home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/04_eqtl_univar_bivar/univ' already exists
+2: In dir.create(x, showWarnings = T) :
+  '/home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/04_eqtl_univar_bivar/bivar' already exists
 Rows: 140 Columns: 4
 -- Column specification --------------------------------------------------------
 Delimiter: "\t"
@@ -28,8 +33,8 @@ dbl (2): cases, controls
 
 i Use `spec()` to retrieve the full column specification for this data.
 i Specify the column types or set `show_col_types = FALSE` to quiet this message.
-[1] "2021-09-01 15:35:17 - Starting LAVA analysis for 92 genes"
-[1] "2021-09-01 15:35:17 - Log file of foreach parallelisation outputted here: /home/rreynolds/misc_projects/neurodegen-psych-local-corr/logs/04d_run_univar_bivar_test_foreach.log"
+[1] "2021-09-20 15:12:14 - Starting LAVA analysis for 92 genes"
+[1] "2021-09-20 15:12:14 - Log file of foreach parallelisation outputted here: /home/rreynolds/misc_projects/neurodegen-psych-local-corr/logs/04d_run_univar_bivar_test_foreach.log"
 discovered package(s): 
 automatically exporting the following variables from the local environment:
   args, eqtls, gene_filtered_loci, input_info, loci, out_dir, results 
@@ -45,9 +50,6 @@ returning status FALSE
 numValues: 15, numResults: 5, stopped: FALSE
 returning status FALSE
 numValues: 16, numResults: 6, stopped: FALSE
-first call to combine function
-evaluating call object to combine results:
-  fun(result.1, result.2)
 returning status FALSE
 numValues: 17, numResults: 7, stopped: FALSE
 returning status FALSE
@@ -56,6 +58,9 @@ returning status FALSE
 numValues: 19, numResults: 9, stopped: FALSE
 returning status FALSE
 numValues: 20, numResults: 10, stopped: FALSE
+first call to combine function
+evaluating call object to combine results:
+  fun(result.1, result.2)
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.3)
@@ -89,15 +94,17 @@ evaluating call object to combine results:
   fun(accum, result.11)
 returning status FALSE
 numValues: 23, numResults: 13, stopped: FALSE
-calling combine function
-evaluating call object to combine results:
-  fun(accum, result.12)
 returning status FALSE
 numValues: 24, numResults: 14, stopped: FALSE
 returning status FALSE
 numValues: 25, numResults: 15, stopped: FALSE
 returning status FALSE
 numValues: 26, numResults: 16, stopped: FALSE
+returning status FALSE
+numValues: 27, numResults: 17, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.12)
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.13)
@@ -110,8 +117,6 @@ evaluating call object to combine results:
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.16)
-returning status FALSE
-numValues: 27, numResults: 17, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.17)
@@ -129,14 +134,14 @@ evaluating call object to combine results:
   fun(accum, result.19)
 returning status FALSE
 numValues: 31, numResults: 21, stopped: FALSE
+returning status FALSE
+numValues: 32, numResults: 22, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.20)
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.21)
-returning status FALSE
-numValues: 32, numResults: 22, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.22)
@@ -155,6 +160,8 @@ returning status FALSE
 numValues: 37, numResults: 27, stopped: FALSE
 returning status FALSE
 numValues: 38, numResults: 28, stopped: FALSE
+returning status FALSE
+numValues: 39, numResults: 29, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.24)
@@ -167,21 +174,19 @@ evaluating call object to combine results:
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.27)
-returning status FALSE
-numValues: 39, numResults: 29, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.28)
 returning status FALSE
 numValues: 40, numResults: 30, stopped: FALSE
-returning status FALSE
-numValues: 41, numResults: 31, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.29)
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.30)
+returning status FALSE
+numValues: 41, numResults: 31, stopped: FALSE
 returning status FALSE
 numValues: 42, numResults: 32, stopped: FALSE
 returning status FALSE
@@ -207,26 +212,26 @@ evaluating call object to combine results:
   fun(accum, result.35)
 returning status FALSE
 numValues: 46, numResults: 36, stopped: FALSE
-returning status FALSE
-numValues: 47, numResults: 37, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.36)
+returning status FALSE
+numValues: 47, numResults: 37, stopped: FALSE
+returning status FALSE
+numValues: 48, numResults: 38, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.37)
-returning status FALSE
-numValues: 48, numResults: 38, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.38)
 returning status FALSE
 numValues: 49, numResults: 39, stopped: FALSE
-returning status FALSE
-numValues: 50, numResults: 40, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.39)
+returning status FALSE
+numValues: 50, numResults: 40, stopped: FALSE
 returning status FALSE
 numValues: 51, numResults: 41, stopped: FALSE
 returning status FALSE
@@ -241,6 +246,8 @@ evaluating call object to combine results:
   fun(accum, result.41)
 returning status FALSE
 numValues: 54, numResults: 44, stopped: FALSE
+returning status FALSE
+numValues: 55, numResults: 45, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.42)
@@ -248,21 +255,19 @@ calling combine function
 evaluating call object to combine results:
   fun(accum, result.43)
 returning status FALSE
-numValues: 55, numResults: 45, stopped: FALSE
-returning status FALSE
 numValues: 56, numResults: 46, stopped: FALSE
 returning status FALSE
 numValues: 57, numResults: 47, stopped: FALSE
 returning status FALSE
 numValues: 58, numResults: 48, stopped: FALSE
-returning status FALSE
-numValues: 59, numResults: 49, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.44)
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.45)
+returning status FALSE
+numValues: 59, numResults: 49, stopped: FALSE
 returning status FALSE
 numValues: 60, numResults: 50, stopped: FALSE
 returning status FALSE
@@ -273,19 +278,19 @@ returning status FALSE
 numValues: 63, numResults: 53, stopped: FALSE
 returning status FALSE
 numValues: 64, numResults: 54, stopped: FALSE
+returning status FALSE
+numValues: 65, numResults: 55, stopped: FALSE
+returning status FALSE
+numValues: 66, numResults: 56, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.46)
-returning status FALSE
-numValues: 65, numResults: 55, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.47)
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.48)
-returning status FALSE
-numValues: 66, numResults: 56, stopped: FALSE
 returning status FALSE
 numValues: 67, numResults: 57, stopped: FALSE
 returning status FALSE
@@ -378,34 +383,34 @@ returning status FALSE
 numValues: 81, numResults: 71, stopped: FALSE
 returning status FALSE
 numValues: 82, numResults: 72, stopped: FALSE
+returning status FALSE
+numValues: 83, numResults: 73, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.69)
 returning status FALSE
-numValues: 83, numResults: 73, stopped: FALSE
+numValues: 84, numResults: 74, stopped: FALSE
+returning status FALSE
+numValues: 85, numResults: 75, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.70)
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.71)
-returning status FALSE
-numValues: 84, numResults: 74, stopped: FALSE
-returning status FALSE
-numValues: 85, numResults: 75, stopped: FALSE
-returning status FALSE
-numValues: 86, numResults: 76, stopped: FALSE
-returning status FALSE
-numValues: 87, numResults: 77, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.72)
+returning status FALSE
+numValues: 86, numResults: 76, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.73)
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.74)
+returning status FALSE
+numValues: 87, numResults: 77, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.75)
@@ -416,14 +421,14 @@ evaluating call object to combine results:
   fun(accum, result.76)
 returning status FALSE
 numValues: 89, numResults: 79, stopped: FALSE
+returning status FALSE
+numValues: 90, numResults: 80, stopped: FALSE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.77)
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.78)
-returning status FALSE
-numValues: 90, numResults: 80, stopped: FALSE
 returning status FALSE
 numValues: 91, numResults: 81, stopped: FALSE
 returning status FALSE
@@ -439,8 +444,6 @@ returning status FALSE
 numValues: 92, numResults: 86, stopped: TRUE
 returning status FALSE
 numValues: 92, numResults: 87, stopped: TRUE
-returning status FALSE
-numValues: 92, numResults: 88, stopped: TRUE
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.79)
@@ -462,6 +465,8 @@ evaluating call object to combine results:
 calling combine function
 evaluating call object to combine results:
   fun(accum, result.85)
+returning status FALSE
+numValues: 92, numResults: 88, stopped: TRUE
 returning status FALSE
 numValues: 92, numResults: 89, stopped: TRUE
 returning status FALSE
@@ -948,4 +953,4 @@ NULL
 [[2]]
 NULL
 
-[1] "2021-09-01 17:06:10 - Analysis done!"
+[1] "2021-09-20 16:35:52 - Analysis done!"

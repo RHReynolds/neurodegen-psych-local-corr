@@ -610,12 +610,9 @@ plot_qtl_edge_diagram <-
         )
     }
 
-    # Filter for loci with more than one bivariate correlation
     # Filter for loci where there is a bivariate correlation with an eQTL
     bivar_corr_qtl <-
       bivar_corr_qtl %>%
-      dplyr::group_by(eqtl_dataset, gene_locus) %>%
-      dplyr::filter(n() > 1) %>%
       dplyr::inner_join(
         bivar_corr_qtl %>%
           dplyr::filter(

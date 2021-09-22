@@ -1,13 +1,13 @@
-starting worker pid=177598 on localhost:11233 at 15:35:16.459
-starting worker pid=177604 on localhost:11233 at 15:35:16.467
-starting worker pid=177602 on localhost:11233 at 15:35:16.489
-starting worker pid=177600 on localhost:11233 at 15:35:16.517
-starting worker pid=177606 on localhost:11233 at 15:35:16.528
-starting worker pid=177601 on localhost:11233 at 15:35:16.553
-starting worker pid=177607 on localhost:11233 at 15:35:16.562
-starting worker pid=177603 on localhost:11233 at 15:35:16.563
-starting worker pid=177605 on localhost:11233 at 15:35:16.564
-starting worker pid=177599 on localhost:11233 at 15:35:16.575
+starting worker pid=97027 on localhost:11161 at 15:12:13.569
+starting worker pid=97025 on localhost:11161 at 15:12:13.587
+starting worker pid=97026 on localhost:11161 at 15:12:13.595
+starting worker pid=97021 on localhost:11161 at 15:12:13.610
+starting worker pid=97023 on localhost:11161 at 15:12:13.615
+starting worker pid=97024 on localhost:11161 at 15:12:13.623
+starting worker pid=97028 on localhost:11161 at 15:12:13.640
+starting worker pid=97029 on localhost:11161 at 15:12:13.646
+starting worker pid=97022 on localhost:11161 at 15:12:13.676
+starting worker pid=97020 on localhost:11161 at 15:12:13.678
 Running LAVA version 0.0.6
 Running LAVA version 0.0.6
 Running LAVA version 0.0.6
@@ -19,57 +19,38 @@ Running LAVA version 0.0.6
 Running LAVA version 0.0.6
 Running LAVA version 0.0.6
 -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
--- Attaching packages --------------------------------------- tidyverse 1.3.1 --
 v ggplot2 3.3.5     v purrr   0.3.4
-v tibble  3.1.3     v dplyr   1.0.7
-v tidyr   1.1.3     v stringr 1.4.0
-v readr   2.0.0     v forcats 0.5.1
-v ggplot2 3.3.5     v purrr   0.3.4
-v tibble  3.1.3     v dplyr   1.0.7
-v tidyr   1.1.3     v stringr 1.4.0
-v readr   2.0.0     v forcats 0.5.1
--- Attaching packages --------------------------------------- tidyverse 1.3.1 --
-v ggplot2 3.3.5     v purrr   0.3.4
-v tibble  3.1.3     v dplyr   1.0.7
+v tibble  3.1.4     v dplyr   1.0.7
 v tidyr   1.1.3     v stringr 1.4.0
 v readr   2.0.0     v forcats 0.5.1
 -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
 -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
 v ggplot2 3.3.5     v purrr   0.3.4
-v tibble  3.1.3     v dplyr   1.0.7
+v tibble  3.1.4     v dplyr   1.0.7
 v tidyr   1.1.3     v stringr 1.4.0
 v readr   2.0.0     v forcats 0.5.1
 v ggplot2 3.3.5     v purrr   0.3.4
-v tibble  3.1.3     v dplyr   1.0.7
-v tidyr   1.1.3     v stringr 1.4.0
-v readr   2.0.0     v forcats 0.5.1
--- Attaching packages --------------------------------------- tidyverse 1.3.1 --
--- Attaching packages --------------------------------------- tidyverse 1.3.1 --
-v ggplot2 3.3.5     v purrr   0.3.4
-v tibble  3.1.3     v dplyr   1.0.7
+v tibble  3.1.4     v dplyr   1.0.7
 v tidyr   1.1.3     v stringr 1.4.0
 v readr   2.0.0     v forcats 0.5.1
 -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
 v ggplot2 3.3.5     v purrr   0.3.4
-v tibble  3.1.3     v dplyr   1.0.7
+v tibble  3.1.4     v dplyr   1.0.7
 v tidyr   1.1.3     v stringr 1.4.0
 v readr   2.0.0     v forcats 0.5.1
-v ggplot2 3.3.5     v purrr   0.3.4
-v tibble  3.1.3     v dplyr   1.0.7
-v tidyr   1.1.3     v stringr 1.4.0
-v readr   2.0.0     v forcats 0.5.1
--- Conflicts ------------------------------------------ tidyverse_conflicts() --
-x dplyr::filter() masks stats::filter()
-x dplyr::lag()    masks stats::lag()
--- Conflicts ------------------------------------------ tidyverse_conflicts() --
-x dplyr::filter() masks stats::filter()
-x dplyr::lag()    masks stats::lag()
--- Conflicts ------------------------------------------ tidyverse_conflicts() --
-x dplyr::filter() masks stats::filter()
-x dplyr::lag()    masks stats::lag()
 -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
 v ggplot2 3.3.5     v purrr   0.3.4
-v tibble  3.1.3     v dplyr   1.0.7
+v tibble  3.1.4     v dplyr   1.0.7
+v tidyr   1.1.3     v stringr 1.4.0
+v readr   2.0.0     v forcats 0.5.1
+-- Attaching packages --------------------------------------- tidyverse 1.3.1 --
+v ggplot2 3.3.5     v purrr   0.3.4
+v tibble  3.1.4     v dplyr   1.0.7
+v tidyr   1.1.3     v stringr 1.4.0
+v readr   2.0.0     v forcats 0.5.1
+-- Attaching packages --------------------------------------- tidyverse 1.3.1 --
+v ggplot2 3.3.5     v purrr   0.3.4
+v tibble  3.1.4     v dplyr   1.0.7
 v tidyr   1.1.3     v stringr 1.4.0
 v readr   2.0.0     v forcats 0.5.1
 -- Conflicts ------------------------------------------ tidyverse_conflicts() --
@@ -87,38 +68,56 @@ x dplyr::lag()    masks stats::lag()
 -- Conflicts ------------------------------------------ tidyverse_conflicts() --
 x dplyr::filter() masks stats::filter()
 x dplyr::lag()    masks stats::lag()
--- Attaching packages --------------------------------------- tidyverse 1.3.1 --
 -- Conflicts ------------------------------------------ tidyverse_conflicts() --
 x dplyr::filter() masks stats::filter()
 x dplyr::lag()    masks stats::lag()
+-- Conflicts ------------------------------------------ tidyverse_conflicts() --
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()
+-- Attaching packages --------------------------------------- tidyverse 1.3.1 --
+-- Attaching packages --------------------------------------- tidyverse 1.3.1 --
 v ggplot2 3.3.5     v purrr   0.3.4
-v tibble  3.1.3     v dplyr   1.0.7
+v tibble  3.1.4     v dplyr   1.0.7
+v tidyr   1.1.3     v stringr 1.4.0
+v readr   2.0.0     v forcats 0.5.1
+v ggplot2 3.3.5     v purrr   0.3.4
+v tibble  3.1.4     v dplyr   1.0.7
+v tidyr   1.1.3     v stringr 1.4.0
+v readr   2.0.0     v forcats 0.5.1
+-- Attaching packages --------------------------------------- tidyverse 1.3.1 --
+v ggplot2 3.3.5     v purrr   0.3.4
+v tibble  3.1.4     v dplyr   1.0.7
 v tidyr   1.1.3     v stringr 1.4.0
 v readr   2.0.0     v forcats 0.5.1
 -- Conflicts ------------------------------------------ tidyverse_conflicts() --
 x dplyr::filter() masks stats::filter()
 x dplyr::lag()    masks stats::lag()
-Chunk 10 -- processing locus for EQTLGEN_ENSG00000104859 
+-- Conflicts ------------------------------------------ tidyverse_conflicts() --
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()
+-- Conflicts ------------------------------------------ tidyverse_conflicts() --
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()
 Chunk 2 -- processing locus for EQTLGEN_ENSG00000007255 
-Chunk 1 -- processing locus for EQTLGEN_ENSG00000007047 
-Chunk 5 -- processing locus for EQTLGEN_ENSG00000069399 
-ChunkChunk  84  -- processing locus for-- processing locus for  EQTLGEN_ENSG00000104853EQTLGEN_ENSG00000048028 Chunk 
- 
-6 -- processing locus for EQTLGEN_ENSG00000073008 
 Chunk 3 -- processing locus for EQTLGEN_ENSG00000041353 
-Chunk 9 -- processing locus for EQTLGEN_ENSG00000104856 
 Chunk 7 -- processing locus for EQTLGEN_ENSG00000086827 
+Chunk 4 -- processing locus for EQTLGEN_ENSG00000048028 
+Chunk 1 -- processing locus for EQTLGEN_ENSG00000007047 
+Chunk 10 -- processing locus for EQTLGEN_ENSG00000104859 
+Chunk 8 -- processing locus for EQTLGEN_ENSG00000104853 
+Chunk 6 -- processing locus for EQTLGEN_ENSG00000073008 
+Chunk 5 -- processing locus for EQTLGEN_ENSG00000069399 
+Chunk 9 -- processing locus for EQTLGEN_ENSG00000104856 
+[1] "...Reading in sumstats"
+[1] "...Reading in sumstats"
+[1] "...Reading in sumstats"
+[1][1] "...Reading in sumstats"
+ "...Reading in sumstats"
 [1] "...Reading in sumstats"
 [1] "...Reading in sumstats"
 [1] "...Reading in sumstats"
 [1] "...Reading in sumstats"
 [1] "...Reading in sumstats"
-[1] "...Reading in sumstats"
-[1] "...Reading in sumstats"
-[1] "...Reading in sumstats"
-[1] "...Reading in sumstats"
-[1] "...Reading in sumstats"
-[1] "...Reading in SNP info from reference data"
 [1] "...Reading in SNP info from reference data"
 [1] "...Reading in SNP info from reference data"
 [1] "...Reading in SNP info from reference data"
@@ -131,1208 +130,1181 @@ Chunk 7 -- processing locus for EQTLGEN_ENSG00000086827
 [1] "...Extracting common SNPs"
 [1] "...Extracting common SNPs"
 [1] "...Extracting common SNPs"
+[1] "~ 4694 SNPs shared across data sets"
 [1] "...Extracting common SNPs"
 [1] "...Extracting common SNPs"
-[1] "...Extracting common SNPs"
-[1] "...Extracting common SNPs"
-[1] "~ 4610 SNPs shared across data sets"
-[1] "~ 4497 SNPs shared across data sets"
-[1] "~ 4630 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Extracting common SNPs"
-[1] "~ 4449 SNPs shared across data sets"
-[1] "...Removing 583 SNPs which could not be aligned, 4027 remaining"
+[1] "...Removing 578 SNPs which could not be aligned, 4116 remaining"
+[1] "~ 4497 SNPs shared across data sets"
+[1] "~ 4470 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
 [1] "...Aligning effect alleles to reference data set"
 [1] "~ 4430 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Aligning effect alleles to reference data set"
-[1] "~ 4694 SNPs shared across data sets"
-[1] "...Removing 567 SNPs which could not be aligned, 4063 remaining"
-[1] "...Removing 544 SNPs which could not be aligned, 3905 remaining"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 579 SNPs which could not be aligned, 3918 remaining"
-[1] "~ 4609 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 526 SNPs which could not be aligned, 3904 remaining"
-[1] "~ 4470 SNPs shared across data sets"
-[1] "...Removing 578 SNPs which could not be aligned, 4116 remaining"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 562 SNPs which could not be aligned, 4047 remaining"
-[1] "...Removing 538 SNPs which could not be aligned, 3932 remaining"
-[1] "~ 4586 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 558 SNPs which could not be aligned, 4028 remaining"
 [1] "...Reading in SNP info from reference data"
+[1] "...Removing 538 SNPs which could not be aligned, 3932 remaining"
+[1] "...Extracting common SNPs"
+[1] "...Reading in SNP info from reference data"
+[1] "...Removing 579 SNPs which could not be aligned, 3918 remaining"
+[1] "...Aligning effect alleles to reference data set"
+[1] "~ 4586 SNPs shared across data sets"
+[1] "...Removing 526 SNPs which could not be aligned, 3904 remaining"
+[1] "...Aligning effect alleles to reference data set"
+[1] "~ 4630 SNPs shared across data sets"
+[1] "...Removing 558 SNPs which could not be aligned, 4028 remaining"
+[1] "~ 4610 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 567 SNPs which could not be aligned, 4063 remaining"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Extracting common SNPs"
+[1] "...Removing 583 SNPs which could not be aligned, 4027 remaining"
+[1] "~ 4449 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 544 SNPs which could not be aligned, 3905 remaining"
 [1] "...Extracting common SNPs"
 [1] "~ 4303 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 591 SNPs which could not be aligned, 3712 remaining"
-Chunk 7 -- running univariate for EQTLGEN_ENSG00000086827 
-Chunk 7  -- running bivariate for EQTLGEN_ENSG00000086827 
+[1] "~ 4609 SNPs shared across data sets"
 Chunk 4 -- running univariate for EQTLGEN_ENSG00000048028 
 Chunk 4  -- running bivariate for EQTLGEN_ENSG00000048028 
-Warning: Estimates too far out of bounds (+-1.25) for phenotype(s) BIP2021 ~ MDD2019 (2.079), BIP2021 ~ SCZ2018 (1.726), MDD2019 ~ SCZ2018 (1.563) in locus ENSG00000048028. Values will be set to NA. To change this threshold, modify the 'param.lim' argument
+[1] "Error: Less than 2 phenotypes provided for bivariate analysis in locus: ENSG00000048028"
 Chunk 4 -- processing locus for PSYCHENCODE_ENSG00000048028 
 [1] "...Reading in sumstats"
-Warning: Estimates too far out of bounds (+-1.25) for phenotype(s) BIP2021 ~ SCZ2018 (1.559), LBD2020 ~ MDD2019 (-1.668) in locus ENSG00000086827. Values will be set to NA. To change this threshold, modify the 'param.lim' argument
-Chunk 7 -- processing locus for PSYCHENCODE_ENSG00000086827 
-[1] "...Reading in sumstats"
-Chunk 8 -- running univariate for EQTLGEN_ENSG00000104853 
-Chunk 8  -- running bivariate for EQTLGEN_ENSG00000104853 
-Chunk 10 -- running univariate for EQTLGEN_ENSG00000104859 
-Chunk 10  -- running bivariate for EQTLGEN_ENSG00000104859 
-Chunk 1 -- running univariate for EQTLGEN_ENSG00000007047 
-Chunk 1  -- running bivariate for EQTLGEN_ENSG00000007047 
 Chunk 6 -- running univariate for EQTLGEN_ENSG00000073008 
-Chunk 9 -- running univariate for EQTLGEN_ENSG00000104856 
-Chunk 2 -- running univariate for EQTLGEN_ENSG00000007255 
 Chunk 6  -- running bivariate for EQTLGEN_ENSG00000073008 
-Chunk 2  -- running bivariate for EQTLGEN_ENSG00000007255 
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 562 SNPs which could not be aligned, 4047 remaining"
+Chunk 6 -- processing locus for PSYCHENCODE_ENSG00000073008 
+[1] "...Reading in sumstats"
+Chunk 9 -- running univariate for EQTLGEN_ENSG00000104856 
 Chunk 9  -- running bivariate for EQTLGEN_ENSG00000104856 
 Chunk 5 -- running univariate for EQTLGEN_ENSG00000069399 
 Chunk 5  -- running bivariate for EQTLGEN_ENSG00000069399 
-Chunk 6 -- processing locus for PSYCHENCODE_ENSG00000073008 
+Chunk 10 -- running univariate for EQTLGEN_ENSG00000104859 
+Chunk 10  -- running bivariate for EQTLGEN_ENSG00000104859 
+Chunk 7 -- running univariate for EQTLGEN_ENSG00000086827 
+Chunk 7  -- running bivariate for EQTLGEN_ENSG00000086827 
+[1] "Error: Less than 2 phenotypes provided for bivariate analysis in locus: ENSG00000086827"
+Chunk 7 -- processing locus for PSYCHENCODE_ENSG00000086827 
 [1] "...Reading in sumstats"
+Chunk 1 -- running univariate for EQTLGEN_ENSG00000007047 
+Chunk 1  -- running bivariate for EQTLGEN_ENSG00000007047 
+Chunk 8 -- running univariate for EQTLGEN_ENSG00000104853 
+Chunk 8  -- running bivariate for EQTLGEN_ENSG00000104853 
+Chunk 3 -- running univariate for EQTLGEN_ENSG00000041353 
+Chunk 3  -- running bivariate for EQTLGEN_ENSG00000041353 
 Chunk 10 -- processing locus for PSYCHENCODE_ENSG00000104859 
+[1] "...Reading in sumstats"
+Chunk 9 -- processing locus for PSYCHENCODE_ENSG00000104856 
+[1] "...Reading in sumstats"
+Chunk 5 -- processing locus for PSYCHENCODE_ENSG00000069399 
+[1] "...Reading in sumstats"
+Chunk 3 -- processing locus for PSYCHENCODE_ENSG00000041353 
 [1] "...Reading in sumstats"
 Chunk 1 -- processing locus for PSYCHENCODE_ENSG00000007047 
 [1] "...Reading in sumstats"
-Chunk 2 -- processing locus for PSYCHENCODE_ENSG00000007255 
-[1] "...Reading in sumstats"
-Chunk 3 -- running univariate for EQTLGEN_ENSG00000041353 
-Chunk 3  -- running bivariate for EQTLGEN_ENSG00000041353 
-Chunk 9 -- processing locus for PSYCHENCODE_ENSG00000104856 
-[1] "...Reading in sumstats"
+Chunk 2 -- running univariate for EQTLGEN_ENSG00000007255 
+Chunk 2  -- running bivariate for EQTLGEN_ENSG00000007255 
 [1] "...Reading in SNP info from reference data"
 [1] "...Reading in SNP info from reference data"
-Chunk 3 -- processing locus for PSYCHENCODE_ENSG00000041353 
-[1] "...Reading in sumstats"
-Chunk 8 -- processing locus for PSYCHENCODE_ENSG00000104853 
-[1] "...Reading in sumstats"
 [1] "...Extracting common SNPs"
-Chunk 5 -- processing locus for PSYCHENCODE_ENSG00000069399 
-[1] "...Reading in sumstats"
-[1] "~ 2854 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
 [1] "...Extracting common SNPs"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 570 SNPs which could not be aligned, 2284 remaining"
 [1] "~ 2760 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 554 SNPs which could not be aligned, 2206 remaining"
-[1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-Chunk 7 -- running univariate for PSYCHENCODE_ENSG00000086827 
-Chunk 7  -- running bivariate for PSYCHENCODE_ENSG00000086827 
-[1] "...Extracting common SNPs"
-[1] "...Reading in SNP info from reference data"
-Warning: Estimates too far out of bounds (+-1.25) for phenotype(s) BIP2021 ~ LBD2020 (-6.157), BIP2021 ~ MDD2019 (3.017), BIP2021 ~ SCZ2018 (5.782), LBD2020 ~ MDD2019 (-2.542) in locus ENSG00000086827. Values will be set to NA. To change this threshold, modify the 'param.lim' argument
-Chunk 11 -- processing locus for EQTLGEN_ENSG00000104866 
-[1] "...Reading in sumstats"
-[1] "...Extracting common SNPs"
-[1] "...Extracting common SNPs"
 [1] "~ 2903 SNPs shared across data sets"
-Chunk 4 -- running univariate for PSYCHENCODE_ENSG00000048028 
-Chunk 4  -- running bivariate for PSYCHENCODE_ENSG00000048028 
-[1] "~ 2791 SNPs shared across data sets"
+Chunk 2 -- processing locus for PSYCHENCODE_ENSG00000007255 
+[1] "...Reading in sumstats"
+Chunk 8 -- processing locus for PSYCHENCODE_ENSG00000104853 
+[1] "...Reading in sumstats"
 [1] "...Aligning effect alleles to reference data set"
-[1] "~ 2813 SNPs shared across data sets"
-[1] "...Extracting common SNPs"
 [1] "...Removing 550 SNPs which could not be aligned, 2353 remaining"
 [1] "...Reading in SNP info from reference data"
-[1] "...Aligning effect alleles to reference data set"
 [1] "...Extracting common SNPs"
-[1] "...Removing 515 SNPs which could not be aligned, 2276 remaining"
+[1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
+[1] "~ 2854 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 518 SNPs which could not be aligned, 2295 remaining"
-Warning: Estimates too far out of bounds (+-1.25) for phenotype(s) BIP2021 ~ LBD2020 (-1.765), BIP2021 ~ MDD2019 (3.767), BIP2021 ~ SCZ2018 (4.116), BIP2021 ~ PSYCHENCODE_ENSG00000048028 (1.971) in locus ENSG00000048028. Values will be set to NA. To change this threshold, modify the 'param.lim' argument
-Chunk 12 -- processing locus for EQTLGEN_ENSG00000104879 
+[1] "...Removing 570 SNPs which could not be aligned, 2284 remaining"
+[1] "...Extracting common SNPs"
+[1] "...Extracting common SNPs"
+Chunk 4 -- running univariate for PSYCHENCODE_ENSG00000048028 
+Chunk 4  -- running bivariate for PSYCHENCODE_ENSG00000048028 
+[1] "Error: Less than 2 phenotypes provided for bivariate analysis in locus: ENSG00000048028"
+Chunk 11 -- processing locus for EQTLGEN_ENSG00000104866 
 [1] "...Reading in sumstats"
-[1] "~ 2765 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "~ 2962 SNPs shared across data sets"
-[1] "...Removing 517 SNPs which could not be aligned, 2248 remaining"
-[1] "...Reading in SNP info from reference data"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Extracting common SNPs"
-[1] "...Removing 542 SNPs which could not be aligned, 2420 remaining"
-[1] "~ 2788 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 522 SNPs which could not be aligned, 2266 remaining"
-[1] "...Extracting common SNPs"
-[1] "...Reading in SNP info from reference data"
 [1] "~ 2880 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 534 SNPs which could not be aligned, 2346 remaining"
+[1] "~ 2765 SNPs shared across data sets"
+[1] "~ 2791 SNPs shared across data sets"
 [1] "...Extracting common SNPs"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 517 SNPs which could not be aligned, 2248 remaining"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 515 SNPs which could not be aligned, 2276 remaining"
+[1] "~ 2813 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 518 SNPs which could not be aligned, 2295 remaining"
 Chunk 6 -- running univariate for PSYCHENCODE_ENSG00000073008 
 Chunk 6  -- running bivariate for PSYCHENCODE_ENSG00000073008 
-Chunk 10 -- running univariate for PSYCHENCODE_ENSG00000104859 
-Chunk 10 -- no bivariate test run for PSYCHENCODE_ENSG00000104859. Univariate p-value =0.38414
+[1] "...Extracting common SNPs"
+Chunk 7 -- running univariate for PSYCHENCODE_ENSG00000086827 
+Chunk 7 -- no bivariate test run for PSYCHENCODE_ENSG00000086827. Univariate p-value =0.00300906
+Chunk 12 -- processing locus for EQTLGEN_ENSG00000104879 
+[1] "...Reading in sumstats"
+[1] "~ 3120 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
 Chunk 13 -- processing locus for EQTLGEN_ENSG00000104881 
 [1] "...Reading in sumstats"
-[1] "Warning: Negative variance estimate for phenotype(s) 'PSYCHENCODE_ENSG00000007047' in locus ENSG00000007047; Dropping these as they cannot be analysed"
-Chunk 1 -- running univariate for PSYCHENCODE_ENSG00000007047 
-Chunk 1 -- no bivariate test run for PSYCHENCODE_ENSG00000007047. Univariate p-value =
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 603 SNPs which could not be aligned, 2517 remaining"
+[1] "...Reading in SNP info from reference data"
+Chunk 5 -- running univariate for PSYCHENCODE_ENSG00000069399 
+Chunk 5 -- no bivariate test run for PSYCHENCODE_ENSG00000069399. Univariate p-value =0.0882006
 Chunk 14 -- processing locus for EQTLGEN_ENSG00000104884 
 [1] "...Reading in sumstats"
+[1] "...Extracting common SNPs"
 [1] "Warning: Negative variance estimate for phenotype(s) 'PSYCHENCODE_ENSG00000104856' in locus ENSG00000104856; Dropping these as they cannot be analysed"
 Chunk 9 -- running univariate for PSYCHENCODE_ENSG00000104856 
 Chunk 9 -- no bivariate test run for PSYCHENCODE_ENSG00000104856. Univariate p-value =
 Chunk 15 -- processing locus for EQTLGEN_ENSG00000104892 
 [1] "...Reading in sumstats"
-[1] "~ 3120 SNPs shared across data sets"
-Chunk 2 -- running univariate for PSYCHENCODE_ENSG00000007255 
-Chunk 2  -- running bivariate for PSYCHENCODE_ENSG00000007255 
-[1] "...Reading in SNP info from reference data"
+Chunk 10 -- running univariate for PSYCHENCODE_ENSG00000104859 
+Chunk 10 -- no bivariate test run for PSYCHENCODE_ENSG00000104859. Univariate p-value =0.38414
 Chunk 16 -- processing locus for EQTLGEN_ENSG00000120885 
 [1] "...Reading in sumstats"
+[1] "~ 2788 SNPs shared across data sets"
+[1] "...Extracting common SNPs"
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 603 SNPs which could not be aligned, 2517 remaining"
+[1] "...Removing 522 SNPs which could not be aligned, 2266 remaining"
+[1] "Warning: Negative variance estimate for phenotype(s) 'PSYCHENCODE_ENSG00000007047' in locus ENSG00000007047; Dropping these as they cannot be analysed"
+Chunk 1 -- running univariate for PSYCHENCODE_ENSG00000007047 
+Chunk 1 -- no bivariate test run for PSYCHENCODE_ENSG00000007047. Univariate p-value =
 Chunk 17 -- processing locus for EQTLGEN_ENSG00000130201 
 [1] "...Reading in sumstats"
-Chunk 8 -- running univariate for PSYCHENCODE_ENSG00000104853 
-Chunk 8  -- running bivariate for PSYCHENCODE_ENSG00000104853 
 [1] "...Reading in SNP info from reference data"
+[1] "~ 2962 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 542 SNPs which could not be aligned, 2420 remaining"
 [1] "...Extracting common SNPs"
 [1] "~ 4566 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+Chunk 3 -- running univariate for PSYCHENCODE_ENSG00000041353 
+Chunk 3  -- running bivariate for PSYCHENCODE_ENSG00000041353 
+[1] "...Removing 554 SNPs which could not be aligned, 4012 remaining"
+[1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
 [1] "...Extracting common SNPs"
-Chunk 5 -- running univariate for PSYCHENCODE_ENSG00000069399 
-Chunk 5 -- no bivariate test run for PSYCHENCODE_ENSG00000069399. Univariate p-value =0.0882006
+Chunk 8 -- running univariate for PSYCHENCODE_ENSG00000104853 
+Chunk 8 -- no bivariate test run for PSYCHENCODE_ENSG00000104853. Univariate p-value =0.0249273
 Chunk 18 -- processing locus for EQTLGEN_ENSG00000130202 
 [1] "...Reading in sumstats"
+[1] "...Reading in SNP info from reference data"
 Chunk 19 -- processing locus for EQTLGEN_ENSG00000130203 
 [1] "...Reading in sumstats"
+[1] "~ 4962 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
+Chunk 2 -- running univariate for PSYCHENCODE_ENSG00000007255 
+Chunk 2  -- running bivariate for PSYCHENCODE_ENSG00000007255 
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 554 SNPs which could not be aligned, 4012 remaining"
+[1] "...Removing 589 SNPs which could not be aligned, 4373 remaining"
+Chunk 20 -- processing locus for EQTLGEN_ENSG00000130204 
+[1] "...Reading in sumstats"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "...Extracting common SNPs"
+[1] "~ 7280 SNPs shared across data sets"
+[1] "~ 4939 SNPs shared across data sets"
+[1] "...Extracting common SNPs"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 831 SNPs which could not be aligned, 6449 remaining"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 586 SNPs which could not be aligned, 4353 remaining"
+Chunk 11 -- running univariate for EQTLGEN_ENSG00000104866 
+Chunk 11  -- running bivariate for EQTLGEN_ENSG00000104866 
+[1] "...Extracting common SNPs"
+[1] "...Extracting common SNPs"
+Chunk 11 -- processing locus for PSYCHENCODE_ENSG00000104866 
+[1] "...Reading in sumstats"
+[1] "~ 4951 SNPs shared across data sets"
+[1] "~ 4677 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 589 SNPs which could not be aligned, 4362 remaining"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 571 SNPs which could not be aligned, 4106 remaining"
 [1] "~ 4944 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 588 SNPs which could not be aligned, 4356 remaining"
-[1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-Chunk 3 -- running univariate for PSYCHENCODE_ENSG00000041353 
-Chunk 3  -- running bivariate for PSYCHENCODE_ENSG00000041353 
-[1] "...Reading in SNP info from reference data"
-[1] "...Extracting common SNPs"
-[1] "...Extracting common SNPs"
-[1] "...Extracting common SNPs"
-[1] "~ 4939 SNPs shared across data sets"
-[1] "~ 4962 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 586 SNPs which could not be aligned, 4353 remaining"
-[1] "...Aligning effect alleles to reference data set"
-[1] "~ 7280 SNPs shared across data sets"
-[1] "...Removing 589 SNPs which could not be aligned, 4373 remaining"
-[1] "...Extracting common SNPs"
-[1] "...Reading in SNP info from reference data"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 831 SNPs which could not be aligned, 6449 remaining"
-[1] "~ 4951 SNPs shared across data sets"
-Chunk 11 -- running univariate for EQTLGEN_ENSG00000104866 
-Chunk 11  -- running bivariate for EQTLGEN_ENSG00000104866 
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 589 SNPs which could not be aligned, 4362 remaining"
-Chunk 12 -- running univariate for EQTLGEN_ENSG00000104879 
-Chunk 12  -- running bivariate for EQTLGEN_ENSG00000104879 
-Chunk 11 -- processing locus for PSYCHENCODE_ENSG00000104866 
-[1] "...Reading in sumstats"
-Chunk 20 -- processing locus for EQTLGEN_ENSG00000130204 
-[1] "...Reading in sumstats"
-Chunk 12 -- processing locus for PSYCHENCODE_ENSG00000104879 
-[1] "...Reading in sumstats"
-[1] "...Extracting common SNPs"
-[1] "...Reading in SNP info from reference data"
 Chunk 16 -- running univariate for EQTLGEN_ENSG00000120885 
 Chunk 16  -- running bivariate for EQTLGEN_ENSG00000120885 
 Chunk 16 -- processing locus for PSYCHENCODE_ENSG00000120885 
 [1] "...Reading in sumstats"
+Chunk 13 -- running univariate for EQTLGEN_ENSG00000104881 
+Chunk 13  -- running bivariate for EQTLGEN_ENSG00000104881 
 [1] "...Reading in SNP info from reference data"
-[1] "~ 4677 SNPs shared across data sets"
-[1] "...Extracting common SNPs"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 571 SNPs which could not be aligned, 4106 remaining"
-[1] "~ 4498 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 558 SNPs which could not be aligned, 3940 remaining"
-[1] "...Extracting common SNPs"
+Chunk 13 -- processing locus for PSYCHENCODE_ENSG00000104881 
+[1] "...Reading in sumstats"
+[1] "...Reading in SNP info from reference data"
 Chunk 14 -- running univariate for EQTLGEN_ENSG00000104884 
 Chunk 14  -- running bivariate for EQTLGEN_ENSG00000104884 
 Chunk 14 -- processing locus for PSYCHENCODE_ENSG00000104884 
 [1] "...Reading in sumstats"
-Chunk 13 -- running univariate for EQTLGEN_ENSG00000104881 
-Chunk 13  -- running bivariate for EQTLGEN_ENSG00000104881 
-[1] "~ 4460 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 551 SNPs which could not be aligned, 3909 remaining"
-Chunk 13 -- processing locus for PSYCHENCODE_ENSG00000104881 
-[1] "...Reading in sumstats"
+[1] "...Extracting common SNPs"
+[1] "...Extracting common SNPs"
 Chunk 15 -- running univariate for EQTLGEN_ENSG00000104892 
 Chunk 15  -- running bivariate for EQTLGEN_ENSG00000104892 
+[1] "~ 4460 SNPs shared across data sets"
 Chunk 15 -- processing locus for PSYCHENCODE_ENSG00000104892 
 [1] "...Reading in sumstats"
 [1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-[1] "...Extracting common SNPs"
-[1] "...Extracting common SNPs"
-[1] "~ 3204 SNPs shared across data sets"
-Chunk 19 -- running univariate for EQTLGEN_ENSG00000130203 
-Chunk 19  -- running bivariate for EQTLGEN_ENSG00000130203 
 Chunk 17 -- running univariate for EQTLGEN_ENSG00000130201 
 Chunk 17  -- running bivariate for EQTLGEN_ENSG00000130201 
-[1] "...Extracting common SNPs"
-[1] "~ 2861 SNPs shared across data sets"
+[1] "~ 4498 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Reading in SNP info from reference data"
-[1] "...Removing 571 SNPs which could not be aligned, 2633 remaining"
+[1] "...Removing 551 SNPs which could not be aligned, 3909 remaining"
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 525 SNPs which could not be aligned, 2336 remaining"
-[1] "~ 4489 SNPs shared across data sets"
-[1] "...Extracting common SNPs"
-Chunk 18 -- running univariate for EQTLGEN_ENSG00000130202 
-Chunk 18  -- running bivariate for EQTLGEN_ENSG00000130202 
+[1] "...Removing 558 SNPs which could not be aligned, 3940 remaining"
 Chunk 17 -- processing locus for PSYCHENCODE_ENSG00000130201 
 [1] "...Reading in sumstats"
+Chunk 12 -- running univariate for EQTLGEN_ENSG00000104879 
+Chunk 12  -- running bivariate for EQTLGEN_ENSG00000104879 
+[1] "...Reading in SNP info from reference data"
+Chunk 12 -- processing locus for PSYCHENCODE_ENSG00000104879 
+[1] "...Reading in sumstats"
+[1] "...Extracting common SNPs"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "~ 2861 SNPs shared across data sets"
+[1] "~ 4489 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 554 SNPs which could not be aligned, 3935 remaining"
+[1] "...Removing 525 SNPs which could not be aligned, 2336 remaining"
+[1] "...Extracting common SNPs"
 [1] "~ 4363 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 807 SNPs which could not be aligned, 3556 remaining"
-[1] "...Extracting common SNPs"
 [1] "...Reading in SNP info from reference data"
-[1] "~ 3204 SNPs shared across data sets"
-Chunk 19 -- processing locus for PSYCHENCODE_ENSG00000130203 
-[1] "...Reading in sumstats"
-[1] "...Reading in SNP info from reference data"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 578 SNPs which could not be aligned, 2626 remaining"
-[1] "...Extracting common SNPs"
+Chunk 18 -- running univariate for EQTLGEN_ENSG00000130202 
+Chunk 18  -- running bivariate for EQTLGEN_ENSG00000130202 
+Chunk 19 -- running univariate for EQTLGEN_ENSG00000130203 
+Chunk 19  -- running bivariate for EQTLGEN_ENSG00000130203 
 [1] "...Extracting common SNPs"
 [1] "~ 3216 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 574 SNPs which could not be aligned, 2642 remaining"
+[1] "...Extracting common SNPs"
 Chunk 16 -- running univariate for PSYCHENCODE_ENSG00000120885 
 Chunk 16 -- no bivariate test run for PSYCHENCODE_ENSG00000120885. Univariate p-value =0.418866
 Chunk 21  -- no gene-eqtl for EQTLGEN_ENSG00000130208 
 Chunk 21 -- processing locus for PSYCHENCODE_ENSG00000130208 
 [1] "...Reading in sumstats"
-[1] "~ 3212 SNPs shared across data sets"
+[1] "~ 3204 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 574 SNPs which could not be aligned, 2642 remaining"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 575 SNPs which could not be aligned, 2637 remaining"
-Chunk 12 -- running univariate for PSYCHENCODE_ENSG00000104879 
-Chunk 12  -- running bivariate for PSYCHENCODE_ENSG00000104879 
+[1] "...Removing 578 SNPs which could not be aligned, 2626 remaining"
+[1] "...Extracting common SNPs"
 Chunk 11 -- running univariate for PSYCHENCODE_ENSG00000104866 
-Chunk 11  -- running bivariate for PSYCHENCODE_ENSG00000104866 
+Chunk 11 -- no bivariate test run for PSYCHENCODE_ENSG00000104866. Univariate p-value =0.00647285
 Chunk 22 -- processing locus for EQTLGEN_ENSG00000134014 
 [1] "...Reading in sumstats"
 Chunk 20 -- running univariate for EQTLGEN_ENSG00000130204 
 Chunk 20  -- running bivariate for EQTLGEN_ENSG00000130204 
-Chunk 18 -- processing locus for PSYCHENCODE_ENSG00000130202 
-[1] "...Reading in sumstats"
-Chunk 23 -- processing locus for EQTLGEN_ENSG00000138722 
+[1] "~ 3212 SNPs shared across data sets"
+[1] "...Extracting common SNPs"
+Chunk 19 -- processing locus for PSYCHENCODE_ENSG00000130203 
 [1] "...Reading in sumstats"
 [1] "...Reading in SNP info from reference data"
-Chunk 14 -- running univariate for PSYCHENCODE_ENSG00000104884 
-Chunk 14 -- no bivariate test run for PSYCHENCODE_ENSG00000104884. Univariate p-value =0.11871
-Chunk 24 -- processing locus for EQTLGEN_ENSG00000142252 
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 575 SNPs which could not be aligned, 2637 remaining"
+[1] "~ 3017 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 551 SNPs which could not be aligned, 2466 remaining"
+Chunk 18 -- processing locus for PSYCHENCODE_ENSG00000130202 
 [1] "...Reading in sumstats"
 [1] "...Extracting common SNPs"
 Chunk 13 -- running univariate for PSYCHENCODE_ENSG00000104881 
 Chunk 13  -- running bivariate for PSYCHENCODE_ENSG00000104881 
+[1] "~ 3204 SNPs shared across data sets"
+Chunk 20 -- processing locus for PSYCHENCODE_ENSG00000130204 
+[1] "...Reading in sumstats"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 571 SNPs which could not be aligned, 2633 remaining"
+Chunk 14 -- running univariate for PSYCHENCODE_ENSG00000104884 
+Chunk 14 -- no bivariate test run for PSYCHENCODE_ENSG00000104884. Univariate p-value =0.11871
+Chunk 23 -- processing locus for EQTLGEN_ENSG00000138722 
+[1] "...Reading in sumstats"
+[1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
 Chunk 15 -- running univariate for PSYCHENCODE_ENSG00000104892 
 Chunk 15  -- running bivariate for PSYCHENCODE_ENSG00000104892 
-[1] "...Reading in SNP info from reference data"
-Chunk 20 -- processing locus for PSYCHENCODE_ENSG00000130204 
+Chunk 24 -- processing locus for EQTLGEN_ENSG00000142252 
 [1] "...Reading in sumstats"
 Chunk 25  -- no gene-eqtl for EQTLGEN_ENSG00000142273 
 Chunk 25 -- processing locus for PSYCHENCODE_ENSG00000142273 
 [1] "...Reading in sumstats"
-[1] "~ 3017 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 551 SNPs which could not be aligned, 2466 remaining"
 [1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-[1] "...Extracting common SNPs"
-[1] "...Reading in SNP info from reference data"
+Chunk 17 -- running univariate for PSYCHENCODE_ENSG00000130201 
+Chunk 17 -- no bivariate test run for PSYCHENCODE_ENSG00000130201. Univariate p-value =0.0912989
 Chunk 26 -- processing locus for EQTLGEN_ENSG00000145335 
 [1] "...Reading in sumstats"
-[1] "~ 2826 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 536 SNPs which could not be aligned, 2290 remaining"
 [1] "...Extracting common SNPs"
 [1] "...Extracting common SNPs"
 [1] "~ 5597 SNPs shared across data sets"
+[1] "...Extracting common SNPs"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 592 SNPs which could not be aligned, 5005 remaining"
 [1] "~ 2836 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Extracting common SNPs"
-[1] "...Removing 592 SNPs which could not be aligned, 5005 remaining"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Reading in SNP info from reference data"
 [1] "...Removing 532 SNPs which could not be aligned, 2304 remaining"
-[1] "~ 6754 SNPs shared across data sets"
-[1] "...Reading in SNP info from reference data"
+[1] "~ 2826 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 867 SNPs which could not be aligned, 5887 remaining"
-[1] "...Extracting common SNPs"
-[1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-[1] "~ 2804 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-Chunk 17 -- running univariate for PSYCHENCODE_ENSG00000130201 
-Chunk 17 -- no bivariate test run for PSYCHENCODE_ENSG00000130201. Univariate p-value =0.0912989
+[1] "...Removing 536 SNPs which could not be aligned, 2290 remaining"
+Chunk 12 -- running univariate for PSYCHENCODE_ENSG00000104879 
+Chunk 12 -- no bivariate test run for PSYCHENCODE_ENSG00000104879. Univariate p-value =0.0201319
 Chunk 27 -- processing locus for EQTLGEN_ENSG00000147419 
 [1] "...Reading in sumstats"
-[1] "...Removing 524 SNPs which could not be aligned, 2280 remaining"
+[1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
 [1] "...Extracting common SNPs"
 Chunk 22 -- running univariate for EQTLGEN_ENSG00000134014 
 Chunk 22  -- running bivariate for EQTLGEN_ENSG00000134014 
-[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
 Chunk 22 -- processing locus for PSYCHENCODE_ENSG00000134014 
 [1] "...Reading in sumstats"
-[1] "~ 4516 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
+[1] "~ 2804 SNPs shared across data sets"
+[1] "~ 6754 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 524 SNPs which could not be aligned, 2280 remaining"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 867 SNPs which could not be aligned, 5887 remaining"
+[1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "...Extracting common SNPs"
+[1] "~ 6520 SNPs shared across data sets"
+[1] "...Extracting common SNPs"
 [1] "...Extracting common SNPs"
 [1] "...Aligning effect alleles to reference data set"
-Chunk 23 -- running univariate for EQTLGEN_ENSG00000138722 
-Chunk 23  -- running bivariate for EQTLGEN_ENSG00000138722 
-[1] "...Removing 549 SNPs which could not be aligned, 3967 remaining"
-[1] "...Extracting common SNPs"
-Chunk 23 -- processing locus for PSYCHENCODE_ENSG00000138722 
-[1] "...Reading in sumstats"
+[1] "...Removing 851 SNPs which could not be aligned, 5669 remaining"
+[1] "~ 2826 SNPs shared across data sets"
+Chunk 21 -- running univariate for PSYCHENCODE_ENSG00000130208 
+Chunk 21  -- running bivariate for PSYCHENCODE_ENSG00000130208 
 Chunk 19 -- running univariate for PSYCHENCODE_ENSG00000130203 
 Chunk 19 -- no bivariate test run for PSYCHENCODE_ENSG00000130203. Univariate p-value =0.281762
 Chunk 28 -- processing locus for EQTLGEN_ENSG00000149292 
 [1] "...Reading in sumstats"
-[1] "~ 2861 SNPs shared across data sets"
-[1] "~ 2826 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 529 SNPs which could not be aligned, 2332 remaining"
-[1] "...Extracting common SNPs"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 534 SNPs which could not be aligned, 2292 remaining"
-[1] "~ 6520 SNPs shared across data sets"
-Chunk 21 -- running univariate for PSYCHENCODE_ENSG00000130208 
-Chunk 21  -- running bivariate for PSYCHENCODE_ENSG00000130208 
+[1] "~ 2861 SNPs shared across data sets"
+Chunk 23 -- running univariate for EQTLGEN_ENSG00000138722 
+Chunk 23  -- running bivariate for EQTLGEN_ENSG00000138722 
+Chunk 23 -- processing locus for PSYCHENCODE_ENSG00000138722 
+[1] "...Reading in sumstats"
+[1] "~ 4516 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 851 SNPs which could not be aligned, 5669 remaining"
+[1] "...Removing 529 SNPs which could not be aligned, 2332 remaining"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 549 SNPs which could not be aligned, 3967 remaining"
 Chunk 26 -- running univariate for EQTLGEN_ENSG00000145335 
 Chunk 26  -- running bivariate for EQTLGEN_ENSG00000145335 
+[1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
 Chunk 29 -- processing locus for EQTLGEN_ENSG00000149294 
 [1] "...Reading in sumstats"
 Chunk 18 -- running univariate for PSYCHENCODE_ENSG00000130202 
 Chunk 18  -- running bivariate for PSYCHENCODE_ENSG00000130202 
-[1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-Chunk 24 -- running univariate for EQTLGEN_ENSG00000142252 
-Chunk 24  -- running bivariate for EQTLGEN_ENSG00000142252 
-[1] "...Reading in SNP info from reference data"
-Chunk 25 -- running univariate for PSYCHENCODE_ENSG00000142273 
-Chunk 25  -- running bivariate for PSYCHENCODE_ENSG00000142273 
-[1] "...Reading in SNP info from reference data"
 [1] "...Extracting common SNPs"
-Chunk 20 -- running univariate for PSYCHENCODE_ENSG00000130204 
-Chunk 20  -- running bivariate for PSYCHENCODE_ENSG00000130204 
 [1] "...Extracting common SNPs"
 Chunk 26 -- processing locus for PSYCHENCODE_ENSG00000145335 
 [1] "...Reading in sumstats"
 [1] "~ 6928 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
 [1] "~ 3238 SNPs shared across data sets"
-[1] "...Extracting common SNPs"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 786 SNPs which could not be aligned, 6142 remaining"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 597 SNPs which could not be aligned, 2641 remaining"
+Chunk 20 -- running univariate for PSYCHENCODE_ENSG00000130204 
+Chunk 20  -- running bivariate for PSYCHENCODE_ENSG00000130204 
 [1] "...Extracting common SNPs"
-[1] "~ 4484 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 549 SNPs which could not be aligned, 3935 remaining"
+[1] "...Reading in SNP info from reference data"
+Chunk 25 -- running univariate for PSYCHENCODE_ENSG00000142273 
+Chunk 25  -- running bivariate for PSYCHENCODE_ENSG00000142273 
+Chunk 24 -- running univariate for EQTLGEN_ENSG00000142252 
+Chunk 24  -- running bivariate for EQTLGEN_ENSG00000142252 
 Chunk 30  -- no gene-eqtl for EQTLGEN_ENSG00000149295 
 Chunk 30 -- processing locus for PSYCHENCODE_ENSG00000149295 
 [1] "...Reading in sumstats"
-[1] "~ 4536 SNPs shared across data sets"
+[1] "~ 4484 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 864 SNPs which could not be aligned, 3672 remaining"
+[1] "...Removing 549 SNPs which could not be aligned, 3935 remaining"
 [1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "~ 4536 SNPs shared across data sets"
+Chunk 22 -- running univariate for PSYCHENCODE_ENSG00000134014 
+Chunk 22  -- running bivariate for PSYCHENCODE_ENSG00000134014 
 [1] "...Extracting common SNPs"
 Chunk 27 -- running univariate for EQTLGEN_ENSG00000147419 
 Chunk 27  -- running bivariate for EQTLGEN_ENSG00000147419 
-Chunk 22 -- running univariate for PSYCHENCODE_ENSG00000134014 
-Chunk 22  -- running bivariate for PSYCHENCODE_ENSG00000134014 
+[1] "...Aligning effect alleles to reference data set"
 Chunk 31 -- processing locus for EQTLGEN_ENSG00000149305 
 [1] "...Reading in sumstats"
-Chunk 23 -- running univariate for PSYCHENCODE_ENSG00000138722 
-Chunk 23  -- running bivariate for PSYCHENCODE_ENSG00000138722 
+[1] "...Removing 864 SNPs which could not be aligned, 3672 remaining"
+Chunk 27 -- processing locus for PSYCHENCODE_ENSG00000147419 
+[1] "...Reading in sumstats"
 Chunk 32  -- no gene-eqtl for EQTLGEN_ENSG00000166510 
 Chunk 32 -- processing locus for PSYCHENCODE_ENSG00000166510 
 [1] "...Reading in sumstats"
-Chunk 27 -- processing locus for PSYCHENCODE_ENSG00000147419 
-[1] "...Reading in sumstats"
-Chunk 33 -- processing locus for EQTLGEN_ENSG00000166682 
-[1] "...Reading in sumstats"
-Chunk 34 -- processing locus for EQTLGEN_ENSG00000166736 
-[1] "...Reading in sumstats"
 [1] "~ 4316 SNPs shared across data sets"
+Chunk 24 -- processing locus for PSYCHENCODE_ENSG00000142252 
+[1] "...Reading in sumstats"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 539 SNPs which could not be aligned, 3777 remaining"
 [1] "...Reading in SNP info from reference data"
-Chunk 24 -- processing locus for PSYCHENCODE_ENSG00000142252 
+Chunk 23 -- running univariate for PSYCHENCODE_ENSG00000138722 
+Chunk 23  -- running bivariate for PSYCHENCODE_ENSG00000138722 
+Chunk 33 -- processing locus for EQTLGEN_ENSG00000166682 
+[1] "...Reading in sumstats"
+[1] "...Extracting common SNPs"
+Chunk 34 -- processing locus for EQTLGEN_ENSG00000166736 
 [1] "...Reading in sumstats"
 Chunk 28 -- running univariate for EQTLGEN_ENSG00000149292 
 Chunk 28  -- running bivariate for EQTLGEN_ENSG00000149292 
-[1] "...Extracting common SNPs"
-Chunk 28 -- processing locus for PSYCHENCODE_ENSG00000149292 
-[1] "...Reading in sumstats"
-[1] "...Reading in SNP info from reference data"
 [1] "~ 4540 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
+Chunk 28 -- processing locus for PSYCHENCODE_ENSG00000149292 
+[1] "...Reading in sumstats"
 [1] "...Removing 867 SNPs which could not be aligned, 3673 remaining"
-[1] "...Extracting common SNPs"
 [1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-Chunk 29 -- running univariate for EQTLGEN_ENSG00000149294 
-Chunk 29  -- running bivariate for EQTLGEN_ENSG00000149294 
-[1] "~ 2784 SNPs shared across data sets"
 [1] "...Reading in SNP info from reference data"
 Chunk 26 -- running univariate for PSYCHENCODE_ENSG00000145335 
 Chunk 26 -- no bivariate test run for PSYCHENCODE_ENSG00000145335. Univariate p-value =0.0591907
 Chunk 35  -- no gene-eqtl for EQTLGEN_ENSG00000168077 
 Chunk 35 -- processing locus for PSYCHENCODE_ENSG00000168077 
 [1] "...Reading in sumstats"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 552 SNPs which could not be aligned, 2232 remaining"
 [1] "...Extracting common SNPs"
+Chunk 29 -- running univariate for EQTLGEN_ENSG00000149294 
+Chunk 29  -- running bivariate for EQTLGEN_ENSG00000149294 
 [1] "...Extracting common SNPs"
-[1] "...Reading in SNP info from reference data"
+[1] "~ 2784 SNPs shared across data sets"
 Chunk 29 -- processing locus for PSYCHENCODE_ENSG00000149294 
 [1] "...Reading in sumstats"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 552 SNPs which could not be aligned, 2232 remaining"
+[1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
 [1] "~ 4395 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 559 SNPs which could not be aligned, 3836 remaining"
-[1] "~ 4341 SNPs shared across data sets"
-[1] "...Extracting common SNPs"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 548 SNPs which could not be aligned, 3793 remaining"
-[1] "...Extracting common SNPs"
 [1] "...Reading in SNP info from reference data"
-[1] "~ 4662 SNPs shared across data sets"
-[1] "...Reading in SNP info from reference data"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 592 SNPs which could not be aligned, 4070 remaining"
-[1] "~ 4111 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 755 SNPs which could not be aligned, 3356 remaining"
-Chunk 30 -- running univariate for PSYCHENCODE_ENSG00000149295 
-Chunk 30  -- running bivariate for PSYCHENCODE_ENSG00000149295 
-[1] "...Extracting common SNPs"
 [1] "...Reading in SNP info from reference data"
 [1] "...Extracting common SNPs"
-[1] "~ 2688 SNPs shared across data sets"
+[1] "...Extracting common SNPs"
+[1] "...Extracting common SNPs"
+[1] "...Extracting common SNPs"
 [1] "~ 2813 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
-Chunk 31 -- running univariate for EQTLGEN_ENSG00000149305 
-Chunk 31  -- running bivariate for EQTLGEN_ENSG00000149305 
-[1] "...Removing 522 SNPs which could not be aligned, 2166 remaining"
-Warning: Estimates too far out of bounds (+-1.25) for phenotype(s) BIP2021 ~ LBD2020 (-1.299) in locus ENSG00000149295. Values will be set to NA. To change this threshold, modify the 'param.lim' argument
+[1] "...Removing 518 SNPs which could not be aligned, 2295 remaining"
+[1] "~ 4341 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Extracting common SNPs"
+[1] "...Removing 548 SNPs which could not be aligned, 3793 remaining"
+[1] "~ 4111 SNPs shared across data sets"
+[1] "~ 4662 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 592 SNPs which could not be aligned, 4070 remaining"
+[1] "...Removing 755 SNPs which could not be aligned, 3356 remaining"
+Chunk 30 -- running univariate for PSYCHENCODE_ENSG00000149295 
+Chunk 30 -- no bivariate test run for PSYCHENCODE_ENSG00000149295. Univariate p-value =0.0020855
 Chunk 36 -- processing locus for EQTLGEN_ENSG00000168078 
 [1] "...Reading in sumstats"
+[1] "...Reading in SNP info from reference data"
+[1] "~ 2688 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 518 SNPs which could not be aligned, 2295 remaining"
+[1] "...Removing 522 SNPs which could not be aligned, 2166 remaining"
 [1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
+Chunk 31 -- running univariate for EQTLGEN_ENSG00000149305 
+Chunk 31  -- running bivariate for EQTLGEN_ENSG00000149305 
 Chunk 31 -- processing locus for PSYCHENCODE_ENSG00000149305 
 [1] "...Reading in sumstats"
+[1] "...Reading in SNP info from reference data"
 [1] "...Extracting common SNPs"
-Chunk 34 -- running univariate for EQTLGEN_ENSG00000166736 
-Chunk 34  -- running bivariate for EQTLGEN_ENSG00000166736 
+[1] "~ 4347 SNPs shared across data sets"
+[1] "...Extracting common SNPs"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 804 SNPs which could not be aligned, 3543 remaining"
 Chunk 27 -- running univariate for PSYCHENCODE_ENSG00000147419 
 Chunk 27  -- running bivariate for PSYCHENCODE_ENSG00000147419 
-Chunk 34 -- processing locus for PSYCHENCODE_ENSG00000166736 
-[1] "...Reading in sumstats"
+[1] "~ 2670 SNPs shared across data sets"
+[1] "...Extracting common SNPs"
+[1] "...Aligning effect alleles to reference data set"
 Chunk 37 -- processing locus for EQTLGEN_ENSG00000168079 
+[1] "...Reading in sumstats"
+[1] "...Removing 506 SNPs which could not be aligned, 2164 remaining"
+Chunk 34 -- running univariate for EQTLGEN_ENSG00000166736 
+Chunk 34  -- running bivariate for EQTLGEN_ENSG00000166736 
+Chunk 34 -- processing locus for PSYCHENCODE_ENSG00000166736 
 [1] "...Reading in sumstats"
 [1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus ENSG00000166682; Dropping these as they cannot be analysed"
 Chunk 33 -- running univariate for EQTLGEN_ENSG00000166682 
 Chunk 33  -- running bivariate for EQTLGEN_ENSG00000166682 
-[1] "...Extracting common SNPs"
-[1] "...Extracting common SNPs"
-[1] "~ 2539 SNPs shared across data sets"
-Warning: Estimates too far out of bounds (+-1.25) for phenotype(s) BIP2021 ~ MDD2019 (1.824), BIP2021 ~ SCZ2018 (1.976) in locus ENSG00000166682. Values will be set to NA. To change this threshold, modify the 'param.lim' argument
 Chunk 33 -- processing locus for PSYCHENCODE_ENSG00000166682 
 [1] "...Reading in sumstats"
-[1] "~ 4347 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 804 SNPs which could not be aligned, 3543 remaining"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 525 SNPs which could not be aligned, 2014 remaining"
-[1] "~ 2670 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 506 SNPs which could not be aligned, 2164 remaining"
+Chunk 24 -- running univariate for PSYCHENCODE_ENSG00000142252 
+Chunk 24  -- running bivariate for PSYCHENCODE_ENSG00000142252 
 [1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus ENSG00000149292; Dropping these as they cannot be analysed"
 Chunk 28 -- running univariate for PSYCHENCODE_ENSG00000149292 
 Chunk 28  -- running bivariate for PSYCHENCODE_ENSG00000149292 
-[1] "...Reading in SNP info from reference data"
-Chunk 24 -- running univariate for PSYCHENCODE_ENSG00000142252 
-Chunk 24  -- running bivariate for PSYCHENCODE_ENSG00000142252 
-[1] "...Reading in SNP info from reference data"
+Chunk 38 -- processing locus for EQTLGEN_ENSG00000168081 
+[1] "...Reading in sumstats"
+[1] "~ 2539 SNPs shared across data sets"
+Chunk 39 -- processing locus for EQTLGEN_ENSG00000170209 
+[1] "...Reading in sumstats"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 525 SNPs which could not be aligned, 2014 remaining"
 Chunk 35 -- running univariate for PSYCHENCODE_ENSG00000168077 
 Chunk 35  -- running bivariate for PSYCHENCODE_ENSG00000168077 
 [1] "...Reading in SNP info from reference data"
-Chunk 38 -- processing locus for EQTLGEN_ENSG00000168081 
-[1] "...Reading in sumstats"
 [1] "...Reading in SNP info from reference data"
 [1] "...Extracting common SNPs"
-[1] "~ 2733 SNPs shared across data sets"
-Chunk 39 -- processing locus for EQTLGEN_ENSG00000170209 
-[1] "...Reading in sumstats"
-[1] "...Reading in SNP info from reference data"
-[1] "...Extracting common SNPs"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 545 SNPs which could not be aligned, 2188 remaining"
 Chunk 29 -- running univariate for PSYCHENCODE_ENSG00000149294 
 Chunk 29  -- running bivariate for PSYCHENCODE_ENSG00000149294 
+[1] "...Extracting common SNPs"
+Chunk 40 -- processing locus for EQTLGEN_ENSG00000170684 
+[1] "...Reading in sumstats"
+[1] "~ 2733 SNPs shared across data sets"
+[1] "~ 6720 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 545 SNPs which could not be aligned, 2188 remaining"
+[1] "...Reading in SNP info from reference data"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 766 SNPs which could not be aligned, 5954 remaining"
+Chunk 41 -- processing locus for EQTLGEN_ENSG00000171320 
+[1] "...Reading in sumstats"
+[1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
+[1] "~ 2644 SNPs shared across data sets"
 Chunk 32 -- running univariate for PSYCHENCODE_ENSG00000166510 
 Chunk 32  -- running bivariate for PSYCHENCODE_ENSG00000166510 
 [1] "...Extracting common SNPs"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 533 SNPs which could not be aligned, 2111 remaining"
 [1] "...Extracting common SNPs"
-[1] "~ 6720 SNPs shared across data sets"
-Chunk 40 -- processing locus for EQTLGEN_ENSG00000170684 
-[1] "...Reading in sumstats"
-Chunk 41 -- processing locus for EQTLGEN_ENSG00000171320 
-[1] "...Reading in sumstats"
 Chunk 42 -- processing locus for EQTLGEN_ENSG00000179846 
 [1] "...Reading in sumstats"
-[1] "~ 2644 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 766 SNPs which could not be aligned, 5954 remaining"
-[1] "...Aligning effect alleles to reference data set"
 [1] "...Extracting common SNPs"
-[1] "...Removing 533 SNPs which could not be aligned, 2111 remaining"
+[1] "~ 2891 SNPs shared across data sets"
+Chunk 36 -- running univariate for EQTLGEN_ENSG00000168078 
+Chunk 36  -- running bivariate for EQTLGEN_ENSG00000168078 
+[1] "...Extracting common SNPs"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 570 SNPs which could not be aligned, 2321 remaining"
+[1] "~ 4512 SNPs shared across data sets"
+[1] "~ 5643 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 549 SNPs which could not be aligned, 3963 remaining"
+[1] "...Aligning effect alleles to reference data set"
+Chunk 31 -- running univariate for PSYCHENCODE_ENSG00000149305 
+Chunk 31  -- running bivariate for PSYCHENCODE_ENSG00000149305 
+Chunk 43 -- processing locus for EQTLGEN_ENSG00000184305 
+[1] "...Reading in sumstats"
+[1] "...Removing 590 SNPs which could not be aligned, 5053 remaining"
 [1] "~ 6415 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 724 SNPs which could not be aligned, 5691 remaining"
-[1] "~ 2891 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 570 SNPs which could not be aligned, 2321 remaining"
-Chunk 31 -- running univariate for PSYCHENCODE_ENSG00000149305 
-Chunk 31  -- running bivariate for PSYCHENCODE_ENSG00000149305 
-[1] "...Reading in SNP info from reference data"
-Chunk 36 -- running univariate for EQTLGEN_ENSG00000168078 
-Chunk 36  -- running bivariate for EQTLGEN_ENSG00000168078 
-Warning: Estimates too far out of bounds (+-1.25) for phenotype(s) BIP2021 ~ MDD2019 (1.602) in locus ENSG00000149305. Values will be set to NA. To change this threshold, modify the 'param.lim' argument
-Chunk 43 -- processing locus for EQTLGEN_ENSG00000184305 
+Chunk 36 -- processing locus for PSYCHENCODE_ENSG00000168078 
 [1] "...Reading in sumstats"
 [1] "...Reading in SNP info from reference data"
-Chunk 37 -- running univariate for EQTLGEN_ENSG00000168079 
-Chunk 37  -- running bivariate for EQTLGEN_ENSG00000168079 
-Chunk 37 -- processing locus for PSYCHENCODE_ENSG00000168079 
-[1] "...Reading in sumstats"
-[1] "...Extracting common SNPs"
+[1] "...Reading in SNP info from reference data"
 Chunk 34 -- running univariate for PSYCHENCODE_ENSG00000166736 
 Chunk 34  -- running bivariate for PSYCHENCODE_ENSG00000166736 
-[1] "...Extracting common SNPs"
-[1] "~ 5643 SNPs shared across data sets"
-[1] "...Reading in SNP info from reference data"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 590 SNPs which could not be aligned, 5053 remaining"
-[1] "~ 4512 SNPs shared across data sets"
 Chunk 44 -- processing locus for EQTLGEN_ENSG00000186567 
 [1] "...Reading in sumstats"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 549 SNPs which could not be aligned, 3963 remaining"
+[1] "...Extracting common SNPs"
+Chunk 38 -- running univariate for EQTLGEN_ENSG00000168081 
+Chunk 38  -- running bivariate for EQTLGEN_ENSG00000168081 
 [1] "Warning: Negative variance estimate for phenotype(s) 'BIP2021', 'LBD2020' in locus ENSG00000166682; Dropping these as they cannot be analysed"
 Chunk 33 -- running univariate for PSYCHENCODE_ENSG00000166682 
 Chunk 33  -- running bivariate for PSYCHENCODE_ENSG00000166682 
 Chunk 45 -- processing locus for EQTLGEN_ENSG00000186918 
 [1] "...Reading in sumstats"
-Chunk 36 -- processing locus for PSYCHENCODE_ENSG00000168078 
-[1] "...Reading in sumstats"
-[1] "...Reading in SNP info from reference data"
-[1] "...Extracting common SNPs"
-[1] "...Reading in SNP info from reference data"
-[1] "~ 6807 SNPs shared across data sets"
-[1] "...Extracting common SNPs"
-[1] "...Extracting common SNPs"
-Chunk 38 -- running univariate for EQTLGEN_ENSG00000168081 
-Chunk 38  -- running bivariate for EQTLGEN_ENSG00000168081 
-[1] "...Aligning effect alleles to reference data set"
-[1] "~ 4477 SNPs shared across data sets"
-[1] "...Reading in SNP info from reference data"
-[1] "...Removing 770 SNPs which could not be aligned, 6037 remaining"
 Chunk 38 -- processing locus for PSYCHENCODE_ENSG00000168081 
 [1] "...Reading in sumstats"
-[1] "...Aligning effect alleles to reference data set"
-[1] "~ 4585 SNPs shared across data sets"
-[1] "...Removing 540 SNPs which could not be aligned, 3937 remaining"
-[1] "...Reading in SNP info from reference data"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 557 SNPs which could not be aligned, 4028 remaining"
+[1] "~ 6807 SNPs shared across data sets"
+[1] "...Extracting common SNPs"
 Chunk 39 -- running univariate for EQTLGEN_ENSG00000170209 
 Chunk 39  -- running bivariate for EQTLGEN_ENSG00000170209 
-[1] "...Extracting common SNPs"
-[1] "...Extracting common SNPs"
-[1] "~ 6334 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 846 SNPs which could not be aligned, 5488 remaining"
-[1] "~ 3602 SNPs shared across data sets"
-[1] "...Reading in SNP info from reference data"
+[1] "...Removing 770 SNPs which could not be aligned, 6037 remaining"
+Chunk 37 -- running univariate for EQTLGEN_ENSG00000168079 
+Chunk 37  -- running bivariate for EQTLGEN_ENSG00000168079 
+[1] "~ 4477 SNPs shared across data sets"
+Chunk 37 -- processing locus for PSYCHENCODE_ENSG00000168079 
+[1] "...Reading in sumstats"
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 657 SNPs which could not be aligned, 2945 remaining"
-Chunk 41 -- running univariate for EQTLGEN_ENSG00000171320 
-Chunk 41  -- running bivariate for EQTLGEN_ENSG00000171320 
+[1] "...Removing 540 SNPs which could not be aligned, 3937 remaining"
 [1] "...Reading in SNP info from reference data"
 [1] "...Reading in SNP info from reference data"
-[1] "...Extracting common SNPs"
-[1] "~ 5656 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-Warning: Estimates too far out of bounds (+-1.25) for phenotype(s) BIP2021 ~ LBD2020 (-2.539), LBD2020 ~ MDD2019 (-1.457), LBD2020 ~ SCZ2018 (-2.136), LBD2020 ~ EQTLGEN_ENSG00000170209 (1.914) in locus ENSG00000170209. Values will be set to NA. To change this threshold, modify the 'param.lim' argument
 Chunk 39 -- processing locus for PSYCHENCODE_ENSG00000170209 
 [1] "...Reading in sumstats"
-[1] "...Removing 595 SNPs which could not be aligned, 5061 remaining"
 [1] "...Extracting common SNPs"
+[1] "...Reading in SNP info from reference data"
+Chunk 41 -- running univariate for EQTLGEN_ENSG00000171320 
+Chunk 41  -- running bivariate for EQTLGEN_ENSG00000171320 
+[1] "~ 6334 SNPs shared across data sets"
+[1] "...Extracting common SNPs"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 846 SNPs which could not be aligned, 5488 remaining"
+[1] "~ 4585 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 557 SNPs which could not be aligned, 4028 remaining"
+[1] "~ 4013 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Reading in SNP info from reference data"
+[1] "...Removing 742 SNPs which could not be aligned, 3271 remaining"
 [1] "...Extracting common SNPs"
 Chunk 41 -- processing locus for PSYCHENCODE_ENSG00000171320 
 [1] "...Reading in sumstats"
+[1] "~ 3197 SNPs shared across data sets"
 Chunk 40 -- running univariate for EQTLGEN_ENSG00000170684 
 Chunk 40  -- running bivariate for EQTLGEN_ENSG00000170684 
-[1] "~ 4013 SNPs shared across data sets"
-Chunk 37 -- running univariate for PSYCHENCODE_ENSG00000168079 
-Chunk 37  -- running bivariate for PSYCHENCODE_ENSG00000168079 
-Chunk 46 -- processing locus for EQTLGEN_ENSG00000187244 
-[1] "...Reading in sumstats"
 [1] "...Aligning effect alleles to reference data set"
-[1] "~ 4699 SNPs shared across data sets"
-[1] "...Reading in SNP info from reference data"
-[1] "...Removing 742 SNPs which could not be aligned, 3271 remaining"
 Chunk 40 -- processing locus for PSYCHENCODE_ENSG00000170684 
 [1] "...Reading in sumstats"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 579 SNPs which could not be aligned, 4120 remaining"
-Chunk 42 -- running univariate for EQTLGEN_ENSG00000179846 
-Chunk 42  -- running bivariate for EQTLGEN_ENSG00000179846 
+[1] "...Removing 573 SNPs which could not be aligned, 2624 remaining"
+[1] "...Extracting common SNPs"
+[1] "...Extracting common SNPs"
+[1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
+[1] "~ 5656 SNPs shared across data sets"
 Chunk 43 -- running univariate for EQTLGEN_ENSG00000184305 
 Chunk 43  -- running bivariate for EQTLGEN_ENSG00000184305 
-[1] "...Extracting common SNPs"
+[1] "...Aligning effect alleles to reference data set"
 Chunk 43 -- processing locus for PSYCHENCODE_ENSG00000184305 
 [1] "...Reading in sumstats"
-Chunk 45 -- running univariate for EQTLGEN_ENSG00000186918 
-Chunk 45  -- running bivariate for EQTLGEN_ENSG00000186918 
-[1] "~ 3197 SNPs shared across data sets"
-[1] "...Reading in SNP info from reference data"
+[1] "...Removing 595 SNPs which could not be aligned, 5061 remaining"
+[1] "~ 4699 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 573 SNPs which could not be aligned, 2624 remaining"
-Chunk 36 -- running univariate for PSYCHENCODE_ENSG00000168078 
-Chunk 36  -- running bivariate for PSYCHENCODE_ENSG00000168078 
-Chunk 47 -- processing locus for EQTLGEN_ENSG00000189114 
-[1] "...Reading in sumstats"
-[1] "...Reading in SNP info from reference data"
+[1] "...Removing 579 SNPs which could not be aligned, 4120 remaining"
 [1] "...Extracting common SNPs"
-Chunk 42 -- processing locus for PSYCHENCODE_ENSG00000179846 
+Chunk 36 -- running univariate for PSYCHENCODE_ENSG00000168078 
+Chunk 36 -- no bivariate test run for PSYCHENCODE_ENSG00000168078. Univariate p-value =0.0337887
+Chunk 46 -- processing locus for EQTLGEN_ENSG00000187244 
 [1] "...Reading in sumstats"
+[1] "...Extracting common SNPs"
 [1] "~ 2740 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 526 SNPs which could not be aligned, 2214 remaining"
-[1] "...Extracting common SNPs"
-Chunk 45 -- processing locus for PSYCHENCODE_ENSG00000186918 
-[1] "...Reading in sumstats"
 Chunk 38 -- running univariate for PSYCHENCODE_ENSG00000168081 
 Chunk 38  -- running bivariate for PSYCHENCODE_ENSG00000168081 
-Chunk 48 -- processing locus for EQTLGEN_ENSG00000189233 
+[1] "...Removing 526 SNPs which could not be aligned, 2214 remaining"
+[1] "~ 3602 SNPs shared across data sets"
+Chunk 47 -- processing locus for EQTLGEN_ENSG00000189114 
+[1] "...Reading in sumstats"
+Chunk 42 -- running univariate for EQTLGEN_ENSG00000179846 
+Chunk 42  -- running bivariate for EQTLGEN_ENSG00000179846 
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 657 SNPs which could not be aligned, 2945 remaining"
+Chunk 45 -- running univariate for EQTLGEN_ENSG00000186918 
+Chunk 45  -- running bivariate for EQTLGEN_ENSG00000186918 
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "...Reading in SNP info from reference data"
+Chunk 42 -- processing locus for PSYCHENCODE_ENSG00000179846 
 [1] "...Reading in sumstats"
 [1] "~ 4109 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 755 SNPs which could not be aligned, 3354 remaining"
+Chunk 45 -- processing locus for PSYCHENCODE_ENSG00000186918 
+[1] "...Reading in sumstats"
+Chunk 37 -- running univariate for PSYCHENCODE_ENSG00000168079 
+Chunk 37  -- running bivariate for PSYCHENCODE_ENSG00000168079 
 Chunk 44 -- running univariate for EQTLGEN_ENSG00000186567 
 Chunk 44  -- running bivariate for EQTLGEN_ENSG00000186567 
-[1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-[1] "...Extracting common SNPs"
-[1] "...Extracting common SNPs"
-[1] "...Extracting common SNPs"
-[1] "~ 4488 SNPs shared across data sets"
 [1] "Warning: Negative variance estimate for phenotype(s) 'LBD2020' in locus ENSG00000170209; Dropping these as they cannot be analysed"
 Chunk 39 -- running univariate for PSYCHENCODE_ENSG00000170209 
 Chunk 39  -- running bivariate for PSYCHENCODE_ENSG00000170209 
+Chunk 48 -- processing locus for EQTLGEN_ENSG00000189233 
+[1] "...Reading in sumstats"
+[1] "...Extracting common SNPs"
+[1] "...Extracting common SNPs"
 [1] "~ 4524 SNPs shared across data sets"
 [1] "~ 2806 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Aligning effect alleles to reference data set"
-Chunk 41 -- running univariate for PSYCHENCODE_ENSG00000171320 
-Chunk 41  -- running bivariate for PSYCHENCODE_ENSG00000171320 
-[1] "...Removing 553 SNPs which could not be aligned, 3935 remaining"
-[1] "...Removing 880 SNPs which could not be aligned, 3644 remaining"
+[1] "...Reading in SNP info from reference data"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 516 SNPs which could not be aligned, 2290 remaining"
+[1] "...Removing 880 SNPs which could not be aligned, 3644 remaining"
 Chunk 49 -- processing locus for EQTLGEN_ENSG00000196628 
 [1] "...Reading in sumstats"
-[1] "...Reading in SNP info from reference data"
-Chunk 44 -- processing locus for PSYCHENCODE_ENSG00000186567 
-[1] "...Reading in sumstats"
-[1] "...Reading in SNP info from reference data"
+Chunk 41 -- running univariate for PSYCHENCODE_ENSG00000171320 
+Chunk 41 -- no bivariate test run for PSYCHENCODE_ENSG00000171320. Univariate p-value =0.0220647
 Chunk 50  -- no gene-eqtl for EQTLGEN_ENSG00000206129 
 Chunk 50 -- processing locus for PSYCHENCODE_ENSG00000206129 
 [1] "...Reading in sumstats"
+Chunk 44 -- processing locus for PSYCHENCODE_ENSG00000186567 
+[1] "...Reading in sumstats"
 [1] "...Reading in SNP info from reference data"
 [1] "...Extracting common SNPs"
+[1] "...Extracting common SNPs"
+[1] "~ 4488 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 553 SNPs which could not be aligned, 3935 remaining"
 Chunk 43 -- running univariate for PSYCHENCODE_ENSG00000184305 
-Chunk 43  -- running bivariate for PSYCHENCODE_ENSG00000184305 
+Chunk 43 -- no bivariate test run for PSYCHENCODE_ENSG00000184305. Univariate p-value =0.0172255
 Chunk 51  -- no gene-eqtl for EQTLGEN_ENSG00000213892 
 Chunk 51  -- no gene-eqtl for PSYCHENCODE_ENSG00000213892 
 Chunk 52  -- no gene-eqtl for EQTLGEN_ENSG00000214050 
 Chunk 52 -- processing locus for PSYCHENCODE_ENSG00000214050 
 [1] "...Reading in sumstats"
-[1] "...Reading in SNP info from reference data"
-[1] "~ 2936 SNPs shared across data sets"
-[1] "...Extracting common SNPs"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 538 SNPs which could not be aligned, 2398 remaining"
-[1] "...Extracting common SNPs"
-[1] "~ 5767 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 630 SNPs which could not be aligned, 5137 remaining"
-Chunk 40 -- running univariate for PSYCHENCODE_ENSG00000170684 
-Chunk 40  -- running bivariate for PSYCHENCODE_ENSG00000170684 
 [1] "~ 4624 SNPs shared across data sets"
-Chunk 53 -- processing locus for EQTLGEN_ENSG00000216588 
-[1] "...Reading in sumstats"
-[1] "...Extracting common SNPs"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 565 SNPs which could not be aligned, 4059 remaining"
-Chunk 46 -- running univariate for EQTLGEN_ENSG00000187244 
-Chunk 46  -- running bivariate for EQTLGEN_ENSG00000187244 
+[1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
+Chunk 40 -- running univariate for PSYCHENCODE_ENSG00000170684 
+Chunk 40 -- no bivariate test run for PSYCHENCODE_ENSG00000170684. Univariate p-value =0.0345072
+Chunk 53 -- processing locus for EQTLGEN_ENSG00000216588 
+[1] "...Reading in sumstats"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "...Extracting common SNPs"
 [1] "~ 3239 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 585 SNPs which could not be aligned, 2654 remaining"
-[1] "...Reading in SNP info from reference data"
-Chunk 48 -- running univariate for EQTLGEN_ENSG00000189233 
-Chunk 48  -- running bivariate for EQTLGEN_ENSG00000189233 
+[1] "~ 2936 SNPs shared across data sets"
 [1] "...Reading in SNP info from reference data"
 [1] "...Extracting common SNPs"
-Chunk 42 -- running univariate for PSYCHENCODE_ENSG00000179846 
-Chunk 42  -- running bivariate for PSYCHENCODE_ENSG00000179846 
-[1] "~ 3221 SNPs shared across data sets"
-Chunk 45 -- running univariate for PSYCHENCODE_ENSG00000186918 
-Chunk 45  -- running bivariate for PSYCHENCODE_ENSG00000186918 
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 579 SNPs which could not be aligned, 2642 remaining"
-Chunk 54  -- no gene-eqtl for EQTLGEN_ENSG00000224916 
-Chunk 54 -- processing locus for PSYCHENCODE_ENSG00000224916 
-[1] "...Reading in sumstats"
-Chunk 55  -- no gene-eqtl for EQTLGEN_ENSG00000227487 
-Chunk 55 -- processing locus for PSYCHENCODE_ENSG00000227487 
-[1] "...Reading in sumstats"
+[1] "...Removing 538 SNPs which could not be aligned, 2398 remaining"
 [1] "...Reading in SNP info from reference data"
+[1] "~ 5767 SNPs shared across data sets"
 [1] "...Extracting common SNPs"
-Chunk 46 -- processing locus for PSYCHENCODE_ENSG00000187244 
-[1] "...Reading in sumstats"
-Chunk 48 -- processing locus for PSYCHENCODE_ENSG00000189233 
-[1] "...Reading in sumstats"
+Chunk 46 -- running univariate for EQTLGEN_ENSG00000187244 
+Chunk 46  -- running bivariate for EQTLGEN_ENSG00000187244 
 Chunk 47 -- running univariate for EQTLGEN_ENSG00000189114 
 Chunk 47  -- running bivariate for EQTLGEN_ENSG00000189114 
-[1] "...Reading in SNP info from reference data"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 630 SNPs which could not be aligned, 5137 remaining"
 [1] "~ 2934 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 549 SNPs which could not be aligned, 2385 remaining"
 [1] "...Extracting common SNPs"
+Chunk 45 -- running univariate for PSYCHENCODE_ENSG00000186918 
+Chunk 45 -- no bivariate test run for PSYCHENCODE_ENSG00000186918. Univariate p-value =0.0135915
+Chunk 54  -- no gene-eqtl for EQTLGEN_ENSG00000224916 
+Chunk 54 -- processing locus for PSYCHENCODE_ENSG00000224916 
+[1] "...Reading in sumstats"
+[1] "~ 3221 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 579 SNPs which could not be aligned, 2642 remaining"
+[1] "...Reading in SNP info from reference data"
 [1] "...Extracting common SNPs"
+Chunk 48 -- running univariate for EQTLGEN_ENSG00000189233 
+Chunk 48  -- running bivariate for EQTLGEN_ENSG00000189233 
+Chunk 47 -- processing locus for PSYCHENCODE_ENSG00000189114 
+[1] "...Reading in sumstats"
+[1] "...Extracting common SNPs"
+[1] "...Extracting common SNPs"
+Chunk 42 -- running univariate for PSYCHENCODE_ENSG00000179846 
+Chunk 42 -- no bivariate test run for PSYCHENCODE_ENSG00000179846. Univariate p-value =0.00359459
+Chunk 55  -- no gene-eqtl for EQTLGEN_ENSG00000227487 
+Chunk 55 -- processing locus for PSYCHENCODE_ENSG00000227487 
+[1] "...Reading in sumstats"
+[1] "~ 4125 SNPs shared across data sets"
+Chunk 46 -- processing locus for PSYCHENCODE_ENSG00000187244 
+[1] "...Reading in sumstats"
+[1] "~ 4660 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 554 SNPs which could not be aligned, 3571 remaining"
+[1] "~ 2572 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 576 SNPs which could not be aligned, 4084 remaining"
+[1] "...Removing 518 SNPs which could not be aligned, 2054 remaining"
 Chunk 52 -- running univariate for PSYCHENCODE_ENSG00000214050 
 Chunk 52  -- running bivariate for PSYCHENCODE_ENSG00000214050 
 Chunk 56  -- no gene-eqtl for EQTLGEN_ENSG00000228607 
 Chunk 56 -- processing locus for PSYCHENCODE_ENSG00000228607 
 [1] "...Reading in sumstats"
-[1] "~ 4125 SNPs shared across data sets"
-[1] "~ 4660 SNPs shared across data sets"
-[1] "...Reading in SNP info from reference data"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 576 SNPs which could not be aligned, 4084 remaining"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 554 SNPs which could not be aligned, 3571 remaining"
-Chunk 47 -- processing locus for PSYCHENCODE_ENSG00000189114 
+Chunk 48 -- processing locus for PSYCHENCODE_ENSG00000189233 
 [1] "...Reading in sumstats"
-[1] "...Reading in SNP info from reference data"
-[1] "...Extracting common SNPs"
-[1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-[1] "~ 2572 SNPs shared across data sets"
-[1] "...Extracting common SNPs"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 518 SNPs which could not be aligned, 2054 remaining"
-[1] "...Extracting common SNPs"
 Chunk 44 -- running univariate for PSYCHENCODE_ENSG00000186567 
 Chunk 44  -- running bivariate for PSYCHENCODE_ENSG00000186567 
 [1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
 [1] "...Extracting common SNPs"
 [1] "~ 2818 SNPs shared across data sets"
-[1] "~ 2716 SNPs shared across data sets"
-[1] "...Extracting common SNPs"
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Aligning effect alleles to reference data set"
+[1] "...Reading in SNP info from reference data"
 [1] "...Removing 530 SNPs which could not be aligned, 2288 remaining"
-[1] "...Removing 526 SNPs which could not be aligned, 2190 remaining"
-[1] "~ 2819 SNPs shared across data sets"
-[1] "...Extracting common SNPs"
-[1] "~ 3249 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 522 SNPs which could not be aligned, 2297 remaining"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 598 SNPs which could not be aligned, 2651 remaining"
-[1] "~ 2855 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 570 SNPs which could not be aligned, 2285 remaining"
-Chunk 53 -- running univariate for EQTLGEN_ENSG00000216588 
-Chunk 53  -- running bivariate for EQTLGEN_ENSG00000216588 
 Chunk 49 -- running univariate for EQTLGEN_ENSG00000196628 
 Chunk 49  -- running bivariate for EQTLGEN_ENSG00000196628 
-Chunk 53 -- processing locus for PSYCHENCODE_ENSG00000216588 
-[1] "...Reading in sumstats"
 [1] "...Reading in SNP info from reference data"
-Chunk 49 -- processing locus for PSYCHENCODE_ENSG00000196628 
-[1] "...Reading in sumstats"
-Chunk 48 -- running univariate for PSYCHENCODE_ENSG00000189233 
-Chunk 48  -- running bivariate for PSYCHENCODE_ENSG00000189233 
+Chunk 50 -- running univariate for PSYCHENCODE_ENSG00000206129 
+Chunk 50 -- no bivariate test run for PSYCHENCODE_ENSG00000206129. Univariate p-value =0.00286463
 Chunk 57  -- no gene-eqtl for EQTLGEN_ENSG00000234906 
 Chunk 57 -- processing locus for PSYCHENCODE_ENSG00000234906 
 [1] "...Reading in sumstats"
-Chunk 55 -- running univariate for PSYCHENCODE_ENSG00000227487 
-Chunk 55 -- no bivariate test run for PSYCHENCODE_ENSG00000227487. Univariate p-value =0.369104
+Chunk 53 -- running univariate for EQTLGEN_ENSG00000216588 
+Chunk 53  -- running bivariate for EQTLGEN_ENSG00000216588 
+[1] "...Extracting common SNPs"
+[1] "...Reading in SNP info from reference data"
+Chunk 53 -- processing locus for PSYCHENCODE_ENSG00000216588 
+[1] "...Reading in sumstats"
+Chunk 49 -- processing locus for PSYCHENCODE_ENSG00000196628 
+[1] "...Reading in sumstats"
 Chunk 58  -- no gene-eqtl for EQTLGEN_ENSG00000247416 
 Chunk 58 -- processing locus for PSYCHENCODE_ENSG00000247416 
 [1] "...Reading in sumstats"
-Chunk 50 -- running univariate for PSYCHENCODE_ENSG00000206129 
-Chunk 50  -- running bivariate for PSYCHENCODE_ENSG00000206129 
+[1] "~ 2965 SNPs shared across data sets"
+[1] "...Extracting common SNPs"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Extracting common SNPs"
+[1] "...Removing 542 SNPs which could not be aligned, 2423 remaining"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "~ 2855 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "~ 2716 SNPs shared across data sets"
+[1] "...Removing 570 SNPs which could not be aligned, 2285 remaining"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 526 SNPs which could not be aligned, 2190 remaining"
+[1] "~ 2819 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 522 SNPs which could not be aligned, 2297 remaining"
+[1] "...Extracting common SNPs"
+[1] "~ 3249 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 598 SNPs which could not be aligned, 2651 remaining"
+Chunk 54 -- running univariate for PSYCHENCODE_ENSG00000224916 
+Chunk 54 -- no bivariate test run for PSYCHENCODE_ENSG00000224916. Univariate p-value =0.0309311
 Chunk 59  -- no gene-eqtl for EQTLGEN_ENSG00000247775 
 Chunk 59 -- processing locus for PSYCHENCODE_ENSG00000247775 
 [1] "...Reading in sumstats"
-[1] "...Extracting common SNPs"
-Chunk 60  -- no gene-eqtl for EQTLGEN_ENSG00000251095 
-Chunk 60 -- processing locus for PSYCHENCODE_ENSG00000251095 
-[1] "...Reading in sumstats"
-[1] "~ 2965 SNPs shared across data sets"
-Chunk 54 -- running univariate for PSYCHENCODE_ENSG00000224916 
-Chunk 54  -- running bivariate for PSYCHENCODE_ENSG00000224916 
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 542 SNPs which could not be aligned, 2423 remaining"
+[1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
 [1] "Warning: Negative variance estimate for phenotype(s) 'BIP2021' in locus ENSG00000228607; Dropping these as they cannot be analysed"
 Chunk 56 -- running univariate for PSYCHENCODE_ENSG00000228607 
 Chunk 56  -- running bivariate for PSYCHENCODE_ENSG00000228607 
-Warning: Estimates too far out of bounds (+-1.25) for phenotype(s) LBD2020 ~ MDD2019 (-1.285) in locus ENSG00000228607. Values will be set to NA. To change this threshold, modify the 'param.lim' argument
+[1] "Error: Less than 2 phenotypes provided for bivariate analysis in locus: ENSG00000228607"
+Chunk 60  -- no gene-eqtl for EQTLGEN_ENSG00000251095 
+Chunk 60 -- processing locus for PSYCHENCODE_ENSG00000251095 
+[1] "...Reading in sumstats"
+Chunk 55 -- running univariate for PSYCHENCODE_ENSG00000227487 
+Chunk 55 -- no bivariate test run for PSYCHENCODE_ENSG00000227487. Univariate p-value =0.369104
 Chunk 61  -- no gene-eqtl for EQTLGEN_ENSG00000253397 
 Chunk 61  -- no gene-eqtl for PSYCHENCODE_ENSG00000253397 
 Chunk 62  -- no gene-eqtl for EQTLGEN_ENSG00000253567 
 Chunk 62 -- processing locus for PSYCHENCODE_ENSG00000253567 
 [1] "...Reading in sumstats"
-Chunk 46 -- running univariate for PSYCHENCODE_ENSG00000187244 
-Chunk 46  -- running bivariate for PSYCHENCODE_ENSG00000187244 
+Chunk 47 -- running univariate for PSYCHENCODE_ENSG00000189114 
+Chunk 47  -- running bivariate for PSYCHENCODE_ENSG00000189114 
 [1] "...Reading in SNP info from reference data"
 Chunk 63  -- no gene-eqtl for EQTLGEN_ENSG00000253690 
 Chunk 63 -- processing locus for PSYCHENCODE_ENSG00000253690 
 [1] "...Reading in sumstats"
-[1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-[1] "...Extracting common SNPs"
-[1] "...Reading in SNP info from reference data"
 [1] "...Extracting common SNPs"
 [1] "...Extracting common SNPs"
-[1] "~ 2673 SNPs shared across data sets"
-[1] "...Reading in SNP info from reference data"
-[1] "~ 2880 SNPs shared across data sets"
-Chunk 47 -- running univariate for PSYCHENCODE_ENSG00000189114 
-Chunk 47  -- running bivariate for PSYCHENCODE_ENSG00000189114 
-[1] "...Extracting common SNPs"
-[1] "~ 2806 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
+Chunk 48 -- running univariate for PSYCHENCODE_ENSG00000189233 
+Chunk 48 -- no bivariate test run for PSYCHENCODE_ENSG00000189233. Univariate p-value =0.0273371
 Chunk 64  -- no gene-eqtl for EQTLGEN_ENSG00000253875 
 Chunk 64 -- processing locus for PSYCHENCODE_ENSG00000253875 
 [1] "...Reading in sumstats"
+[1] "~ 2673 SNPs shared across data sets"
+[1] "~ 2806 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 529 SNPs which could not be aligned, 2277 remaining"
+[1] "...Extracting common SNPs"
+Chunk 46 -- running univariate for PSYCHENCODE_ENSG00000187244 
+Chunk 46  -- running bivariate for PSYCHENCODE_ENSG00000187244 
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 507 SNPs which could not be aligned, 2166 remaining"
+[1] "~ 2880 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Reading in SNP info from reference data"
 [1] "...Removing 547 SNPs which could not be aligned, 2333 remaining"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "...Reading in SNP info from reference data"
+[1] "~ 4541 SNPs shared across data sets"
+[1] "~ 2679 SNPs shared across data sets"
+Chunk 58 -- running univariate for PSYCHENCODE_ENSG00000247416 
+Chunk 58 -- no bivariate test run for PSYCHENCODE_ENSG00000247416. Univariate p-value =0.208827
 Chunk 65  -- no gene-eqtl for EQTLGEN_ENSG00000255129 
 Chunk 65 -- processing locus for PSYCHENCODE_ENSG00000255129 
 [1] "...Reading in sumstats"
 [1] "...Aligning effect alleles to reference data set"
-[1] "~ 4541 SNPs shared across data sets"
-[1] "...Removing 529 SNPs which could not be aligned, 2277 remaining"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 507 SNPs which could not be aligned, 2166 remaining"
-[1] "...Extracting common SNPs"
-[1] "...Removing 868 SNPs which could not be aligned, 3673 remaining"
-[1] "...Extracting common SNPs"
-[1] "~ 4209 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 817 SNPs which could not be aligned, 3392 remaining"
 [1] "...Reading in SNP info from reference data"
-Chunk 59 -- running univariate for PSYCHENCODE_ENSG00000247775 
-Chunk 59  -- running bivariate for PSYCHENCODE_ENSG00000247775 
-[1] "~ 3196 SNPs shared across data sets"
+[1] "...Removing 868 SNPs which could not be aligned, 3673 remaining"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 544 SNPs which could not be aligned, 2135 remaining"
+[1] "...Extracting common SNPs"
+[1] "...Extracting common SNPs"
+Chunk 57 -- running univariate for PSYCHENCODE_ENSG00000234906 
+Chunk 57  -- running bivariate for PSYCHENCODE_ENSG00000234906 
+[1] "~ 4209 SNPs shared across data sets"
+[1] "~ 3212 SNPs shared across data sets"
 Chunk 66  -- no gene-eqtl for EQTLGEN_ENSG00000256452 
 Chunk 66 -- processing locus for PSYCHENCODE_ENSG00000256452 
 [1] "...Reading in sumstats"
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 585 SNPs which could not be aligned, 2611 remaining"
-[1] "...Reading in SNP info from reference data"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 817 SNPs which could not be aligned, 3392 remaining"
+[1] "...Removing 572 SNPs which could not be aligned, 2640 remaining"
 [1] "...Extracting common SNPs"
-Chunk 60 -- running univariate for PSYCHENCODE_ENSG00000251095 
-Chunk 60  -- running bivariate for PSYCHENCODE_ENSG00000251095 
+Chunk 59 -- running univariate for PSYCHENCODE_ENSG00000247775 
+Chunk 59  -- running bivariate for PSYCHENCODE_ENSG00000247775 
 Chunk 67  -- no gene-eqtl for EQTLGEN_ENSG00000256603 
 Chunk 67 -- processing locus for PSYCHENCODE_ENSG00000256603 
 [1] "...Reading in sumstats"
-[1] "...Extracting common SNPs"
-[1] "~ 2679 SNPs shared across data sets"
-Chunk 58 -- running univariate for PSYCHENCODE_ENSG00000247416 
-Chunk 58 -- no bivariate test run for PSYCHENCODE_ENSG00000247416. Univariate p-value =0.208827
+[1] "~ 3196 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 585 SNPs which could not be aligned, 2611 remaining"
+Chunk 53 -- running univariate for PSYCHENCODE_ENSG00000216588 
+Chunk 53 -- no bivariate test run for PSYCHENCODE_ENSG00000216588. Univariate p-value =0.0448671
 Chunk 68  -- no gene-eqtl for EQTLGEN_ENSG00000256757 
 Chunk 68  -- no gene-eqtl for PSYCHENCODE_ENSG00000256757 
 Chunk 69  -- no gene-eqtl for EQTLGEN_ENSG00000260930 
 Chunk 69 -- processing locus for PSYCHENCODE_ENSG00000260930 
 [1] "...Reading in sumstats"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 544 SNPs which could not be aligned, 2135 remaining"
-[1] "...Reading in SNP info from reference data"
-[1] "~ 3212 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-Chunk 57 -- running univariate for PSYCHENCODE_ENSG00000234906 
-Chunk 57  -- running bivariate for PSYCHENCODE_ENSG00000234906 
-Chunk 62 -- running univariate for PSYCHENCODE_ENSG00000253567 
-Chunk 62  -- running bivariate for PSYCHENCODE_ENSG00000253567 
-[1] "...Reading in SNP info from reference data"
-[1] "...Removing 572 SNPs which could not be aligned, 2640 remaining"
-Chunk 53 -- running univariate for PSYCHENCODE_ENSG00000216588 
-Chunk 53  -- running bivariate for PSYCHENCODE_ENSG00000216588 
+Chunk 60 -- running univariate for PSYCHENCODE_ENSG00000251095 
+Chunk 60 -- no bivariate test run for PSYCHENCODE_ENSG00000251095. Univariate p-value =0.00369799
 Chunk 70  -- no gene-eqtl for EQTLGEN_ENSG00000266903 
 Chunk 70 -- processing locus for PSYCHENCODE_ENSG00000266903 
 [1] "...Reading in sumstats"
-[1] "...Extracting common SNPs"
-[1] "...Extracting common SNPs"
-[1] "...Reading in SNP info from reference data"
-[1] "~ 4201 SNPs shared across data sets"
-[1] "~ 2703 SNPs shared across data sets"
 Chunk 71  -- no gene-eqtl for EQTLGEN_ENSG00000266958 
 Chunk 71 -- processing locus for PSYCHENCODE_ENSG00000266958 
 [1] "...Reading in sumstats"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 525 SNPs which could not be aligned, 2178 remaining"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 775 SNPs which could not be aligned, 3426 remaining"
 [1] "...Extracting common SNPs"
+Chunk 63 -- running univariate for PSYCHENCODE_ENSG00000253690 
+Chunk 63 -- no bivariate test run for PSYCHENCODE_ENSG00000253690. Univariate p-value =0.216494
 Chunk 72  -- no gene-eqtl for EQTLGEN_ENSG00000267013 
 Chunk 72 -- processing locus for PSYCHENCODE_ENSG00000267013 
 [1] "...Reading in sumstats"
 [1] "...Reading in SNP info from reference data"
-[1] "~ 2780 SNPs shared across data sets"
-Chunk 63 -- running univariate for PSYCHENCODE_ENSG00000253690 
-Chunk 63 -- no bivariate test run for PSYCHENCODE_ENSG00000253690. Univariate p-value =0.216494
+[1] "~ 4201 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 775 SNPs which could not be aligned, 3426 remaining"
+Chunk 62 -- running univariate for PSYCHENCODE_ENSG00000253567 
+Chunk 62 -- no bivariate test run for PSYCHENCODE_ENSG00000253567. Univariate p-value =0.00968011
 Chunk 73  -- no gene-eqtl for EQTLGEN_ENSG00000267028 
 Chunk 73 -- processing locus for PSYCHENCODE_ENSG00000267028 
 [1] "...Reading in sumstats"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 557 SNPs which could not be aligned, 2223 remaining"
 Chunk 49 -- running univariate for PSYCHENCODE_ENSG00000196628 
-Chunk 49  -- running bivariate for PSYCHENCODE_ENSG00000196628 
-[1] "...Extracting common SNPs"
+Chunk 49 -- no bivariate test run for PSYCHENCODE_ENSG00000196628. Univariate p-value =0.0018925
 Chunk 74  -- no gene-eqtl for EQTLGEN_ENSG00000267037 
 Chunk 74 -- processing locus for PSYCHENCODE_ENSG00000267037 
 [1] "...Reading in sumstats"
-[1] "~ 2852 SNPs shared across data sets"
+[1] "...Extracting common SNPs"
+[1] "...Reading in SNP info from reference data"
+[1] "~ 2703 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 525 SNPs which could not be aligned, 2178 remaining"
+[1] "...Extracting common SNPs"
 Chunk 64 -- running univariate for PSYCHENCODE_ENSG00000253875 
-Chunk 64  -- running bivariate for PSYCHENCODE_ENSG00000253875 
+Chunk 64 -- no bivariate test run for PSYCHENCODE_ENSG00000253875. Univariate p-value =0.000614445
 Chunk 75  -- no gene-eqtl for EQTLGEN_ENSG00000267044 
 Chunk 75 -- processing locus for PSYCHENCODE_ENSG00000267044 
 [1] "...Reading in sumstats"
+[1] "...Extracting common SNPs"
+[1] "~ 2780 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 557 SNPs which could not be aligned, 2223 remaining"
+[1] "...Reading in SNP info from reference data"
+[1] "~ 2852 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 569 SNPs which could not be aligned, 2283 remaining"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "~ 2972 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
 Chunk 65 -- running univariate for PSYCHENCODE_ENSG00000255129 
 Chunk 65  -- running bivariate for PSYCHENCODE_ENSG00000255129 
-[1] "...Reading in SNP info from reference data"
-Warning: Estimates too far out of bounds (+-1.25) for phenotype(s) BIP2021 ~ SCZ2018 (1.323) in locus ENSG00000255129. Values will be set to NA. To change this threshold, modify the 'param.lim' argument
 Chunk 76  -- no gene-eqtl for EQTLGEN_ENSG00000267045 
 Chunk 76 -- processing locus for PSYCHENCODE_ENSG00000267045 
 [1] "...Reading in sumstats"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 543 SNPs which could not be aligned, 2429 remaining"
+[1] "...Extracting common SNPs"
 [1] "...Reading in SNP info from reference data"
+[1] "~ 2877 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 537 SNPs which could not be aligned, 2340 remaining"
+[1] "...Extracting common SNPs"
 [1] "Warning: Negative variance estimate for phenotype(s) 'BIP2021', 'PSYCHENCODE_ENSG00000256452' in locus ENSG00000256452; Dropping these as they cannot be analysed"
 Chunk 66 -- running univariate for PSYCHENCODE_ENSG00000256452 
 Chunk 66 -- no bivariate test run for PSYCHENCODE_ENSG00000256452. Univariate p-value =
 Chunk 77  -- no gene-eqtl for EQTLGEN_ENSG00000267057 
 Chunk 77 -- processing locus for PSYCHENCODE_ENSG00000267057 
 [1] "...Reading in sumstats"
-[1] "...Extracting common SNPs"
-[1] "~ 2877 SNPs shared across data sets"
 [1] "...Reading in SNP info from reference data"
-[1] "...Aligning effect alleles to reference data set"
 [1] "...Extracting common SNPs"
-[1] "...Removing 537 SNPs which could not be aligned, 2340 remaining"
-[1] "~ 2972 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
 [1] "Warning: Negative variance estimate for phenotype(s) 'BIP2021' in locus ENSG00000256603; Dropping these as they cannot be analysed"
 Chunk 67 -- running univariate for PSYCHENCODE_ENSG00000256603 
 Chunk 67  -- running bivariate for PSYCHENCODE_ENSG00000256603 
-[1] "...Removing 543 SNPs which could not be aligned, 2429 remaining"
-Warning: Estimates too far out of bounds (+-1.25) for phenotype(s) LBD2020 ~ MDD2019 (-1.336) in locus ENSG00000256603. Values will be set to NA. To change this threshold, modify the 'param.lim' argument
+[1] "Error: Less than 2 phenotypes provided for bivariate analysis in locus: ENSG00000256603"
 Chunk 78  -- no gene-eqtl for EQTLGEN_ENSG00000267112 
 Chunk 78  -- no gene-eqtl for PSYCHENCODE_ENSG00000267112 
 Chunk 79 -- processing locus for EQTLGEN_ENSG00000267114 
 [1] "...Reading in sumstats"
+[1] "~ 2931 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 537 SNPs which could not be aligned, 2394 remaining"
 [1] "...Extracting common SNPs"
-[1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
 [1] "~ 2511 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 500 SNPs which could not be aligned, 2011 remaining"
-[1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-[1] "...Extracting common SNPs"
-[1] "...Extracting common SNPs"
-[1] "...Reading in SNP info from reference data"
-[1] "...Extracting common SNPs"
-[1] "...Extracting common SNPs"
-[1] "~ 2931 SNPs shared across data sets"
-Chunk 70 -- running univariate for PSYCHENCODE_ENSG00000266903 
-Chunk 70  -- running bivariate for PSYCHENCODE_ENSG00000266903 
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 537 SNPs which could not be aligned, 2394 remaining"
 [1] "~ 2623 SNPs shared across data sets"
-Chunk 71 -- running univariate for PSYCHENCODE_ENSG00000266958 
-Chunk 71  -- running bivariate for PSYCHENCODE_ENSG00000266958 
 [1] "...Aligning effect alleles to reference data set"
-[1] "~ 2934 SNPs shared across data sets"
 [1] "...Removing 537 SNPs which could not be aligned, 2086 remaining"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Extracting common SNPs"
-[1] "...Removing 538 SNPs which could not be aligned, 2396 remaining"
-[1] "~ 2583 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
+Chunk 71 -- running univariate for PSYCHENCODE_ENSG00000266958 
+Chunk 71 -- no bivariate test run for PSYCHENCODE_ENSG00000266958. Univariate p-value =0.00252245
 Chunk 80  -- no gene-eqtl for EQTLGEN_ENSG00000267172 
 Chunk 80  -- no gene-eqtl for PSYCHENCODE_ENSG00000267172 
 Chunk 81  -- no gene-eqtl for EQTLGEN_ENSG00000267282 
 Chunk 81 -- processing locus for PSYCHENCODE_ENSG00000267282 
 [1] "...Reading in sumstats"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 535 SNPs which could not be aligned, 2048 remaining"
-[1] "~ 3049 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 560 SNPs which could not be aligned, 2489 remaining"
 [1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-Chunk 69 -- running univariate for PSYCHENCODE_ENSG00000260930 
-Chunk 69 -- no bivariate test run for PSYCHENCODE_ENSG00000260930. Univariate p-value =0.0597403
+[1] "...Extracting common SNPs"
+[1] "...Extracting common SNPs"
+Chunk 70 -- running univariate for PSYCHENCODE_ENSG00000266903 
+Chunk 70  -- running bivariate for PSYCHENCODE_ENSG00000266903 
+[1] "~ 2934 SNPs shared across data sets"
+[1] "~ 2583 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 538 SNPs which could not be aligned, 2396 remaining"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Extracting common SNPs"
+Chunk 74 -- running univariate for PSYCHENCODE_ENSG00000267037 
+Chunk 74 -- no bivariate test run for PSYCHENCODE_ENSG00000267037. Univariate p-value =0.0819409
 Chunk 82  -- no gene-eqtl for EQTLGEN_ENSG00000267284 
 Chunk 82 -- processing locus for PSYCHENCODE_ENSG00000267284 
 [1] "...Reading in sumstats"
-[1] "...Extracting common SNPs"
-[1] "...Extracting common SNPs"
-[1] "~ 4423 SNPs shared across data sets"
+[1] "...Removing 535 SNPs which could not be aligned, 2048 remaining"
+[1] "...Reading in SNP info from reference data"
+[1] "~ 3049 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+Chunk 69 -- running univariate for PSYCHENCODE_ENSG00000260930 
+Chunk 69 -- no bivariate test run for PSYCHENCODE_ENSG00000260930. Univariate p-value =0.0597403
 Chunk 83  -- no gene-eqtl for EQTLGEN_ENSG00000267311 
 Chunk 83 -- processing locus for PSYCHENCODE_ENSG00000267311 
 [1] "...Reading in sumstats"
-[1] "~ 2491 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 537 SNPs which could not be aligned, 3886 remaining"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 492 SNPs which could not be aligned, 1999 remaining"
-Chunk 74 -- running univariate for PSYCHENCODE_ENSG00000267037 
-Chunk 74 -- no bivariate test run for PSYCHENCODE_ENSG00000267037. Univariate p-value =0.0819409
+[1] "...Removing 560 SNPs which could not be aligned, 2489 remaining"
+Chunk 72 -- running univariate for PSYCHENCODE_ENSG00000267013 
+Chunk 72 -- no bivariate test run for PSYCHENCODE_ENSG00000267013. Univariate p-value =0.0230249
 Chunk 84  -- no gene-eqtl for EQTLGEN_ENSG00000267325 
 Chunk 84 -- processing locus for PSYCHENCODE_ENSG00000267325 
 [1] "...Reading in sumstats"
-Chunk 72 -- running univariate for PSYCHENCODE_ENSG00000267013 
-Chunk 72  -- running bivariate for PSYCHENCODE_ENSG00000267013 
-[1] "Warning: Negative variance estimate for phenotype(s) 'PSYCHENCODE_ENSG00000267044' in locus ENSG00000267044; Dropping these as they cannot be analysed"
-Chunk 75 -- running univariate for PSYCHENCODE_ENSG00000267044 
-Chunk 75 -- no bivariate test run for PSYCHENCODE_ENSG00000267044. Univariate p-value =
+[1] "...Extracting common SNPs"
+[1] "~ 4423 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 537 SNPs which could not be aligned, 3886 remaining"
+[1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
 Chunk 85  -- no gene-eqtl for EQTLGEN_ENSG00000267327 
 Chunk 85 -- processing locus for PSYCHENCODE_ENSG00000267327 
 [1] "...Reading in sumstats"
+[1] "...Extracting common SNPs"
 Chunk 73 -- running univariate for PSYCHENCODE_ENSG00000267028 
 Chunk 73 -- no bivariate test run for PSYCHENCODE_ENSG00000267028. Univariate p-value =0.443714
 Chunk 86 -- processing locus for EQTLGEN_ENSG00000267348 
 [1] "...Reading in sumstats"
-[1] "...Reading in SNP info from reference data"
+[1] "Warning: Negative variance estimate for phenotype(s) 'PSYCHENCODE_ENSG00000267044' in locus ENSG00000267044; Dropping these as they cannot be analysed"
+Chunk 75 -- running univariate for PSYCHENCODE_ENSG00000267044 
+Chunk 75 -- no bivariate test run for PSYCHENCODE_ENSG00000267044. Univariate p-value =
 Chunk 87  -- no gene-eqtl for EQTLGEN_ENSG00000267399 
 Chunk 87 -- processing locus for PSYCHENCODE_ENSG00000267399 
-[1] "...Reading in sumstats"
-Chunk 76 -- running univariate for PSYCHENCODE_ENSG00000267045 
-Chunk 76 -- no bivariate test run for PSYCHENCODE_ENSG00000267045. Univariate p-value =0.264267
-Chunk 88  -- no gene-eqtl for EQTLGEN_ENSG00000267402 
-Chunk 88 -- processing locus for PSYCHENCODE_ENSG00000267402 
 [1] "...Reading in sumstats"
 [1] "...Extracting common SNPs"
 [1] "~ 2825 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 534 SNPs which could not be aligned, 2291 remaining"
+Chunk 76 -- running univariate for PSYCHENCODE_ENSG00000267045 
+Chunk 76 -- no bivariate test run for PSYCHENCODE_ENSG00000267045. Univariate p-value =0.264267
+Chunk 88  -- no gene-eqtl for EQTLGEN_ENSG00000267402 
+Chunk 88 -- processing locus for PSYCHENCODE_ENSG00000267402 
+[1] "...Reading in sumstats"
+[1] "~ 2491 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 492 SNPs which could not be aligned, 1999 remaining"
 Chunk 79 -- running univariate for EQTLGEN_ENSG00000267114 
 Chunk 79  -- running bivariate for EQTLGEN_ENSG00000267114 
-Chunk 77 -- running univariate for PSYCHENCODE_ENSG00000267057 
-Chunk 77 -- no bivariate test run for PSYCHENCODE_ENSG00000267057. Univariate p-value =0.0794079
-Chunk 89  -- no gene-eqtl for EQTLGEN_ENSG00000267467 
-Chunk 89 -- processing locus for PSYCHENCODE_ENSG00000267467 
-[1] "...Reading in sumstats"
 [1] "...Reading in SNP info from reference data"
 [1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
 [1] "...Extracting common SNPs"
 Chunk 79 -- processing locus for PSYCHENCODE_ENSG00000267114 
 [1] "...Reading in sumstats"
-[1] "...Reading in SNP info from reference data"
+[1] "~ 2548 SNPs shared across data sets"
+[1] "...Extracting common SNPs"
 Chunk 81 -- running univariate for PSYCHENCODE_ENSG00000267282 
 Chunk 81 -- no bivariate test run for PSYCHENCODE_ENSG00000267282. Univariate p-value =0.0864136
+Chunk 89  -- no gene-eqtl for EQTLGEN_ENSG00000267467 
+Chunk 89 -- processing locus for PSYCHENCODE_ENSG00000267467 
+[1] "...Reading in sumstats"
+[1] "~ 2555 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 519 SNPs which could not be aligned, 2029 remaining"
+[1] "...Reading in SNP info from reference data"
+[1] "~ 2456 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 521 SNPs which could not be aligned, 2034 remaining"
+Chunk 77 -- running univariate for PSYCHENCODE_ENSG00000267057 
+Chunk 77 -- no bivariate test run for PSYCHENCODE_ENSG00000267057. Univariate p-value =0.0794079
 Chunk 90  -- no gene-eqtl for EQTLGEN_ENSG00000267545 
 Chunk 90 -- processing locus for PSYCHENCODE_ENSG00000267545 
 [1] "...Reading in sumstats"
-[1] "~ 2548 SNPs shared across data sets"
-[1] "...Extracting common SNPs"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Reading in SNP info from reference data"
-[1] "...Removing 519 SNPs which could not be aligned, 2029 remaining"
-[1] "...Reading in SNP info from reference data"
-[1] "~ 4467 SNPs shared across data sets"
-[1] "...Extracting common SNPs"
-[1] "...Reading in SNP info from reference data"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 538 SNPs which could not be aligned, 3929 remaining"
-[1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-[1] "...Extracting common SNPs"
-[1] "~ 2555 SNPs shared across data sets"
-[1] "...Extracting common SNPs"
-[1] "...Extracting common SNPs"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 521 SNPs which could not be aligned, 2034 remaining"
-[1] "~ 2456 SNPs shared across data sets"
-[1] "...Extracting common SNPs"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 510 SNPs which could not be aligned, 1946 remaining"
+[1] "...Reading in SNP info from reference data"
 [1] "...Extracting common SNPs"
-[1] "~ 2512 SNPs shared across data sets"
-[1] "~ 2479 SNPs shared across data sets"
+[1] "...Extracting common SNPs"
+[1] "~ 4467 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 498 SNPs which could not be aligned, 2014 remaining"
-[1] "~ 2818 SNPs shared across data sets"
+[1] "...Removing 538 SNPs which could not be aligned, 3929 remaining"
+[1] "~ 2479 SNPs shared across data sets"
+[1] "...Reading in SNP info from reference data"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 499 SNPs which could not be aligned, 1980 remaining"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 530 SNPs which could not be aligned, 2288 remaining"
-[1] "~ 2652 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 546 SNPs which could not be aligned, 2106 remaining"
 [1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
 Chunk 82 -- running univariate for PSYCHENCODE_ENSG00000267284 
-Chunk 82  -- running bivariate for PSYCHENCODE_ENSG00000267284 
+Chunk 82 -- no bivariate test run for PSYCHENCODE_ENSG00000267284. Univariate p-value =0.0369308
 Chunk 91  -- no gene-eqtl for EQTLGEN_ENSG00000267712 
 Chunk 91 -- processing locus for PSYCHENCODE_ENSG00000267712 
 [1] "...Reading in sumstats"
-Chunk 86 -- running univariate for EQTLGEN_ENSG00000267348 
-Chunk 86  -- running bivariate for EQTLGEN_ENSG00000267348 
-[1] "...Extracting common SNPs"
-[1] "...Extracting common SNPs"
-[1] "~ 2965 SNPs shared across data sets"
-[1] "~ 2789 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 542 SNPs which could not be aligned, 2423 remaining"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 522 SNPs which could not be aligned, 2267 remaining"
+[1] "...Reading in SNP info from reference data"
+[1] "...Reading in SNP info from reference data"
 Chunk 83 -- running univariate for PSYCHENCODE_ENSG00000267311 
 Chunk 83 -- no bivariate test run for PSYCHENCODE_ENSG00000267311. Univariate p-value =0.123582
 Chunk 92  -- no gene-eqtl for EQTLGEN_ENSG00000268341 
@@ -1341,40 +1313,61 @@ Chunk 92 -- processing locus for PSYCHENCODE_ENSG00000268341
 [1] "Warning: Negative variance estimate for phenotype(s) 'PSYCHENCODE_ENSG00000267325' in locus ENSG00000267325; Dropping these as they cannot be analysed"
 Chunk 84 -- running univariate for PSYCHENCODE_ENSG00000267325 
 Chunk 84 -- no bivariate test run for PSYCHENCODE_ENSG00000267325. Univariate p-value =
-Chunk 87 -- running univariate for PSYCHENCODE_ENSG00000267399 
-Chunk 87 -- no bivariate test run for PSYCHENCODE_ENSG00000267399. Univariate p-value =0.160728
+[1] "...Extracting common SNPs"
+[1] "...Extracting common SNPs"
+[1] "...Reading in SNP info from reference data"
+[1] "~ 2652 SNPs shared across data sets"
+[1] "...Extracting common SNPs"
+[1] "~ 2512 SNPs shared across data sets"
+[1] "~ 2789 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 546 SNPs which could not be aligned, 2106 remaining"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 498 SNPs which could not be aligned, 2014 remaining"
+[1] "~ 2818 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 530 SNPs which could not be aligned, 2288 remaining"
+[1] "...Removing 522 SNPs which could not be aligned, 2267 remaining"
+Chunk 86 -- running univariate for EQTLGEN_ENSG00000267348 
+Chunk 86  -- running bivariate for EQTLGEN_ENSG00000267348 
+[1] "...Extracting common SNPs"
+[1] "~ 2965 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
 Chunk 85 -- running univariate for PSYCHENCODE_ENSG00000267327 
 Chunk 85 -- no bivariate test run for PSYCHENCODE_ENSG00000267327. Univariate p-value =0.23709
+[1] "...Removing 542 SNPs which could not be aligned, 2423 remaining"
 Chunk 86 -- processing locus for PSYCHENCODE_ENSG00000267348 
 [1] "...Reading in sumstats"
-Chunk 89 -- running univariate for PSYCHENCODE_ENSG00000267467 
-Chunk 89 -- no bivariate test run for PSYCHENCODE_ENSG00000267467. Univariate p-value =0.091098
+[1] "...Reading in SNP info from reference data"
 Chunk 88 -- running univariate for PSYCHENCODE_ENSG00000267402 
-Chunk 88  -- running bivariate for PSYCHENCODE_ENSG00000267402 
-Chunk 90 -- running univariate for PSYCHENCODE_ENSG00000267545 
-Chunk 90  -- running bivariate for PSYCHENCODE_ENSG00000267545 
+Chunk 88 -- no bivariate test run for PSYCHENCODE_ENSG00000267402. Univariate p-value =0.0078371
+Chunk 87 -- running univariate for PSYCHENCODE_ENSG00000267399 
+Chunk 87 -- no bivariate test run for PSYCHENCODE_ENSG00000267399. Univariate p-value =0.160728
+[1] "...Extracting common SNPs"
 Chunk 79 -- running univariate for PSYCHENCODE_ENSG00000267114 
 Chunk 79 -- no bivariate test run for PSYCHENCODE_ENSG00000267114. Univariate p-value =0.121994
-[1] "...Reading in SNP info from reference data"
-[1] "...Reading in SNP info from reference data"
-[1] "...Extracting common SNPs"
-[1] "...Extracting common SNPs"
+Chunk 89 -- running univariate for PSYCHENCODE_ENSG00000267467 
+Chunk 89 -- no bivariate test run for PSYCHENCODE_ENSG00000267467. Univariate p-value =0.091098
 [1] "~ 3206 SNPs shared across data sets"
-[1] "...Reading in SNP info from reference data"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 576 SNPs which could not be aligned, 2630 remaining"
-[1] "~ 2551 SNPs shared across data sets"
+Chunk 90 -- running univariate for PSYCHENCODE_ENSG00000267545 
+Chunk 90 -- no bivariate test run for PSYCHENCODE_ENSG00000267545. Univariate p-value =0.01293
+[1] "...Reading in SNP info from reference data"
 [1] "...Extracting common SNPs"
+[1] "~ 2551 SNPs shared across data sets"
 [1] "...Aligning effect alleles to reference data set"
 [1] "...Removing 514 SNPs which could not be aligned, 2037 remaining"
-[1] "~ 2856 SNPs shared across data sets"
-[1] "...Aligning effect alleles to reference data set"
-[1] "...Removing 524 SNPs which could not be aligned, 2332 remaining"
 Chunk 92 -- running univariate for PSYCHENCODE_ENSG00000268341 
 Chunk 92  -- running bivariate for PSYCHENCODE_ENSG00000268341 
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "~ 2856 SNPs shared across data sets"
 Chunk 91 -- running univariate for PSYCHENCODE_ENSG00000267712 
 Chunk 91 -- no bivariate test run for PSYCHENCODE_ENSG00000267712. Univariate p-value =0.282707
-Warning: Estimates too far out of bounds (+-1.25) for phenotype(s) AD2019 ~ LBD2020 (1.832) in locus ENSG00000268341. Values will be set to NA. To change this threshold, modify the 'param.lim' argument
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 524 SNPs which could not be aligned, 2332 remaining"
 [1] "Warning: Negative variance estimate for phenotype(s) 'PSYCHENCODE_ENSG00000267348' in locus ENSG00000267348; Dropping these as they cannot be analysed"
 Chunk 86 -- running univariate for PSYCHENCODE_ENSG00000267348 
 Chunk 86 -- no bivariate test run for PSYCHENCODE_ENSG00000267348. Univariate p-value =

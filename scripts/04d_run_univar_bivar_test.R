@@ -37,8 +37,8 @@ args <-
     # Used to filter bivariate results to include only phenos with significant local rg
     # These phenos will then be used together with the eQTL
     bivar_threshold = 0.05/1603, # n bivariate tests
-    # Set eQTL univariate threshold to liberal 0.05
-    univar_threshold = 0.05
+    # Will be set to 0.05/n_loci
+    univar_threshold = c()
   )
 
 # Set up for parallel run -------------------------------------------------
@@ -96,6 +96,9 @@ results <-
     locus %in% gene_filtered_loci$locus,
     p < args$bivar_threshold
   )
+
+# Update univariate threshold
+args$univar_threshold <- 0.05/nrow(loci)
 
 # Main --------------------------------------------------------------------
 
@@ -191,7 +194,7 @@ foreach::foreach(
         )
 
       # Run the univariate and bivariate tests seperately
-      # Only run bivariate if p-value is not NULL/NA and is < univar_threshold
+      # Only run bivariate if eQTL p-value is not NULL/NA and is < univar_threshold
       loc_out[["univ"]] <-
         LAVA::run.univ(locus)
 
@@ -207,7 +210,17 @@ foreach::foreach(
         cat("Chunk", i, " -- running bivariate for", eqtl_gene,"\n")
 
         loc_out[["bivar"]] <-
-          LAVA::run.bivar(locus)
+          LAVA::run.bivar(
+            locus,
+            # Subset for other phenotypes with univ p < univar_threshold
+            phenos =
+              loc_out[["univ"]] %>%
+              dplyr::filter(
+                p < args$univar_threshold
+              ) %>%
+              .[["phen"]] %>%
+              as.character()
+            )
 
       } else{
 
