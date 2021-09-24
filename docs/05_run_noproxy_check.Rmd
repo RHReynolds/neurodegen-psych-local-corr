@@ -1,5 +1,5 @@
 ---
-title: "Title"
+title: "Determine impact of by-proxy cases"
 author: 
 - name: "Regina H. Reynolds"
   affiliation: UCL
@@ -7,7 +7,7 @@ date: "`r format(Sys.time(), '%d %B %Y')`"
 output: 
   bookdown::html_document2:
     figure_caption: yes
-    code_folding: show
+    code_folding: hide
     theme: paper
     highlight: kate
     df_print: paged
@@ -42,7 +42,7 @@ fct_disease <- c("AD", "LBD", "PD")
 
 ```
 
-> Aim: determine the impact of excluding by-proxy cases on AD-LBD local $r_g$
+> Aim: determine the impact of excluding by-proxy cases on AD-LBD and PD-LBD local $r_g$
 <br><br>
 
 # Background
@@ -220,6 +220,8 @@ source(here::here("R", "plots.R"))
 # Methods {.tabset}
 
 Methods are as described in [01_preparing_inputs_gwas.html](01_preparing_inputs_gwas.html). LD blocks were filtered to include only those where significant bivariate local $r_g$'s were observed between LBD and either by-proxy AD or PD GWASs. This limited the number of LD blocks to `r nrow(loci)` (locus `r loci$LOC`). Bivariate local correlations were only performed for pairs of traits which both exhibited a significant univariate local genetic signal (p < 0.05/`r nrow(loci)`, where the denominator represents the total number of tested loci). This resulted in a total of **`r nrow(results$bivar)`** bivariate test spanning **`r results$bivar %>% .[["locus"]] %>% unique() %>% length()`** distinct loci. 
+
+# Results {.tabset}
 
 ## Tabular results {.tabset}
 
