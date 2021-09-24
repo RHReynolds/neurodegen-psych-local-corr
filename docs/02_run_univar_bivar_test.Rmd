@@ -1,7 +1,7 @@
 ---
 title: "Running univariate and bivariate LAVA"
 author: 
-- name: "Regina H. Reynolds"
+- name: "Aaron Wagen & Regina H. Reynolds"
   affiliation: UCL
 output: 
   bookdown::html_document2:

@@ -59,7 +59,7 @@ Following section includes any intermediary code used in this `.Rmd`.
 
 ## Get gene loci 
 
-```{r find-overlaps, eval = F}
+```{r get-gene-loci, eval = F}
 
 source(here::here("scripts", "04a_get_gene_loci.R"))
 
@@ -67,7 +67,7 @@ source(here::here("scripts", "04a_get_gene_loci.R"))
 
 All gene loci are shown below. 
 
-```{r ld-blocks-table}
+```{r gene-loci}
 
 gene_loci <- 
   read_delim(
