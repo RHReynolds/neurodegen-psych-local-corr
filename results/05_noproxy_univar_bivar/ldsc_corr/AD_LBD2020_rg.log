@@ -1,0 +1,65 @@
+*********************************************************************
+* LD Score Regression (LDSC)
+* Version 1.0.1
+* (C) 2014-2019 Brendan Bulik-Sullivan and Hilary Finucane
+* Broad Institute of MIT and Harvard / MIT Department of Mathematics
+* GNU General Public License v3
+*********************************************************************
+Call: 
+./ldsc.py \
+--ref-ld-chr /data/LDScore/Reference_Files/eur_w_ld_chr/ \
+--out /home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/05_noproxy_univar_bivar/ldsc_corr/AD_LBD2020_rg \
+--rg /data/LDScore/GWAS//AD/AD.sumstats.gz,/data/LDScore/GWAS//LBD2020/LBD2020.sumstats.gz \
+--w-ld-chr /data/LDScore/Reference_Files/eur_w_ld_chr/ 
+
+Beginning analysis at Fri Sep 24 14:37:55 2021
+Reading summary statistics from /data/LDScore/GWAS//AD/AD.sumstats.gz ...
+Read summary statistics for 1150200 SNPs.
+Reading reference panel LD Score from /data/LDScore/Reference_Files/eur_w_ld_chr/[1-22] ... (ldscore_fromlist)
+Read reference panel LD Scores for 1290028 SNPs.
+Removing partitioned LD Scores with zero variance.
+Reading regression weight LD Score from /data/LDScore/Reference_Files/eur_w_ld_chr/[1-22] ... (ldscore_fromlist)
+Read regression weight LD Scores for 1290028 SNPs.
+After merging with reference panel LD, 1145016 SNPs remain.
+After merging with regression SNP LD, 1145016 SNPs remain.
+Computing rg for phenotype 2/2
+Reading summary statistics from /data/LDScore/GWAS//LBD2020/LBD2020.sumstats.gz ...
+Read summary statistics for 1217311 SNPs.
+After merging with summary statistics, 1145016 SNPs remain.
+1042201 SNPs with valid alleles.
+
+Heritability of phenotype 1
+---------------------------
+Total Observed scale h2: 0.047 (0.0222)
+Lambda GC: 1.0926
+Mean Chi^2: 1.1139
+Intercept: 1.063 (0.0323)
+Ratio: 0.553 (0.2834)
+
+Heritability of phenotype 2/2
+-----------------------------
+Total Observed scale h2: 0.1631 (0.079)
+Lambda GC: 1.0225
+Mean Chi^2: 1.0245
+Intercept: 1.0029 (0.0078)
+Ratio: 0.1164 (0.3165)
+
+Genetic Covariance
+------------------
+Total Observed scale gencov: 0.053 (0.0277)
+Mean z1*z2: 0.0526
+Intercept: 0.0328 (0.0103)
+
+Genetic Correlation
+-------------------
+Genetic Correlation: 0.6052 (0.2561)
+Z-score: 2.3637
+P: 0.0181
+
+
+Summary of Genetic Correlation Results
+                                    p1                                               p2      rg      se       z       p  h2_obs  h2_obs_se  h2_int  h2_int_se  gcov_int  gcov_int_se
+ /data/LDScore/GWAS//AD/AD.sumstats.gz  /data/LDScore/GWAS//LBD2020/LBD2020.sumstats.gz  0.6052  0.2561  2.3637  0.0181  0.1631      0.079  1.0029     0.0078    0.0328       0.0103
+
+Analysis finished at Fri Sep 24 14:38:12 2021
+Total time elapsed: 17.21s

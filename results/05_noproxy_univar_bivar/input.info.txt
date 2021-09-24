@@ -1,0 +1,4 @@
+phenotype	cases	controls	filename
+AD2013	17008	37154	/data/LDScore/GWAS//AD/AD2013.lava.gz
+LBD2020	2591	4027	/data/LDScore/GWAS//LBD2020/LBD2020_hg19_rsids.lava.gz
+PD2011	5333	12019	/data/LDScore/GWAS//PD2011/PD2011.lava.gz

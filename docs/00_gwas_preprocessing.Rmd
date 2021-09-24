@@ -1,7 +1,7 @@
 ---
 title: "GWAS preprocessing"
 author: 
-- name: "Regina H. Reynolds"
+- name: "Aaron Wagen & Regina H. Reynolds"
   affiliation: UCL
 output: 
   html_document:
@@ -71,8 +71,55 @@ devtools::install_github("RHReynolds/rutils")
     - **We will save these LAVA-formatted GWASs using the suffix `.lava.gz` in the commmon GWAS folder (for lab re-use).** This will also make it easier to find their file paths later, using the `list.files()` function.
     - **Remember to modify directory readmes to reflect addition of new files.**
 
-## AD
-```{r AD-check-cols}
+## AD 2013
+```{r AD2013-check-cols}
+
+file_path <-
+  file.path(
+    gwas_dir,
+    "AD/AD_all_sum_stats/IGAP_stage_1.txt"
+  )
+
+# Read in first few rows to check data format
+fread(file_path, nrows = 6)
+```
+
+- Most columns are present, but require renaming.
+- N not defined for study, therefore will add column with N = 17,008 cases +	37,154 controls = `r c(17008	+ 37154) %>% format(scientific = F)`
+
+```{r AD2013-preprocess, eval = F}
+
+AD <-
+  fread(file_path) %>%
+  dplyr::mutate(
+    P = as.numeric(Pvalue),
+    N = 17008	+ 37154
+  ) %>% 
+  dplyr::select(
+    CHR = Chromosome, 
+    BP = Position, 
+    SNP = MarkerName, 
+    A1 = Effect_allele, 
+    A2 = Non_Effect_allele, 
+    BETA = Beta, 
+    SE, 
+    P,
+    N
+  )
+
+fwrite(AD,
+  file =
+    stringr::str_c(
+      gwas_dir,
+      "AD/AD2013",
+      lava_ext
+    ),
+  sep = "\t"
+)
+```
+
+## AD 2019
+```{r AD2019-check-cols}
 
 file_path <-
   file.path(
@@ -86,7 +133,7 @@ fread(file_path, nrows = 6)
 
 - All columns present. Just need to rename `Neff` to one of the accepted LAVA inputs.
 
-```{r AD-preprocess, eval = F}
+```{r AD2019-preprocess, eval = F}
 
 AD <-
   fread(file_path) %>%
@@ -169,8 +216,76 @@ print(str_c("Number of lines in original file: ", n_original))
 print(str_c("Number of lines in modified file: ", n_liftover))
 ```
 
-## PD
-```{r PD-check-cols}
+## PD 2011
+
+```{r PD2011-check-cols}
+
+file_path <-
+  file.path(
+    gwas_dir,
+    "PD2011/PD-2011_Meta.txt"
+  )
+
+fread(file_path, nrows = 6)
+```
+
+- Liftover from GRCh36 to GRCh37 and add RS IDs.
+- A1 and A2 are lowercase, so will change to upper case.
+- N not defined for study, therefore will add column with N = 5,333 cases +	12,019 controls = `r c(5333 + 12019) %>% format(scientific = F)`
+
+```{r PD2011-preprocess, eval = F}
+
+PD <-
+  fread(file_path) %>%
+  dplyr::select(
+    CHR, BP, 
+    CHR_BP = MARKER,
+    A1 = Allele1, 
+    A2 = Allele2, 
+    MAF = Freq1, 
+    BETA = Effect, 
+    SE = StdErr, 
+    P = meta_P, 
+    ) %>% 
+  dplyr::mutate(
+    CHR = as.factor(CHR),
+    A1 = stringr::str_to_upper(A1),
+    A2 = stringr::str_to_upper(A2),
+    N = 5333 + 12019
+  ) %>% 
+  rutils::liftover_coord(
+    df = .,
+    path_to_chain = "/data/liftover/hg18/hg18ToHg19.over.chain"
+  ) %>% 
+  colochelpR::convert_loc_to_rs(
+    df = .,
+    dbsnp_144
+  )
+
+# Function colochelpR::convert_loc_to_rs does not remove CHR:BP associated with more than one rs id
+# Nor does it remove CHR:BP locations that do not have associated rs ids (left as NA)
+# Thus, will remove NAs and remove duplicated CHR:BP  
+PD <-
+  PD %>%
+  dplyr::group_by(CHR_BP) %>%
+  dplyr::filter(!any(row_number() > 1))  %>%
+  dplyr::ungroup() %>%
+  dplyr::select(-CHR_BP) %>%
+  tidyr::drop_na(SNP)
+  
+fwrite(
+  PD,
+  stringr::str_c(
+    gwas_dir,
+    "PD2011/PD2011",
+    lava_ext
+  ),
+  sep = "\t"
+)
+```
+
+## PD 2019
+```{r PD2019-check-cols}
 
 file_path <-
   file.path(
@@ -184,7 +299,7 @@ fread(file_path, nrows = 6)
 - All columns are present, but a few need renaming.
 - Number of samples currently split into cases and controls. These need to be summed to a total.
 
-```{r PD-preprocess, eval = F}
+```{r PD2019-preprocess, eval = F}
 
 PD <-
   fread(file_path) %>%
@@ -287,7 +402,8 @@ MDD <-
     MAF = Freq, 
     logOdds = LogOR, 
     SE = StdErrLogOR, 
-    P, N
+    P, 
+    N
     )
 
 fwrite(

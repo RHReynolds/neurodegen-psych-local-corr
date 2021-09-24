@@ -1,0 +1,440 @@
+---
+title: "Title"
+author: 
+- name: "Regina H. Reynolds"
+  affiliation: UCL
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: 
+  bookdown::html_document2:
+    figure_caption: yes
+    code_folding: show
+    theme: paper
+    highlight: kate
+    df_print: paged
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+```{r setup, include = FALSE}
+
+library(ggplot2) # For plotting
+library(ggraph) # For edge diagrams
+library(tidyverse) # For tidy manipulation of data
+library(stringr) # For string manipulation
+
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+
+# Set defaults for ggplots 
+theme_rhr <- theme_set(
+  theme_bw(base_family = "Helvetica",
+           base_size = 10) + 
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "top",
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        axis.title.y = element_text(vjust = 0.6),
+        panel.spacing = unit(0.1, "lines"))
+)
+
+loci <- LAVA::read.loci(here::here("results", "05_noproxy_univar_bivar", "filtered.loci"))
+fct_disease <- c("AD", "LBD", "PD")
+
+
+```
+
+> Aim: determine the impact of excluding by-proxy cases on AD-LBD local $r_g$
+<br><br>
+
+# Background
+
+Both AD and PD GWASs used in this work include by-proxy cases, which are defined as individuals who have a parent with the disease. In AD, it has been shown that the genetic correlation with clinically diagnosed Alzheimer's disease is high (PMID: [29777097](https://pubmed.ncbi.nlm.nih.gov/29777097/)). However, mislabelling by-proxy cases when parents suffer from other types of dementia could lead to spurious genetic correlations. This is particularly relevant in comparisons of AD to LBD, which both present with cognitive decline. To assess the impact of by-proxy inclusions on local $r_g$'s with LBD, we used older releases of the AD and PD GWASs (AD2013 and PD2011) where by-proxy cases were not included.
+
+# Supplementary code {.tabset}
+
+Following section includes any intermediary code used in this `.Rmd`.
+
+## Filter LD blocks
+
+```{r filter-ld-blocks, eval = F}
+
+source(here::here("scripts", "05a_filter_loci.R"))
+
+```
+
+## Get sample overlap
+
+```{r get-sample-overlaps, eval = F}
+
+source(here::here("scripts", "05b_get_sample_overlaps.R"))
+
+```
+
+Sample overlap matrix shown below.
+
+```{r load-sample-overlap}
+
+sample_overlap <-
+  read.table(
+    file = here::here("results", "05_noproxy_univar_bivar", "sample_overlap.txt")
+    )
+
+sample_overlap %>% 
+  as.matrix()
+
+```
+
+## Prepare input info file
+
+```{r get-input-info, eval = F}
+
+phenotypes <- c("AD2013", "PD2011", "LBD2020") %>% sort()
+
+gwas_details <- 
+  readxl::read_xlsx(path = "/data/LDScore/GWAS/LDSC_GWAS_details.xlsx") %>% 
+  dplyr::mutate(
+    Original_name = Original_name %>% 
+      stringr::str_replace_all("_", "\\.")
+  ) %>% 
+  dplyr::select(
+    Original_name, 
+    cases = N_case,
+    controls = N_ctrl
+  ) %>% 
+  dplyr::mutate(
+    # Rename AD to AD2013 to fit with LAVA file
+    Original_name =
+      case_when(Original_name == "AD" ~ "AD2013",
+                TRUE ~ Original_name)
+  )
+
+input_info <- 
+  tibble(
+    phenotype = 
+      list.files(
+        path = gwas_dir,
+        full.names = F,
+        recursive = T,
+        pattern = ".lava.gz"
+      ) %>% 
+      stringr::str_remove("/.*") %>% 
+      stringr::str_replace_all("_", "\\."),
+    filename = 
+      list.files(
+        path = gwas_dir,
+        full.names = T,
+        recursive = T,
+        pattern = ".lava.gz"
+      )
+  ) %>% 
+  dplyr::mutate(
+    phenotype =
+      case_when(phenotype == "AD" ~ "AD2013",
+                TRUE ~ phenotype)
+  ) %>% 
+  dplyr::filter(phenotype %in% phenotypes) %>% 
+  dplyr::inner_join(
+    gwas_details,
+    by = c("phenotype" = "Original_name")
+    ) %>% 
+  dplyr::select(phenotype, cases, controls, filename)
+
+write_delim(
+  input_info,
+  path = file.path(here::here("results", "05_noproxy_univar_bivar"),
+                   "input.info.txt"),
+  delim = "\t"
+)
+
+```
+
+## Run univariate and bivariate tests
+This was run using `nohup`:
+
+```{bash bash-run-univar-bivar, eval = F}
+# Have to navigate to root project folder for script to work (as it uses here package)
+cd /home/rreynolds/misc_projects/neurodegen-psych-local-corr
+
+nohup Rscript \
+/home/rreynolds/misc_projects/neurodegen-psych-local-corr/scripts/05c_run_univar_bivar_test.R \
+&>/home/rreynolds/misc_projects/neurodegen-psych-local-corr/logs/05c_run_univar_bivar_test.log&
+
+```
+
+## Loading results
+Once run, results can be loaded using the following code chunk:
+
+```{r load-lava-results}
+files <- 
+  list.files(
+  path = 
+    here::here("results",
+               "05_noproxy_univar_bivar"),
+  pattern = ".lava.rds", 
+  full.names = T
+)
+
+results <- 
+  setNames(
+    object = files %>% 
+      lapply(., function(file){
+        
+        list <-
+          file %>% 
+          readRDS() 
+        
+        if(!is.null(list)){
+          list %>%
+            purrr::discard(is.null) %>%
+            qdapTools::list_df2df() %>%
+            dplyr::select(-X1)
+        }
+
+      }),
+    nm = files %>% 
+      basename() %>% 
+      str_remove(".lava.rds") %>% 
+      str_remove(".*:") %>% 
+      str_remove(".*\\.")
+  )
+
+```
+
+
+```{r load-ldsc}
+global <- 
+  read_delim(
+    file = here::here("results", "05_noproxy_univar_bivar", "ldsc_corr", "ldsc_correlations.txt"),
+    delim = "\t"
+    ) 
+
+```
+
+## Loading plotting functions
+
+```{r load-plot-func}
+
+source(here::here("R", "plots.R"))
+
+```
+
+# Methods {.tabset}
+
+Methods are as described in [01_preparing_inputs_gwas.html](01_preparing_inputs_gwas.html). LD blocks were filtered to include only those where significant bivariate local $r_g$'s were observed between LBD and either by-proxy AD or PD GWASs. This limited the number of LD blocks to `r nrow(loci)` (locus `r loci$LOC`). Bivariate local correlations were only performed for pairs of traits which both exhibited a significant univariate local genetic signal (p < 0.05/`r nrow(loci)`, where the denominator represents the total number of tested loci). This resulted in a total of **`r nrow(results$bivar)`** bivariate test spanning **`r results$bivar %>% .[["locus"]] %>% unique() %>% length()`** distinct loci. 
+
+## Tabular results {.tabset}
+
+### Global correlations
+```{r global-corr-table}
+
+print("Global correlation column descriptions:")
+
+tibble(
+  column = colnames(global),
+  description = 
+    c(
+      "Phenotype 1",
+      "Phenotype 2",
+      "The estimated genetic correlation",
+      "The bootstrap standard error of the genetic correlation estimate",
+      "The bootstrap standard error of the genetic correlation estimate",
+      "P-value for genetic correlation",
+      "Estimated snp-heritability of the second phenotype ",
+      "Standard error of h2 for phenotype 2",
+      "Single-trait LD score regression intercept for phenotype 2",
+      "Standard error for single-trait LD score regression intercept for phenotype 2",
+      "Estimated genetic covariance between p1 and p2",
+      "Bootstrap standard error of cross-trait LD score regression intercept"
+    )
+) %>%
+  DT::datatable(rownames = FALSE,
+                options = list(scrollX = TRUE),
+                class = 'white-space: nowrap')
+
+
+print("Global correlation results (p < 0.05/n_tests):")
+
+combn <-
+  global$p1 %>%
+  unique() %>%
+  combn(m = 2) %>%
+  t() %>%
+  as_tibble() %>%
+  dplyr::rename(
+    p1 = V1,
+    p2 = V2
+  )
+
+global_signif <- 
+  global %>% 
+  dplyr::filter(
+    !p1==p2
+  ) %>% 
+  dplyr::inner_join(combn) %>%
+  dplyr::filter(
+    p < 0.05/nrow(combn)
+  )
+
+global_signif %>%
+  DT::datatable(rownames = FALSE,
+                options = list(scrollX = TRUE),
+                class = 'white-space: nowrap')
+
+```
+
+### Univariate results
+```{r univar-table}
+print("Univariate column descriptions:")
+
+tibble(
+  column = colnames(results$univ),
+  description = 
+    c(
+      "Locus ID",
+      "Locus chromosome",
+      "Locus start base pair",
+      "Locus end base pair",
+      "The number of SNPs within the locus",
+      "The number of PCs retained within the locus",
+      "Analysed phenotype",
+      "Observed local heritability",
+      "P-value from the univariate test (F-test for continuous, Chi-sq for binary)"
+    )
+) %>%
+  DT::datatable(rownames = FALSE,
+                options = list(scrollX = TRUE),
+                class = 'white-space: nowrap')
+
+print("Univariate results (p < 0.05/n_loci):")
+
+results$univ <- 
+  results$univ %>% 
+  dplyr::mutate(
+    phen = phen %>% 
+      str_replace_all("[:digit:]", "") %>% 
+      str_remove("\\..*") %>% 
+      fct_relevel(
+        fct_disease
+      )
+  )
+
+results$univ %>% 
+  dplyr::filter(p < 0.05/nrow(loci)) %>%   
+  DT::datatable(rownames = FALSE,
+                options = list(scrollX = TRUE),
+                class = 'white-space: nowrap')
+```
+
+### Bivariate results
+```{r bivar-table}
+
+print("Bivariate column descriptions:")
+
+tibble(
+  column = colnames(results$bivar),
+  description = 
+    c(
+      "Locus ID",
+      "Locus chromosome",
+      "Locus start base pair",
+      "Locus end base pair",
+      "The number of SNPs within the locus",
+      "The number of PCs retained within the locus",
+      "Phenotype 1",
+      "Phenotype 2",
+      "Standardised coefficient for the local genetic correlation",
+      "Lower 95% confidence estimate for rho",
+      "Upper 95% confidence estimate for rho",
+      "Equivalent of taking the square of rho. Denotes the proportion of variance in genetic signal for phen1 explained by phen2 (and vice versa)",
+      "Lower 95% confidence estimate for r2",
+      "Upper 95% confidence estimate for r2",
+      "Simulation p-values for the local genetic correlation"
+    )
+) %>%
+  DT::datatable(rownames = FALSE,
+                options = list(scrollX = TRUE),
+                class = 'white-space: nowrap')
+
+print("Bivariate results (p < 0.05/n_bivar_tests):")
+
+results$bivar <- 
+  results$bivar %>% 
+  dplyr::mutate(
+    phen1 = phen1 %>% 
+      str_replace_all("[:digit:]", "") %>% 
+      str_remove("\\..*"),
+    phen2 = phen2 %>% 
+      str_replace_all("[:digit:]", "") %>% 
+      str_remove("\\..*")
+  )
+
+bivar_thres <- 0.05/nrow(results$bivar)
+
+bivar_bonf <- 
+  results$bivar %>% 
+  dplyr::filter(p < bivar_thres)
+
+bivar_bonf %>%
+  DT::datatable(rownames = FALSE,
+                options = list(scrollX = TRUE),
+                class = 'white-space: nowrap')
+
+
+```
+
+## Global correlations versus bivariate tests {.tabset}
+
+### Text
+```{r, echo = F}
+
+by_proxy <- 
+  readRDS(list.files(
+    here::here("results",
+               "02_univar_bivar_test"),
+    pattern = "bivar", 
+    full.names = T
+  )) %>% 
+  purrr::discard(is.null) %>% 
+  qdapTools::list_df2df() %>% 
+  dplyr::select(-X1) %>% 
+  dplyr::filter(
+    locus %in% unique(bivar_bonf$locus)
+  )
+
+```
+
+- Global cross-trait correlations revealed a significant positive correlation between LBD and PD2011 (without by-proxy cases), as previously observed when using PD2019 (with by-proxy cases).
+- In univariate tests, a negative variance estimate was calculated for PD2011 in locus 2351 (likely due to insufficient signal), thus this trait was dropped from the analysis.
+- The bivariate test revealed a significant positive correlation between AD2013 (without by-proxy cases; rho = `r bivar_bonf$rho %>% round(digits = 2)`, p = $`r bivar_bonf$p`$) and LBD, as previously observed using AD2019 (with by-proxy cases; rho = `r by_proxy %>% dplyr::filter(phen1 == "AD2019", phen2 == "LBD2020") %>% .[["rho"]] %>% round(digits = 2)`, p = $`r by_proxy %>% dplyr::filter(phen1 == "AD2019", phen2 == "LBD2020") %>% .[["p"]]`$). This results suggests that the local $r_g$ observed in locus 2351 between AD and LBD is not driven by the inclusion of by-proxy cases.
+
+### Figures
+
+```{r global-corr, fig.height = 3, fig.cap = "Global genetic correlations between pairs of phenotypes. Significant negative and positive correlations are indicated by blue and red fill, respectively. Non-significant correlations (p >= 0.05/n_tests) have a grey fill."}
+
+plot_global_corr(
+  global_corr = global,
+  n_phenotypes = 3
+)
+
+```
+
+```{r, edge-diagram, fig.height = 3, fig.cap = "Edge diagram for each locus showing the standardised coefficient for genetic correlation (rho) for each significant bivariate local genetic correlations (p < 0.05/n_tests). Significant negative and positive correlations are indicated by blue and red colour, respectively."}
+
+plot_edge_diagram(
+  bivar_corr = 
+    bivar_bonf,
+  phen = fct_disease,
+  multiple_corr = FALSE,
+  ncol = 3
+)
+
+```
+<br><br>
+
+# Session info
+
+```{r reproducibility, echo = FALSE}
+# Session info
+library("sessioninfo")
+options(width = 120)
+session_info()
+```

@@ -266,6 +266,9 @@ plot_bivar_chord_diagram <-
 #' @param p_threshold `numeric` vector indicating p-value threshold to filter
 #'   results by. Default is NULL.
 #' @param phen `character` vector indicating phenotypes present.
+#' @param multiple_corr logical vector indicating whether to filter loci such
+#'   that only those with more than one bivariate correlation are displayed.
+#'   Default is TRUE.
 #' @param ncol `integer` vector indicating number of columns in facet.
 #' @param seed `integer` vector indicating seed to be used for generating the
 #'   layout of the graph (i.e. how nodes are placed on the plot), which is
@@ -283,6 +286,7 @@ plot_edge_diagram <-
     bivar_corr,
     p_threshold = NULL,
     phen,
+    multiple_corr = TRUE,
     ncol = 3,
     seed = 89
   ) {
@@ -297,10 +301,14 @@ plot_edge_diagram <-
     }
 
     # Filter for loci with more than one bivariate correlation
-    bivar_corr <-
-      bivar_corr %>%
-      dplyr::group_by(locus) %>%
-      dplyr::filter(n() > 1)
+    if(multiple_corr == TRUE){
+
+      bivar_corr <-
+        bivar_corr %>%
+        dplyr::group_by(locus) %>%
+        dplyr::filter(n() > 1)
+
+      }
 
     edges <-
       bivar_corr %>%
