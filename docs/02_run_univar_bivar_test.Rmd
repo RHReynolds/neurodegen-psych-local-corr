@@ -453,11 +453,43 @@ results$bivar %>%
 plot_edge_diagram(
   bivar_corr = 
     bivar_bonf,
-  phen = fct_disease,
-  ncol = 3
+  phen = fct_disease, 
+  ncol = 3,
 )
 
 ```
+
+```{r asap-subgroup-plot, echo = F, eval = F}
+
+plot <- 
+  plot_edge_diagram(
+  bivar_corr = 
+    bivar_bonf %>% 
+    dplyr::filter(
+      locus %in% c(681,1719, 2281, 2351)
+      ),
+  phen = fct_disease, 
+  multiple_corr = FALSE,
+  ncol = 4,
+  seed = 78
+) + 
+  theme(
+    legend.position = "right"
+  )
+
+ggsave(
+  plot,
+  path = here::here("tmp"), 
+  filename = "20211006_edgediagrams.png",
+  device = "png", 
+  width = 250, 
+  height = 70, 
+  dpi = 300, 
+  units = "mm"
+)
+
+```
+
 
 ```{r individual-locus-plots, message = F, fig.height = 8}
 

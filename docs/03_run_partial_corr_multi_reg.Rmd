@@ -29,7 +29,7 @@ theme_rhr <-
            base_size = 10) + 
   theme(panel.grid.major.x = element_blank(),
         legend.position = "top",
-        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1),
         axis.title.y = element_text(vjust = 0.6),
         panel.spacing = unit(0.1, "lines")
         )
@@ -381,7 +381,8 @@ multireg %>%
 multireg_w_signif_pred <- 
   multireg %>% 
   dplyr::filter(
-    p < 0.05
+    p < 0.05,
+    locus %in% c(2281,2351)
   ) %>% 
   dplyr::select(locus, contains("model"), outcome) %>% 
   dplyr::distinct()
@@ -472,14 +473,33 @@ b <-
   ggplot2::labs(x = "Predictors", y = "Standardised multiple\nregression coefficient") +
   theme_rhr
 
-cowplot::plot_grid(
-  a,b, 
-  ncol = 1, 
-  axis = "lr", 
-  align = "v"
+plot <- 
+  cowplot::plot_grid(
+    b,a, 
+    ncol = 1, 
+    axis = "lr", 
+    align = "v"
+  )
+
+plot
+
+```
+
+```{r asap-subgroup-plot, echo = F, eval = F}
+
+ggsave(
+  plot,
+  path = here::here("tmp"), 
+  filename = "20211006_multireg.png",
+  device = "png", 
+  width = 90, 
+  height = 140, 
+  dpi = 300, 
+  units = "mm"
 )
 
 ```
+
 
 <br><br>
 

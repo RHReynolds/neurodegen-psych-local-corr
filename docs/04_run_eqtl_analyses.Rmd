@@ -747,6 +747,128 @@ fig_list[5]
 
 ```
 
+```{r asap-subgroup-plot, echo = F, eval = F}
+
+ld_blocks <- 
+  c(681, 2351)
+
+qtl_genes <-
+  bivar_fdr %>%
+  dplyr::group_by(eqtl_dataset, gene_locus) %>%
+  dplyr::filter(str_detect(phen2, "ENSG")) %>% 
+  .[["gene_locus"]] %>% 
+  unique()
+
+bivar_list <- 
+  setNames(
+    bivar_fdr %>% 
+      dplyr::filter(ld_block %in% ld_blocks) %>% 
+      dplyr::group_split(ld_block),
+    nm = 
+      str_c("locus_", ld_blocks)
+  )
+  
+ld_fig_list <- vector(mode = "list", length = length(ld_blocks))
+edge_fig_list <- vector(mode = "list", length = length(ld_blocks))
+
+
+for(block in ld_blocks){
+  
+  ld_fig_list[[which(ld_blocks == block)]] <- 
+    plot_locus(
+      locus_gr = loci_gr[loci_gr$locus == block], 
+      ref = ref,
+      highlight_gene = qtl_genes,
+      highlight_gene_label = "QTL - local rg?"
+    )
+  
+  names(ld_fig_list)[which(ld_blocks == block)] <- str_c("locus_", block)
+  
+}
+
+for(block in ld_blocks){
+  
+  data_to_plot <- 
+    bivar_list[[str_c("locus_", block)]]
+  
+  if(block == 2351){
+    
+    data_to_plot <- 
+      data_to_plot %>% 
+      dplyr::filter(gene_name %in% c("TOMM40", "PVRL2"))
+    
+  }
+  
+  edge_fig_list[[which(ld_blocks == block)]] <- 
+    plot_qtl_edge_diagram(
+      bivar_corr_qtl = data_to_plot,
+      phen = fct_disease,
+      seed = 89
+    )
+  
+  if(block == 2351){
+    
+    edge_fig_list[[which(ld_blocks == block)]] <-
+       ggpubr::ggarrange(
+        plotlist = edge_fig_list[[which(ld_blocks == block)]],
+        ncol = 2,
+        nrow = 1, 
+        common.legend = TRUE,
+        legend = "top"
+      )
+    
+  }
+  
+  names(edge_fig_list)[which(ld_blocks == block)] <- str_c("locus_", block)
+  
+}
+
+ggsave(
+  ld_fig_list[[1]],
+  path = here::here("tmp"), 
+  filename = "20211006_snca_ld_block.png",
+  device = "png", 
+  width = 150, 
+  height = 40, 
+  dpi = 300, 
+  units = "mm"
+)
+
+ggsave(
+  ld_fig_list[[2]],
+  path = here::here("tmp"), 
+  filename = "20211006_apoe_ld_block.png",
+  device = "png", 
+  width = 150, 
+  height = 150, 
+  dpi = 300, 
+  units = "mm"
+)
+
+ggsave(
+  edge_fig_list[[1]][[1]],
+  path = here::here("tmp"), 
+  filename = "20211006_snca_egde.png",
+  device = "png", 
+  width = 75, 
+  height = 100, 
+  dpi = 300, 
+  units = "mm"
+)
+
+ggsave(
+  edge_fig_list[[2]],
+  path = here::here("tmp"), 
+  filename = "20211006_apoe_edge.png",
+  device = "png", 
+  width = 150, 
+  height = 100, 
+  dpi = 300, 
+  units = "mm"
+)
+
+```
+
 <br><br>
 
 # Session info
