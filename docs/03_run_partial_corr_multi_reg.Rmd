@@ -382,7 +382,7 @@ multireg_w_signif_pred <-
   multireg %>% 
   dplyr::filter(
     p < 0.05,
-    locus %in% c(2281,2351)
+    # locus %in% c(2281,2351)
   ) %>% 
   dplyr::select(locus, contains("model"), outcome) %>% 
   dplyr::distinct()
