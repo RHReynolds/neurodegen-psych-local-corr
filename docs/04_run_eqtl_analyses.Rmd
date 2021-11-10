@@ -661,7 +661,7 @@ fig_list[5]
         - Positive local $r_{g}$ between MDD and PsychENCODE-derived *RAB27B* eQTLs.
         - Negative local $r_{g}$ between MDD and eQTLGen-derived *TCF4* eQTLs.
     - Locus 2351 (of the `r bivar_fdr %>% dplyr::filter(ld_block == 2351, str_detect(phen2, "ENSG")) %>% nrow()` eQTL-GWAS bivariate correlations observed using the lenient FDR correction, `r bivar_bonf %>% dplyr::filter(ld_block == 2351, str_detect(phen2, "ENSG")) %>% nrow()` survived Bonferroni correction) 
-        - Positive local $r_{g}$ between eQTLGen- and PsychENCODE-derived *GEMIN7* eQTLs.
+        - Positive local $r_{g}$ between AD and eQTLGen- and PsychENCODE-derived *GEMIN7* eQTLs.
         - Positive local $r_{g}$ between AD and eQTLGen-derived *PVRL2* eQTLs. 
 
 ### Figures
