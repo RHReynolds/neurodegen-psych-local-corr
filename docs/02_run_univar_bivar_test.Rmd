@@ -136,7 +136,7 @@ source(here::here("R", "plots.R"))
 # Methods {.tabset}
 
 ## Running univariate and bivariate tests
-The detection of valid and interpretable local genetic corrlation ($r_{g}$) requires the presence of sufficient local genetic signal. For this reason, a univariate test was performed as a filtering step for bivariate local $r_{g}$ analyses. Bivariate local correlations were only performed for pairs of traits which both exhibited a significant univariate local genetic signal (p < 0.05/`r nrow(loci)`, where the denominator represents the total number of tested loci). This resulted in a total of **`r nrow(results$bivar)`** bivariate tests spanning **`r results$bivar %>% .[["locus"]] %>% unique() %>% length()`** distinct loci. 
+The detection of valid and interpretable local genetic corrlation ($r_{g}$) requires the presence of sufficient local genetic signal. For this reason, a univariate test was performed as a filtering step for bivariate local $r_{g}$ analyses. Bivariate local correlations were only performed for pairs of traits which both exhibited a significant univariate local genetic signal (p < 0.05/`r nrow(loci)`, where the denominator represents the total number of tested loci, i.e. LD blocks). This resulted in a total of **`r nrow(results$bivar)`** bivariate tests spanning **`r results$bivar %>% .[["locus"]] %>% unique() %>% length()`** distinct LD blocks. 
 <br><br>
 
 # Results {.tabset}
@@ -225,7 +225,7 @@ tibble(
                 options = list(scrollX = TRUE),
                 class = 'white-space: nowrap')
 
-print("Univariate results (p < 0.05/n_loci):")
+print("Univariate results (p < 0.05/n_ld_blocks):")
 
 results$univ <- 
   results$univ %>% 
@@ -306,7 +306,7 @@ bivar_bonf %>%
 
 ### Text
 - Global cross-trait correlations revealed `r nrow(global_signif)` significant global $r_{g}$'s (Figure \@ref(fig:global-corr)). These global $r_{g}$'s are very much in line with what we expect from previous literature e.g. significant positive correlations between the three neuropsychiatric disorders (PMID: [29930110](https://pubmed.ncbi.nlm.nih.gov/29930110/)). Between neurodegenerative disorders, we only observe a significant postive $r_{g}$ between LBD and PD.
-- With a Bonferroni cut-off of `r signif(bivar_thres, digits = 2) %>% format(scientific = F)`, we detect a total of `r bivar_bonf %>% nrow()` significant bivariate local $r_{g}$'s across `r bivar_bonf %>% dplyr::distinct(locus) %>% nrow()` distinct loci. 
+- With a Bonferroni cut-off of `r signif(bivar_thres, digits = 2) %>% format(scientific = F)`, we detect a total of `r bivar_bonf %>% nrow()` significant bivariate local $r_{g}$'s across `r bivar_bonf %>% dplyr::distinct(locus) %>% nrow()` distinct LD blocks, of which `r bivar_bonf %>% dplyr::count(locus) %>% dplyr::filter(n > 1) %>% nrow()` were associated with more than one trait pair. 
 - The phenotype with the highest number of significant bivariate local $r_{g}$'s was SCZ followed by BIP. Notably, the number of significant bivariate local $r_{g}$'s did not appear to correlate with GWAS sample size (Figure \@ref(fig:bivar-sample-size)). 
 - As seen from the table below and Figure \@ref(fig:chord-diagram-rho), the phenotype pairs with the most local $r_{g}$'s were (i) BIP and SCZ and (ii) AD and PD. 
 
@@ -335,7 +335,7 @@ plot_global_corr(
 
 ```
 
-```{r bivar-sample-size, fig.cap = "Plot of total number of significant bivariate local genetic correlations for each phenotype across all loci versus GWAS sample size."}
+```{r bivar-sample-size, fig.cap = "Plot of total number of significant bivariate local genetic correlations for each phenotype across all LD blocks versus GWAS sample size."}
 
 bivar_bonf %>% 
   dplyr::count(phen1) %>% 
@@ -386,20 +386,41 @@ bivar_bonf %>%
 
 ```
 
-```{r chord-diagram-rho, fig.height = 6, fig.cap = "Chord diagram showing the number of significant bivariate local genetic correlations (p < 0.05/n_tests) between each of the phenotypes across all loci. Positive and negative correlations are coloured red and blue, respectively."}
+```{r chord-diagram-rho, fig.height = 6, fig.cap = "Chord diagram showing the number of significant bivariate local genetic correlations (p < 0.05/n_tests) between each of the phenotypes across all LD blocks. Positive and negative correlations are coloured red and blue, respectively."}
 
 plot_bivar_chord_diagram(
-  bivar_corr = bivar_bonf,
-  fct_phen = fct_disease,
-  palette = RColorBrewer::brewer.pal(n = 6, name = "BrBG")
-)
+    bivar_corr = bivar_bonf,
+    fct_phen = fct_disease,
+    palette = RColorBrewer::brewer.pal(n = 6, name = "BrBG")
+  )
+
 
 ```
+
+```{r asap-cosa-plot, eval = F, echo = F}
+
+png(
+  file = here::here("tmp", "20211012_trait_circlise.png"),
+  bg = "transparent", 
+  width = 150, 
+  height = 150, 
+  units = "mm",
+  res = 300
+)
+plot_bivar_chord_diagram(
+    bivar_corr = bivar_bonf,
+    fct_phen = fct_disease,
+    palette = RColorBrewer::brewer.pal(n = 6, name = "BrBG")
+  )
+dev.off()
+
+```
+
 
 ## Signficant phenotype correlations at locus level {.tabset}
 
 ### Text
-- The loci with the highest number of significant bivariate local $r_{g}$'s, locus 758 and 1719, were positioned on chromosome 4 and 11, respectively (Figure \@ref(fig:corr-plot), \@ref(fig:edge-diagram)). 
+- The LD block with the highest number of significant bivariate local $r_{g}$'s, locus 758 and 1719, were positioned on chromosome 4 and 11, respectively (Figure \@ref(fig:corr-plot), \@ref(fig:edge-diagram)). 
 - The locus on chromosome 4 contains three protein-coding genes (*GPM6A*, *WDR17* and *SPATA4*), while the locus on chromosome 11 contains ten protein-coding genes, one of which includes *DRD2*, which encodes dopamine receptor D2. As perhaps expected, all three neuropsychiatric disorders positively correlate with one another at locus 1719. Somewhat unexpected is the significant negative correlation between LBD and SCZ at locus 1719.
 
 ```{r bivar-correlations-locus-count}
@@ -420,7 +441,7 @@ bivar_bonf %>%
 
 ### Figures
 
-```{r corr-plot, fig.height=16, fig.cap = "Heatmaps showing the standardised coefficient for genetic correlation (rho) for each association within the loci with significant bivariate local genetic correlations (p < 0.05/n_tests). Significant negative and positive correlations are indicated by blue and red fill, respectively. Non-significant correlations have a grey fill."}
+```{r corr-plot, fig.height=16, fig.cap = "Heatmaps showing the standardised coefficient for genetic correlation (rho) for each association within the LD block with significant bivariate local genetic correlations (p < 0.05/n_tests). Significant negative and positive correlations are indicated by blue and red fill, respectively. Non-significant correlations have a grey fill."}
 
 results$bivar %>% 
   dplyr::filter(locus %in% unique(bivar_bonf$locus)) %>% 
@@ -467,6 +488,7 @@ plot <-
     bivar_bonf %>% 
     dplyr::filter(
       locus %in% c(681,1719, 2281, 2351)
+      # locus %in% c(681,2351)
       ),
   phen = fct_disease, 
   multiple_corr = FALSE,
