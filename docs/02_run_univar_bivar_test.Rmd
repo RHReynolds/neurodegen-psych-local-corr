@@ -309,13 +309,34 @@ bivar_bonf %>%
 - With a Bonferroni cut-off of `r signif(bivar_thres, digits = 2) %>% format(scientific = F)`, we detect a total of `r bivar_bonf %>% nrow()` significant bivariate local $r_{g}$'s across `r bivar_bonf %>% dplyr::distinct(locus) %>% nrow()` distinct LD blocks, of which `r bivar_bonf %>% dplyr::count(locus) %>% dplyr::filter(n > 1) %>% nrow()` were associated with more than one trait pair. 
 - The phenotype with the highest number of significant bivariate local $r_{g}$'s was SCZ followed by BIP. Notably, the number of significant bivariate local $r_{g}$'s did not appear to correlate with GWAS sample size (Figure \@ref(fig:bivar-sample-size)). 
 - As seen from the table below and Figure \@ref(fig:chord-diagram-rho), the phenotype pairs with the most local $r_{g}$'s were (i) BIP and SCZ and (ii) AD and PD. 
+- For some of these local $r_{g}$'s, the 95% confidence intervals (CI’s) for the explained variance (r2) included 
+1 (see table below), which is consistent with a scenario where the genetic signal of those pairs of phenotypes in these LD blocks is completely shared.  
 
 ```{r bivar-correlations-bonf-phen-count}
 
+# proportion of correlations where CI 97.5% for explained variance (r2) = 1
+# consistent with scenario where genetic signal of those pairs of phenotypes in these loci is completely shared
+n_upper_r2_ci <-
+  bivar_bonf %>% 
+  dplyr::filter(
+    r2.upper == 1
+  ) %>% 
+  dplyr::count(phen1, phen2)
+
 phen_count <- 
   bivar_bonf %>% 
-  dplyr::count(phen1, phen2) %>% 
-  dplyr::arrange(-n)
+  dplyr::count(phen1, phen2, name = "total_n") %>% 
+  dplyr::left_join(n_upper_r2_ci) %>% 
+  dplyr::mutate(
+    prop_upper_r2_ci_equals_one = 
+      n/total_n,
+    prop_upper_r2_ci_equals_one =
+      case_when(
+        is.na(prop_upper_r2_ci_equals_one) ~ 0,
+        TRUE ~ prop_upper_r2_ci_equals_one
+        )
+  ) %>% 
+  dplyr::select(contains("phen"), total_n, prop_upper_r2_ci_equals_one)
 
 phen_count
 
