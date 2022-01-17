@@ -9,11 +9,36 @@ library(qdapTools)
 
 # Load data ---------------------------------------------------------------
 
+# Genes run will be the same, just with different window sizes, so only need to load one locus file
+# Used genes from 100 kb window
 loci <-
   read_delim(
-    file = here::here("results", "04_eqtl_univar_bivar", "gene_filtered.loci"),
+    file = here::here("results", "04_eqtl_univar_bivar", "window_100000", "gene_filtered.loci"),
     delim = "\t"
   )
+
+
+setNames(
+  object =
+    list.files(
+      path =
+        here::here("results",
+                   "04_eqtl_univar_bivar"),
+      pattern = ".loci$",
+      full.names = T,
+      recursive = T
+    ) %>%
+    lapply(., function(file) read_delim(file, delim = "\t")),
+  nm =
+    list.files(
+      path =
+        here::here("results",
+                   "04_eqtl_univar_bivar"),
+      pattern = ".loci$",
+      recursive = T
+    ) %>%
+    str_remove(., "/.*.loci")
+)
 
 eqtlgen <-
   fread("/data/eQTLGen/2019-12-11-cis-eQTLsFDR-ProbeLevel-CohortInfoRemoved-BonferroniAdded.txt.gz")

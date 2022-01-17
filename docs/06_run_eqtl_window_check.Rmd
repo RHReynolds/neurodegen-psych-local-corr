@@ -1,0 +1,94 @@
+---
+title: "Title"
+author: 
+- name: "Regina H. Reynolds"
+  affiliation: UCL
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: 
+  bookdown::html_document2:
+    figure_caption: yes
+    code_folding: show
+    theme: paper
+    highlight: kate
+    df_print: paged
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+```{r setup, include = FALSE}
+
+library(ggplot2) # For plotting
+library(tidyverse) # For tidy manipulation of data
+library(stringr) # For string manipulation
+
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+
+# Set defaults for ggplots 
+theme_rhr <- theme_set(
+  theme_bw(base_family = "Helvetica",
+           base_size = 10) + 
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "top",
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        axis.title.y = element_text(vjust = 0.6),
+        panel.spacing = unit(0.1, "lines"))
+)
+
+```
+
+> Aim: What's the major aim of this .Rmd?
+<br><br>
+
+# Background
+
+What is the background for running this analysis?
+
+# Methods {.tabset}
+
+Describe methods in text, as you would do in a paper.
+
+# Supplementary code {.tabset}
+
+Following section includes any intermediary code used in this `.Rmd`.
+
+## Example supplementary code section
+
+```{r example-supp-code, eval = F}
+
+source(here::here("", ""))
+
+```
+
+# Results 
+
+## Example results section {.tabset}
+
+### Text
+
+### Figures
+
+For figures, need to make sure your keys don't have a "_" in them and have `fig.cap = "figure caption"` to refer to them in the text (\@ref(fig:iris-figure))
+
+```{r iris-figure, fig.cap = "You need this to refer to figures"}
+
+iris_10 <- data.frame(iris[1:10,]) 
+
+iris_10 %>% 
+    ggplot(aes(x = Sepal.Length,
+               y = Sepal.Width)
+    ) +
+    geom_point()
+
+```
+
+<br><br>
+
+# Session info
+
+```{r reproducibility, echo = FALSE}
+# Session info
+library("sessioninfo")
+options(width = 120)
+session_info()
+```

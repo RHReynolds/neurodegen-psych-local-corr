@@ -1,0 +1,974 @@
+nohup: ignoring input
+Loading required package: foreach
+Loading required package: iterators
+Loading required package: snow
+here() starts at /home/rreynolds/misc_projects/neurodegen-psych-local-corr
+Running LAVA version 0.0.6
+-- Attaching packages --------------------------------------- tidyverse 1.3.1 --
+v ggplot2 3.3.5     v purrr   0.3.4
+v tibble  3.1.6     v dplyr   1.0.7
+v tidyr   1.1.4     v stringr 1.4.0
+v readr   2.0.2     v forcats 0.5.1
+-- Conflicts ------------------------------------------ tidyverse_conflicts() --
+x purrr::accumulate() masks foreach::accumulate()
+x dplyr::filter()     masks stats::filter()
+x dplyr::lag()        masks stats::lag()
+x purrr::when()       masks foreach::when()
+$window_100000
+$window_100000$univ
+[1] TRUE
+
+$window_100000$bivar
+[1] TRUE
+
+
+$window_50000
+$window_50000$univ
+[1] FALSE
+
+$window_50000$bivar
+[1] FALSE
+
+
+Warning messages:
+1: In dir.create(dir_path, showWarnings = T) :
+  '/home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/04_eqtl_univar_bivar/window_50000/univ' already exists
+2: In dir.create(dir_path, showWarnings = T) :
+  '/home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/04_eqtl_univar_bivar/window_50000/bivar' already exists
+Rows: 140 Columns: 4
+-- Column specification --------------------------------------------------------
+Delimiter: "\t"
+chr (2): phenotype, filename
+dbl (2): cases, controls
+
+i Use `spec()` to retrieve the full column specification for this data.
+i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+[1] "2022-01-14 12:32:12 - Starting LAVA analysis for 92 genes using a window size of 100000 bp"
+[1] "2022-01-14 12:32:12 - Log file of foreach parallelisation outputted here: /home/rreynolds/misc_projects/neurodegen-psych-local-corr/logs/04d_run_univar_bivar_test_multwindows_foreach.log"
+discovered package(s): 
+automatically exporting the following variables from the local environment:
+  args, eqtls, gene_filtered_loci, input_info, loci, out_dir, results, window 
+explicitly exporting package(s): LAVA, tidyverse, stringr
+numValues: 11, numResults: 1, stopped: FALSE
+returning status FALSE
+numValues: 12, numResults: 2, stopped: FALSE
+returning status FALSE
+numValues: 13, numResults: 3, stopped: FALSE
+returning status FALSE
+numValues: 14, numResults: 4, stopped: FALSE
+returning status FALSE
+numValues: 15, numResults: 5, stopped: FALSE
+returning status FALSE
+numValues: 16, numResults: 6, stopped: FALSE
+first call to combine function
+evaluating call object to combine results:
+  fun(result.1, result.2)
+returning status FALSE
+numValues: 17, numResults: 7, stopped: FALSE
+returning status FALSE
+numValues: 18, numResults: 8, stopped: FALSE
+returning status FALSE
+numValues: 19, numResults: 9, stopped: FALSE
+returning status FALSE
+numValues: 20, numResults: 10, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.3)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.4)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.5)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.6)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.7)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.8)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.9)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.10)
+returning status FALSE
+numValues: 21, numResults: 11, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.11)
+returning status FALSE
+numValues: 22, numResults: 12, stopped: FALSE
+returning status FALSE
+numValues: 23, numResults: 13, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.12)
+returning status FALSE
+numValues: 24, numResults: 14, stopped: FALSE
+returning status FALSE
+numValues: 25, numResults: 15, stopped: FALSE
+returning status FALSE
+numValues: 26, numResults: 16, stopped: FALSE
+returning status FALSE
+numValues: 27, numResults: 17, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.13)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.14)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.15)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.16)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.17)
+returning status FALSE
+numValues: 28, numResults: 18, stopped: FALSE
+returning status FALSE
+numValues: 29, numResults: 19, stopped: FALSE
+returning status FALSE
+numValues: 30, numResults: 20, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.18)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.19)
+returning status FALSE
+numValues: 31, numResults: 21, stopped: FALSE
+returning status FALSE
+numValues: 32, numResults: 22, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.20)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.21)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.22)
+returning status FALSE
+numValues: 33, numResults: 23, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.23)
+returning status FALSE
+numValues: 34, numResults: 24, stopped: FALSE
+returning status FALSE
+numValues: 35, numResults: 25, stopped: FALSE
+returning status FALSE
+numValues: 36, numResults: 26, stopped: FALSE
+returning status FALSE
+numValues: 37, numResults: 27, stopped: FALSE
+returning status FALSE
+numValues: 38, numResults: 28, stopped: FALSE
+returning status FALSE
+numValues: 39, numResults: 29, stopped: FALSE
+returning status FALSE
+numValues: 40, numResults: 30, stopped: FALSE
+returning status FALSE
+numValues: 41, numResults: 31, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.24)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.25)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.26)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.27)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.28)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.29)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.30)
+returning status FALSE
+numValues: 42, numResults: 32, stopped: FALSE
+returning status FALSE
+numValues: 43, numResults: 33, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.31)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.32)
+returning status FALSE
+numValues: 44, numResults: 34, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.33)
+returning status FALSE
+numValues: 45, numResults: 35, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.34)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.35)
+returning status FALSE
+numValues: 46, numResults: 36, stopped: FALSE
+returning status FALSE
+numValues: 47, numResults: 37, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.36)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.37)
+returning status FALSE
+numValues: 48, numResults: 38, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.38)
+returning status FALSE
+numValues: 49, numResults: 39, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.39)
+returning status FALSE
+numValues: 50, numResults: 40, stopped: FALSE
+returning status FALSE
+numValues: 51, numResults: 41, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.40)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.41)
+returning status FALSE
+numValues: 52, numResults: 42, stopped: FALSE
+returning status FALSE
+numValues: 53, numResults: 43, stopped: FALSE
+returning status FALSE
+numValues: 54, numResults: 44, stopped: FALSE
+returning status FALSE
+numValues: 55, numResults: 45, stopped: FALSE
+returning status FALSE
+numValues: 56, numResults: 46, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.42)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.43)
+returning status FALSE
+numValues: 57, numResults: 47, stopped: FALSE
+returning status FALSE
+numValues: 58, numResults: 48, stopped: FALSE
+returning status FALSE
+numValues: 59, numResults: 49, stopped: FALSE
+returning status FALSE
+numValues: 60, numResults: 50, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.44)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.45)
+returning status FALSE
+numValues: 61, numResults: 51, stopped: FALSE
+returning status FALSE
+numValues: 62, numResults: 52, stopped: FALSE
+returning status FALSE
+numValues: 63, numResults: 53, stopped: FALSE
+returning status FALSE
+numValues: 64, numResults: 54, stopped: FALSE
+returning status FALSE
+numValues: 65, numResults: 55, stopped: FALSE
+returning status FALSE
+numValues: 66, numResults: 56, stopped: FALSE
+returning status FALSE
+numValues: 67, numResults: 57, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.46)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.47)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.48)
+returning status FALSE
+numValues: 68, numResults: 58, stopped: FALSE
+returning status FALSE
+numValues: 69, numResults: 59, stopped: FALSE
+returning status FALSE
+numValues: 70, numResults: 60, stopped: FALSE
+returning status FALSE
+numValues: 71, numResults: 61, stopped: FALSE
+returning status FALSE
+numValues: 72, numResults: 62, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.49)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.50)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.51)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.52)
+returning status FALSE
+numValues: 73, numResults: 63, stopped: FALSE
+returning status FALSE
+numValues: 74, numResults: 64, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.53)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.54)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.55)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.56)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.57)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.58)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.59)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.60)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.61)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.62)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.63)
+returning status FALSE
+numValues: 75, numResults: 65, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.64)
+returning status FALSE
+numValues: 76, numResults: 66, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.65)
+returning status FALSE
+numValues: 77, numResults: 67, stopped: FALSE
+returning status FALSE
+numValues: 78, numResults: 68, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.66)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.67)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.68)
+returning status FALSE
+numValues: 79, numResults: 69, stopped: FALSE
+returning status FALSE
+numValues: 80, numResults: 70, stopped: FALSE
+returning status FALSE
+numValues: 81, numResults: 71, stopped: FALSE
+returning status FALSE
+numValues: 82, numResults: 72, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.69)
+returning status FALSE
+numValues: 83, numResults: 73, stopped: FALSE
+returning status FALSE
+numValues: 84, numResults: 74, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.70)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.71)
+returning status FALSE
+numValues: 85, numResults: 75, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.72)
+returning status FALSE
+numValues: 86, numResults: 76, stopped: FALSE
+returning status FALSE
+numValues: 87, numResults: 77, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.73)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.74)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.75)
+returning status FALSE
+numValues: 88, numResults: 78, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.76)
+returning status FALSE
+numValues: 89, numResults: 79, stopped: FALSE
+returning status FALSE
+numValues: 90, numResults: 80, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.77)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.78)
+returning status FALSE
+numValues: 91, numResults: 81, stopped: FALSE
+returning status FALSE
+numValues: 92, numResults: 82, stopped: FALSE
+returning status FALSE
+numValues: 92, numResults: 82, stopped: TRUE
+numValues: 92, numResults: 83, stopped: TRUE
+returning status FALSE
+numValues: 92, numResults: 84, stopped: TRUE
+returning status FALSE
+numValues: 92, numResults: 85, stopped: TRUE
+returning status FALSE
+numValues: 92, numResults: 86, stopped: TRUE
+returning status FALSE
+numValues: 92, numResults: 87, stopped: TRUE
+returning status FALSE
+numValues: 92, numResults: 88, stopped: TRUE
+returning status FALSE
+numValues: 92, numResults: 89, stopped: TRUE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.79)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.80)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.81)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.82)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.83)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.84)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.85)
+returning status FALSE
+numValues: 92, numResults: 90, stopped: TRUE
+returning status FALSE
+numValues: 92, numResults: 91, stopped: TRUE
+returning status FALSE
+numValues: 92, numResults: 92, stopped: TRUE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.86)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.87)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.88)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.89)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.90)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.91)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.92)
+returning status TRUE
+[1] "2022-01-14 13:54:10 - Starting LAVA analysis for 92 genes using a window size of 50000 bp"
+[1] "2022-01-14 13:54:10 - Log file of foreach parallelisation outputted here: /home/rreynolds/misc_projects/neurodegen-psych-local-corr/logs/04d_run_univar_bivar_test_multwindows_foreach.log"
+discovered package(s): 
+automatically exporting the following variables from the local environment:
+  args, eqtls, gene_filtered_loci, input_info, loci, out_dir, results, window 
+explicitly exporting package(s): LAVA, tidyverse, stringr
+numValues: 11, numResults: 1, stopped: FALSE
+returning status FALSE
+numValues: 12, numResults: 2, stopped: FALSE
+returning status FALSE
+numValues: 13, numResults: 3, stopped: FALSE
+returning status FALSE
+numValues: 14, numResults: 4, stopped: FALSE
+returning status FALSE
+numValues: 15, numResults: 5, stopped: FALSE
+returning status FALSE
+numValues: 16, numResults: 6, stopped: FALSE
+returning status FALSE
+numValues: 17, numResults: 7, stopped: FALSE
+returning status FALSE
+numValues: 18, numResults: 8, stopped: FALSE
+first call to combine function
+evaluating call object to combine results:
+  fun(result.1, result.2)
+returning status FALSE
+numValues: 19, numResults: 9, stopped: FALSE
+returning status FALSE
+numValues: 20, numResults: 10, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.3)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.4)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.5)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.6)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.7)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.8)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.9)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.10)
+returning status FALSE
+numValues: 21, numResults: 11, stopped: FALSE
+returning status FALSE
+numValues: 22, numResults: 12, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.11)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.12)
+returning status FALSE
+numValues: 23, numResults: 13, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.13)
+returning status FALSE
+numValues: 24, numResults: 14, stopped: FALSE
+returning status FALSE
+numValues: 25, numResults: 15, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.14)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.15)
+returning status FALSE
+numValues: 26, numResults: 16, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.16)
+returning status FALSE
+numValues: 27, numResults: 17, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.17)
+returning status FALSE
+numValues: 28, numResults: 18, stopped: FALSE
+returning status FALSE
+numValues: 29, numResults: 19, stopped: FALSE
+returning status FALSE
+numValues: 30, numResults: 20, stopped: FALSE
+returning status FALSE
+numValues: 31, numResults: 21, stopped: FALSE
+returning status FALSE
+numValues: 32, numResults: 22, stopped: FALSE
+returning status FALSE
+numValues: 33, numResults: 23, stopped: FALSE
+returning status FALSE
+numValues: 34, numResults: 24, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.18)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.19)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.20)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.21)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.22)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.23)
+returning status FALSE
+numValues: 35, numResults: 25, stopped: FALSE
+returning status FALSE
+numValues: 36, numResults: 26, stopped: FALSE
+returning status FALSE
+numValues: 37, numResults: 27, stopped: FALSE
+returning status FALSE
+numValues: 38, numResults: 28, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.24)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.25)
+returning status FALSE
+numValues: 39, numResults: 29, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.26)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.27)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.28)
+returning status FALSE
+numValues: 40, numResults: 30, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.29)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.30)
+returning status FALSE
+numValues: 41, numResults: 31, stopped: FALSE
+returning status FALSE
+numValues: 42, numResults: 32, stopped: FALSE
+returning status FALSE
+numValues: 43, numResults: 33, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.31)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.32)
+returning status FALSE
+numValues: 44, numResults: 34, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.33)
+returning status FALSE
+numValues: 45, numResults: 35, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.34)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.35)
+returning status FALSE
+numValues: 46, numResults: 36, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.36)
+returning status FALSE
+numValues: 47, numResults: 37, stopped: FALSE
+returning status FALSE
+numValues: 48, numResults: 38, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.37)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.38)
+returning status FALSE
+numValues: 49, numResults: 39, stopped: FALSE
+returning status FALSE
+numValues: 50, numResults: 40, stopped: FALSE
+returning status FALSE
+numValues: 51, numResults: 41, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.39)
+returning status FALSE
+numValues: 52, numResults: 42, stopped: FALSE
+returning status FALSE
+numValues: 53, numResults: 43, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.40)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.41)
+returning status FALSE
+numValues: 54, numResults: 44, stopped: FALSE
+returning status FALSE
+numValues: 55, numResults: 45, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.42)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.43)
+returning status FALSE
+numValues: 56, numResults: 46, stopped: FALSE
+returning status FALSE
+numValues: 57, numResults: 47, stopped: FALSE
+returning status FALSE
+numValues: 58, numResults: 48, stopped: FALSE
+returning status FALSE
+numValues: 59, numResults: 49, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.44)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.45)
+returning status FALSE
+numValues: 60, numResults: 50, stopped: FALSE
+returning status FALSE
+numValues: 61, numResults: 51, stopped: FALSE
+returning status FALSE
+numValues: 62, numResults: 52, stopped: FALSE
+returning status FALSE
+numValues: 63, numResults: 53, stopped: FALSE
+returning status FALSE
+numValues: 64, numResults: 54, stopped: FALSE
+returning status FALSE
+numValues: 65, numResults: 55, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.46)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.47)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.48)
+returning status FALSE
+numValues: 66, numResults: 56, stopped: FALSE
+returning status FALSE
+numValues: 67, numResults: 57, stopped: FALSE
+returning status FALSE
+numValues: 68, numResults: 58, stopped: FALSE
+returning status FALSE
+numValues: 69, numResults: 59, stopped: FALSE
+returning status FALSE
+numValues: 70, numResults: 60, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.49)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.50)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.51)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.52)
+returning status FALSE
+numValues: 71, numResults: 61, stopped: FALSE
+returning status FALSE
+numValues: 72, numResults: 62, stopped: FALSE
+returning status FALSE
+numValues: 73, numResults: 63, stopped: FALSE
+returning status FALSE
+numValues: 74, numResults: 64, stopped: FALSE
+returning status FALSE
+numValues: 75, numResults: 65, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.53)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.54)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.55)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.56)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.57)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.58)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.59)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.60)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.61)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.62)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.63)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.64)
+returning status FALSE
+numValues: 76, numResults: 66, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.65)
+returning status FALSE
+numValues: 77, numResults: 67, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.66)
+returning status FALSE
+numValues: 78, numResults: 68, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.67)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.68)
+returning status FALSE
+numValues: 79, numResults: 69, stopped: FALSE
+returning status FALSE
+numValues: 80, numResults: 70, stopped: FALSE
+returning status FALSE
+numValues: 81, numResults: 71, stopped: FALSE
+returning status FALSE
+numValues: 82, numResults: 72, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.69)
+returning status FALSE
+numValues: 83, numResults: 73, stopped: FALSE
+returning status FALSE
+numValues: 84, numResults: 74, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.70)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.71)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.72)
+returning status FALSE
+numValues: 85, numResults: 75, stopped: FALSE
+returning status FALSE
+numValues: 86, numResults: 76, stopped: FALSE
+returning status FALSE
+numValues: 87, numResults: 77, stopped: FALSE
+returning status FALSE
+numValues: 88, numResults: 78, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.73)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.74)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.75)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.76)
+returning status FALSE
+numValues: 89, numResults: 79, stopped: FALSE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.77)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.78)
+returning status FALSE
+numValues: 90, numResults: 80, stopped: FALSE
+returning status FALSE
+numValues: 91, numResults: 81, stopped: FALSE
+returning status FALSE
+numValues: 92, numResults: 82, stopped: FALSE
+returning status FALSE
+numValues: 92, numResults: 82, stopped: TRUE
+numValues: 92, numResults: 83, stopped: TRUE
+returning status FALSE
+numValues: 92, numResults: 84, stopped: TRUE
+returning status FALSE
+numValues: 92, numResults: 85, stopped: TRUE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.79)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.80)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.81)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.82)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.83)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.84)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.85)
+returning status FALSE
+numValues: 92, numResults: 86, stopped: TRUE
+returning status FALSE
+numValues: 92, numResults: 87, stopped: TRUE
+returning status FALSE
+numValues: 92, numResults: 88, stopped: TRUE
+returning status FALSE
+numValues: 92, numResults: 89, stopped: TRUE
+returning status FALSE
+numValues: 92, numResults: 90, stopped: TRUE
+returning status FALSE
+numValues: 92, numResults: 91, stopped: TRUE
+returning status FALSE
+numValues: 92, numResults: 92, stopped: TRUE
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.86)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.87)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.88)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.89)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.90)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.91)
+calling combine function
+evaluating call object to combine results:
+  fun(accum, result.92)
+returning status TRUE
+[1] "2022-01-14 15:09:48 - Analysis done!"
