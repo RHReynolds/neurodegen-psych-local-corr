@@ -1,0 +1,158 @@
+---
+title: "Determining the contribution of eQTLGen/PsychENCODE eQTLs to GWAS traits"
+author: 
+- name: "Regina H. Reynolds"
+  affiliation: UCL
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: 
+  bookdown::html_document2:
+    figure_caption: yes
+    code_folding: hide
+    theme: paper
+    highlight: kate
+    df_print: paged
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+```{r setup, include = FALSE}
+
+library(ggplot2) # For plotting
+library(tidyverse) # For tidy manipulation of data
+library(stringr) # For string manipulation
+library(rtracklayer) # For loading of reference gtf
+
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+
+# Set defaults for ggplots 
+theme_rhr <- theme_set(
+  theme_bw(base_family = "Helvetica",
+           base_size = 10) + 
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "top",
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        axis.title.y = element_text(vjust = 0.6),
+        panel.spacing = unit(0.1, "lines"))
+)
+
+```
+
+> Aim: determine the frequency of significant eQTL-GWAS correlations across a chromosome
+
+<br><br>
+
+# Background
+
+eQTL-GWAS bivariate analyses revealed that of the two eQTL datasets, the dataset with the highest number of gene loci (i.e. a gene where eQTLs were detected) was PsychENCODE (eQTLGen, n gene loci = 47; PsychENCODE, n gene loci = 87). In spite of this, the eQTL dataset with highest number of significant bivariate local $r_{g}$ was eQTLGen, irrespective of the stringency of multiple test correction. This likely reflects the bias in the selection of the LD blocks, which were weighted towards the AD/PD phenotypes (where we might expect to see a greater association with blood-derived molecular phenotypes). More generally, we wanted to determine what the frequency of significant eQTL-GWAS correlations when using an unbiased approach (e.g. across an entire chromosome).
+
+# Methods {.tabset}
+
+## Deriving loci for eQTL analyses
+To reduce the computational burden, we chose to run eQTL-GWAS analyses across only one chromosome. Ideally, this chromosome should have: (i) no or few long-range LD regions in European populations; (ii) overlapping genome-wide signficiant loci from $\geq$ 2 neurodegenerative and $\geq$ 2 neuropsychiatric traits; (iii) a minimum of $\geq$ 2 LD blocks overlapping genome-wide signficiant loci from neurodegenerative or neuropsychiatric traits, with an approximately equal proportion between the two. The number of long-range LD regions in European population were derived from [PMID:31388069](https://pubmed.ncbi.nlm.nih.gov/31388069/). 
+
+# Supplementary code {.tabset}
+
+Following section includes any intermediary code used in this `.Rmd`.
+
+# Results 
+
+## Determining an ideal chromosome candidate {.tabset}
+
+### Text
+
+- The three chromosomes with the lowest number of genes were 13, 18 and 21 (Figure \@ref(fig:n-genes-lrld)a). Of these, 18 was not found to have any long-range LD regions in European populations (Figure \@ref(fig:n-genes-lrld)b).
+- In terms of overlapping genome-wide signficiant loci, chromosome 18 contained overlapping genome-wide signficiant loci from 2 neurodegenerative (AD, PD) and 2 neuropsychiatric traits (MDD, SCZ). In turn, these overlapped a total of 8 LD blocks (n = 2, neurodegenerative; n = 6, neuropsychiatric; see Figure 4.5 and 4.6 in [01_preparing_inputs_gwas.Rmd](https://rhreynolds.github.io/neurodegen-psych-local-corr/01_preparing_inputs_gwas.html)). Thus, while the proportion of LD blocks overlapping overlapping genome-wide signficiant loci from neurodegenerative or neuropsychiatric traits was not equal, all other criteria were met.
+
+### Figures
+
+```{r n-genes-lrld, fig.height = 4, fig.cap = "(a) Number of genes per chromosome. Chromosome 18 is highlighted by a red fill. (b) Number of long-range LD regions in EUR populations."}
+
+ref <- rtracklayer::import("/data/references/ensembl/gtf_gff3/v87/Homo_sapiens.GRCh37.87.gtf")
+ref <- ref %>% GenomeInfoDb::keepSeqlevels(c(1:22), pruning.mode = "coarse") 
+ref <- ref[ref$type == "gene"]
+
+a <- 
+  ref %>% 
+  as_tibble() %>% 
+  dplyr::group_by(seqnames) %>% 
+  dplyr::count() %>% 
+  dplyr::arrange(n) %>% 
+  dplyr::mutate(
+    highlight =
+      case_when(
+        seqnames == "18" ~ "*"
+      )
+  ) %>% 
+  ggplot(
+    aes(
+      x = n,
+      y = forcats::fct_reorder(.f = as.factor(seqnames), 
+                               .x = n, 
+                               .fun = sum, 
+                               .desc = FALSE),
+      fill = highlight
+    )
+  ) +
+  geom_col(colour = "black") +
+  labs(
+    x = "Number of genes",
+    y = "Chromosome"
+  ) +
+  theme(
+    legend.position = "none"
+  )
+
+b <-
+  readxl::read_xlsx(
+    path = here::here("raw_data", "06_eqtl_chr_check", "park2019_lrld_table1.xlsx"),
+    range = "A2:H24"
+  ) %>% 
+  dplyr::select(CHR, EUR) %>% 
+  dplyr::mutate(
+    highlight =
+      case_when(
+        CHR == "18" ~ "*"
+      )
+  ) %>%
+  ggplot(
+    aes(
+      x = EUR,
+      y = forcats::fct_reorder(.f = as.factor(CHR), 
+                               .x = EUR, 
+                               .fun = sum, 
+                               .desc = FALSE),
+      fill = highlight
+    )
+  ) +
+  geom_col(colour = "black") +
+  scale_x_log10(n.breaks = 10, labels = scales::number) +
+  labs(
+    x = "Number of long-range LD regions\nin EUR populations\n(log10 scale)",
+    y = "Chromosome"
+  ) +
+  theme(
+    legend.position = "none"
+  )
+
+cowplot::plot_grid(
+  a,b,
+  labels = letters[1:2],
+  nrow = 1,
+  align = "h",
+  axis = "bt",
+  legend = "none"
+)
+
+```
+
+<br><br>
+
+# Session info
+
+```{r reproducibility, echo = FALSE}
+# Session info
+library("sessioninfo")
+options(width = 120)
+session_info()
+```

@@ -238,7 +238,8 @@ loci %>%
 
 ### Text
 - A total of `r readRDS(here::here("results", "01_input_prep", "gwas_filtered_loci.rds")) %>% dplyr::distinct(GWAS_SNP) %>% nrow()` genome-wide significant SNPs were found to overlap an LD block.
-- The number of AD, BIP, LBD, MDD, PD and SCZ SNPs across LD blocks (Figure \@ref(fig:loci-per-block)) and chromosomes (Figure \@ref(fig:loci-per-chr)) was not equally distributed. 
+- The number of AD, BIP, LBD, MDD, PD and SCZ SNPs across LD blocks (Figure \@ref(fig:loci-per-block)) and chromosomes (Figure \@ref(fig:loci-per-chr)) was not equally distributed. However, across most chromosomes, $\geq$ neurodegenerative or neuropsychiatric traits had overlapping genome-wide significant SNPs (Figure \@ref(fig:phenotypes-per-chr)). 
+- The same unequal distribution of SNPs across chromosomes was also reflected in the number of LD blocks with overlapping genome-wide significant SNPs across chromosomes (Figure \@ref(fig:phenotype-ld-blocks-per-chr)). 
 - It is worth noting that `r readRDS(here::here("results", "01_input_prep", "gwas_filtered_loci.rds")) %>% dplyr::group_by(GWAS, LD_LOC) %>% dplyr::count() %>% dplyr::filter(n <= 5) %>% nrow()` LD blocks were overlapped by $\leq$ 5 genome-wide significant SNPs.
 
 ### Figures
@@ -252,7 +253,12 @@ gwas_loci <-
       fct_relevel(
           GWAS,
           c("ad", "lbd", "pd", "bip", "mdd", "scz")
-        )
+        ),
+    gwas_type =
+      case_when(
+        GWAS %in% c("ad", "lbd", "pd") ~ "neurodegenerative",
+        GWAS %in% c("bip", "mdd", "scz") ~ "neuropsychiatric"
+      )
   )
 
 gwas_loci %>% 
@@ -314,6 +320,107 @@ gwas_loci %>%
   coord_flip()
 
 ```
+
+```{r phenotypes-per-chr, fig.cap = "Number of phenotypes with genome-wide signficant SNPs per chromosome."}
+
+gwas_loci %>% 
+  dplyr::distinct(LD_CHR, gwas_type, GWAS) %>% 
+  dplyr::count(LD_CHR, gwas_type) %>% 
+  dplyr::mutate(
+    LD_CHR = as.factor(LD_CHR)
+  ) %>% 
+  ggplot(
+    aes(
+      x = n,
+      y = forcats::fct_reorder(.f = LD_CHR, 
+                               .x = n, 
+                               .fun = sum, 
+                               .desc = FALSE),
+      fill = gwas_type) 
+  ) +
+  geom_col(colour = "black") +
+  scale_fill_manual(
+    values = RColorBrewer::brewer.pal(4, name = "BrBG")[c(2,3)],
+    name = "Phenotype category"
+  ) +
+  guides(fill = guide_legend(nrow = 2, byrow = TRUE)) +
+  labs(
+    x = "Number of phenotypes with overlapping\ngenome-wide significant SNPs",
+    y = "Chromosome"
+  )
+  
+```
+
+```{r phenotype-ld-blocks-per-chr, fig.cap = " (a) Number of LD blocks with overlapping genome-wide significant SNPs per chromosome. (b) Proportion of LD blocks that are overlap genome-wide significant SNPs from a neurodegenerative or neuropsychiatric phenotype."}
+
+data_to_plot <- 
+  gwas_loci %>% 
+  dplyr::distinct(LD_CHR, gwas_type, GWAS, LD_LOC) %>% 
+  dplyr::count(LD_CHR, gwas_type) %>% 
+  dplyr::mutate(
+    LD_CHR = as.factor(LD_CHR)
+  )
+
+a <- 
+  data_to_plot %>% 
+  ggplot(
+    aes(
+      x = n,
+      y = forcats::fct_reorder(.f = LD_CHR, 
+                               .x = n, 
+                               .fun = sum, 
+                               .desc = FALSE),
+      fill = gwas_type) 
+  ) +
+  geom_col(colour = "black") +
+  scale_fill_manual(
+    values = RColorBrewer::brewer.pal(4, name = "BrBG")[c(2,3)],
+    name = "Phenotype category"
+  ) +
+  labs(
+    x = "Number of LD blocks with overlapping\ngenome-wide significant SNPs",
+    y = "Chromosome"
+  )
+
+b <- 
+  data_to_plot %>% 
+  dplyr::inner_join(
+    data_to_plot %>% 
+      dplyr::group_by(LD_CHR) %>% 
+      dplyr::mutate(n_total = sum(n))
+  ) %>% 
+  dplyr::mutate(
+    LD_CHR = as.factor(LD_CHR),
+    prop = n/n_total
+  ) %>% 
+  ggplot(
+    aes(
+      x = prop,
+      y = forcats::fct_reorder(.f = LD_CHR, 
+                               .x = prop, 
+                               .fun = max, 
+                               .desc = FALSE),
+      fill = gwas_type) 
+  ) +
+  geom_col(colour = "black") +
+  scale_fill_manual(
+    values = RColorBrewer::brewer.pal(4, name = "BrBG")[c(2,3)],
+    name = "Phenotype category"
+  ) +
+  labs(
+    x = "Proportion of LD blocks with overlapping\ngenome-wide significant SNPs each phenotype category",
+    y = "Chromosome"
+  )
+
+ggpubr::ggarrange(
+  a,b,
+  labels = letters[1:2],
+  align = "hv",
+  common.legend = TRUE
+)
+
+```
+
 
 # Session info
 ```{r session-info}
