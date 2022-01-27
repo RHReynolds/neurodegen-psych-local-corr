@@ -1,0 +1,33 @@
+nohup: ignoring input
+
+Attaching package: 'janitor'
+
+The following objects are masked from 'package:stats':
+
+    chisq.test, fisher.test
+
+-- Attaching packages --------------------------------------- tidyverse 1.3.1 --
+v ggplot2 3.3.5     v purrr   0.3.4
+v tibble  3.1.6     v dplyr   1.0.7
+v tidyr   1.1.4     v forcats 0.5.1
+v readr   2.0.2     
+-- Conflicts ------------------------------------------ tidyverse_conflicts() --
+x dplyr::between()   masks data.table::between()
+x dplyr::filter()    masks stats::filter()
+x dplyr::first()     masks data.table::first()
+x dplyr::lag()       masks stats::lag()
+x dplyr::last()      masks data.table::last()
+x purrr::transpose() masks data.table::transpose()
+$file_path_pd
+[1] "/data/LDScore/GWAS/PD2019_meta5_ex23andMe_exUKBB/META_no_UKBB_no_231.tbl.gz"
+
+$file_path_cohort
+[1] "/home/rreynolds/misc_projects/neurodegen-psych-local-corr/raw_data/05_noproxy_check/Table_S1_Study_descriptive_statistics.xlsx"
+
+$out_path
+[1] "/data/LDScore/GWAS/PD2019_meta5_ex23andMe_exUKBB/META_no_UKBB_no_231_N.tbl.gz"
+
+There were 13 warnings (use warnings() to see them)
+[1] "2022-01-26 14:28:16 - generating N column"
+[1] "2022-01-26 16:00:01 - N column generated"
+[1] "2022-01-26 16:00:03 - Done!"

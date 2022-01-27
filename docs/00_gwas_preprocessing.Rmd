@@ -31,6 +31,16 @@ dbsnp_144 <- SNPlocs.Hsapiens.dbSNP144.GRCh37
 gwas_dir <- "/data/LDScore/GWAS/"
 lava_ext <- ".lava.gz"
 
+# Load PD w/o UKBB
+PD <- 
+  fread(
+    stringr::str_c(
+      gwas_dir,
+      "PD2019_meta5_ex23andMe_exUKBB/PD2019.ex23andMe.exUKBB",
+      lava_ext
+    )
+  )
+
 knitr::opts_chunk$set(echo = T, warning = F, message = F)
 ```
 
@@ -144,6 +154,112 @@ fwrite(AD,
     stringr::str_c(
       gwas_dir,
       "AD2019/AD_sumstats_Jansenetal_2019sept",
+      lava_ext
+    ),
+  sep = "\t"
+)
+```
+
+## AD 2019, Kunkle et al.
+
+```{r AD2019-kunkle-check-cols}
+
+file_path <-
+  file.path(
+    gwas_dir,
+    "AD2019_Kunkle/Kunkle_etal_Stage1_results.txt.gz"
+  )
+
+# Read in first few rows to check data format
+fread(file_path, nrows = 6)
+```
+
+- Most columns are present, but require renaming.
+- N not defined for study, therefore will add column with N = 21,982 cases +	41,944 controls = `r c(21982 + 41944) %>% format(scientific = F)`
+
+```{r AD2019-kunkle-preprocess, eval = F}
+
+AD <-
+  fread(file_path) %>%
+  dplyr::mutate(
+    N = 21982 + 41944
+  ) %>% 
+  dplyr::select(
+    CHR = Chromosome, 
+    BP = Position, 
+    SNP = MarkerName, 
+    A1 = Effect_allele, 
+    A2 = Non_Effect_allele, 
+    BETA = Beta, 
+    SE, 
+    P = Pvalue,
+    N
+  )
+
+fwrite(AD,
+  file =
+    stringr::str_c(
+      gwas_dir,
+      "AD2019_Kunkle/AD2019.Kunkle",
+      lava_ext
+    ),
+  sep = "\t"
+)
+```
+
+## AD 2021
+
+```{r AD2021-check-cols}
+
+file_path <-
+  file.path(
+    gwas_dir,
+    "AD2021/PGCALZ2sumstatsExcluding23andMe.txt.gz"
+  )
+
+# Read in first few rows to check data format
+fread(file_path, nrows = 6)
+```
+
+- Most columns are present, but require renaming.
+- Will also add a SNP column with RS ID. 
+
+```{r AD2021-preprocess, eval = F}
+
+AD <-
+  fread(file_path) %>%
+  dplyr::select(
+    CHR = chr, 
+    BP = PosGRCh37, 
+    A1 = testedAllele, 
+    A2 = otherAllele, 
+    Z = z, 
+    P = p,
+    N
+  ) %>% 
+  dplyr::mutate(CHR = as.factor(CHR)) %>%
+  colochelpR::convert_loc_to_rs(
+    df = .,
+    dbsnp_144
+  )
+
+# Function colochelpR::convert_loc_to_rs does not remove CHR:BP associated with more than one rs id
+# Nor does it remove CHR:BP locations that do not have associated rs ids (left as NA)
+# Thus, will remove NAs and remove duplicated CHR:BP
+AD <-
+  AD %>%
+  dplyr::mutate(CHR_BP = stringr::str_c(CHR, ":", BP)) %>%
+  dplyr::group_by(CHR_BP) %>%
+  dplyr::filter(!any(row_number() > 1))  %>%
+  dplyr::ungroup() %>%
+  dplyr::select(-CHR_BP) %>%
+  tidyr::drop_na(SNP)
+
+fwrite(AD,
+  file =
+    stringr::str_c(
+      gwas_dir,
+      "AD2021/AD2021",
       lava_ext
     ),
   sep = "\t"
@@ -284,7 +400,7 @@ fwrite(
 )
 ```
 
-## PD 2019
+## PD 2019 (excluding 23andMe)
 ```{r PD2019-check-cols}
 
 file_path <-
@@ -311,6 +427,141 @@ fwrite(
   stringr::str_c(
     gwas_dir,
     "PD2019_meta5_ex23andMe/PD2019_ex23andMe_hg19",
+    lava_ext
+  ),
+  sep = "\t"
+)
+```
+
+## PD 2019 (excluding 23andMe and UK Biobank)
+```{r PD2019-noUKBB-check-cols}
+
+file_path <-
+  file.path(
+    gwas_dir,
+    "PD2019_meta5_ex23andMe_exUKBB/META_no_UKBB_no_231.tbl.gz"
+  )
+
+fread(file_path, nrows = 6)
+```
+
+- **Note:** this is not an official release of the PD summary statistics (supplied by Cornelis Blauwendraat, IPDGC), so use with care.
+- Number of samples for each SNP added using the `Direction` column together with cohort sample numbers
+    - The order of the 13 symbols (`+`, `-` or `?`) reflect the order of the cohorts meta-analysed, which is as follows:
+        - Input File 1 : ../individual_cohort_sumstats_meta5/toMeta.dbgapNeuroX.tab
+        - Input File 2 : ../individual_cohort_sumstats_meta5/toMeta.SHUL.tab
+        - Input File 3 : ../individual_cohort_sumstats_meta5/toMeta.FINLAND_no_age.tab
+        - Input File 4 : ../individual_cohort_sumstats_meta5/toMeta.HBS.tab
+        - Input File 5 : ../individual_cohort_sumstats_meta5/toMeta.GILL_PD_C.tab
+        - Input File 6 : ../individual_cohort_sumstats_meta5/toMeta.OSLO.tab
+        - Input File 7 : ../individual_cohort_sumstats_meta5/toMeta.PDBP.tab
+        - Input File 8 : ../individual_cohort_sumstats_meta5/toMeta.PPMI.tab
+        - Input File 9 : ../individual_cohort_sumstats_meta5/toMeta.queensland.tab
+        - Input File 10 : ../individual_cohort_sumstats_meta5/toMeta.SPAIN3.tab
+        - Input File 11 : ../individual_cohort_sumstats_meta5/toMeta.TUBI_no_overlap.tab
+        - Input File 12 : ../individual_cohort_sumstats_meta5/toMeta.VANCE.tab
+        - Input File 13 : ../individual_cohort_sumstats_meta5/toMeta.COURAGE_UK.tab
+    -  `+` or `-` indicate the variant direction of effect within a cohort; `?` indicate that that variant was not present in that dataset
+
+```{bash PD2019-noUKBB-generate-n, eval = F}
+# Have to navigate to root project folder for script to work (as it uses here package)
+cd /home/rreynolds/misc_projects/neurodegen-psych-local-corr
+
+nohup Rscript \
+/home/rreynolds/misc_projects/neurodegen-psych-local-corr/scripts/00_generate_pd_n.R \
+&>/home/rreynolds/misc_projects/neurodegen-psych-local-corr/logs/00_generate_pd_n.log&
+
+```
+
+- Filtering of summary statistics necessary and performed as recommended by Cornelis Blauweendraat:
+    - Exclude MAF < 1%
+    - Exclude `HetISq` > 80% (I^2 statistic measures heterogeneity on scale of 0-100%)
+    - Exclude SNPs where SNP is not present in $\geq$ 2/3 of studies included. 
+- **Note:** distribution of N across filtered SNPs is bimodally distributed (Figure \@ref(fig:PD2019-noUKBB-N)). This is problematic, as LDSC `munge_sumstats.py` removes any SNPs that have N < (90th percentile/1.5), unless another minimum is specified (in the filtered data, this accounts for `r ((PD %>% dplyr::filter(N < (quantile(PD$N, seq(0,1,0.1))["90%"])/1.5) %>% nrow()/nrow(PD)) * 100) %>% round(digits = 1)` of the data). 
+    - Notably, the default specified by the code does not reflect the default behaviour described in the arguments (see issue [#335](https://github.com/bulik/ldsc/issues/335)). In the arguments descriptions, the default behaviour should be N < (90th percentile/2). 
+    - Given the bimodal distribution, and the peak around ~ 13,000, chose to use `--n-min 13655` N < median(N). This equates to `r median(PD$N)`, as compared to `r quantile(PD$N, seq(0,1,0.1)["90%"])/1.5` (N < (90th percentile/1.5)) or `r quantile(PD$N, seq(0,1,0.1))["90%"]/2` (N < (90th percentile/2)), and accounts for `r ((PD %>% dplyr::filter(N < median(N)) %>% nrow()/nrow(PD)) * 100) %>% round(digits = 1)` of the data.
+- Will also add a SNP column with RS ID. 
+
+```{r PD2019-noUKBB-N, echo = F, fig.cap = "Histogram of SNP N."}
+
+PD %>% 
+  ggplot(
+    aes(
+      x = N
+    )
+  ) + 
+  geom_histogram(binwidth = 500)
+
+```
+
+
+```{r PD2019-noUKBB-preprocess, eval = F}
+
+# Filtering by MAF, I^2 and number of cohorts where variant is present
+PD_filtered <-
+  fread(file_path) %>% 
+  dplyr::mutate(
+    n_cohort_present = 
+      stringr::str_count(Direction, c("\\+|-")),
+  ) %>% 
+  dplyr::filter(
+    Freq1 >= 1/100,
+    HetISq <= 80,
+    n_cohort_present >= (2/3 * 13)
+  )
+
+# Tidy and rename columns for use with LAVA
+# Add RS ID
+PD <- 
+  PD_filtered %>% 
+  dplyr::select(
+    CHR_BP = MarkerName,
+    A1 = Allele1, 
+    A2 = Allele2, 
+    MAF = Freq1, 
+    BETA = Effect, 
+    SE = StdErr, 
+    P = `P-value`
+    ) %>% 
+  dplyr::inner_join(
+    PD_N %>% 
+      dplyr::select(
+        CHR_BP = MarkerName,
+        N
+        )
+  ) %>% 
+  tidyr::separate(
+    col = CHR_BP,
+    sep = ":",
+    into = c("CHR", "BP"), 
+    remove = FALSE
+  ) %>% 
+  dplyr::mutate(
+    CHR = as.factor(CHR),
+    A1 = stringr::str_to_upper(A1),
+    A2 = stringr::str_to_upper(A2),
+  ) %>% 
+  colochelpR::convert_loc_to_rs(
+    df = .,
+    dbsnp_144
+  )
+
+# Function colochelpR::convert_loc_to_rs does not remove CHR:BP associated with more than one rs id
+# Nor does it remove CHR:BP locations that do not have associated rs ids (left as NA)
+# Thus, will remove NAs and remove duplicated CHR:BP  
+PD <-
+  PD %>%
+  dplyr::group_by(CHR_BP) %>%
+  dplyr::filter(!any(row_number() > 1))  %>%
+  dplyr::ungroup() %>%
+  dplyr::select(-CHR_BP) %>%
+  tidyr::drop_na(SNP)
+
+fwrite(
+  PD,
+  stringr::str_c(
+    gwas_dir,
+    "PD2019_meta5_ex23andMe_exUKBB/PD2019.ex23andMe.exUKBB",
     lava_ext
   ),
   sep = "\t"
