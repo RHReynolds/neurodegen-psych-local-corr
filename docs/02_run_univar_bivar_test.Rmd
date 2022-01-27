@@ -78,7 +78,6 @@ nohup Rscript \
 
 ```
 
-
 ## Loading results
 Once run, results can be loaded using the following code chunk:
 
@@ -122,6 +121,60 @@ global <-
     file = here::here("results", "01_input_prep", "ldsc_corr", "ldsc_correlations.txt"),
     delim = "\t"
     ) 
+
+```
+
+## Filtering for pleiotropic genes
+```{r pleiotropic-genes}
+
+ref <- import("/data/references/ensembl/gtf_gff3/v87/Homo_sapiens.GRCh37.87.gtf")
+ref <- ref %>% keepSeqlevels(c(1:22), pruning.mode = "coarse") 
+ref <- ref[ref$type == "gene"]
+
+# genes to check
+genes <- 
+  c("APOE", "TMEM175", "SNCA", "BIN1", "GRN", "KIF5A")
+
+# construct granges object with LD blocks for overlap with reference gtf
+loci_gr <-
+  loci %>%
+  GenomicRanges::makeGRangesFromDataFrame(
+    .,
+    keep.extra.columns = TRUE,
+    ignore.strand = TRUE,
+    seqinfo = NULL,
+    seqnames.field = "CHR",
+    start.field = "START",
+    end.field = "STOP"
+  )
+
+overlap <-
+  GenomicRanges::findOverlaps(loci_gr, ref) %>%
+  tibble::as_tibble()
+
+loci_genes <-  
+  tibble::tibble(
+    locus = loci_gr[overlap$queryHits]$LOC,
+    chr = loci_gr[overlap$queryHits] %>% GenomeInfoDb::seqnames() %>% as.character(),
+    locus_start = loci_gr[overlap$queryHits] %>% BiocGenerics::start(),
+    locus_end = loci_gr[overlap$queryHits] %>% BiocGenerics::end(),
+    gene_id = ref[overlap$subjectHits]$gene_id,
+    gene_name =
+      ref[overlap$subjectHits]$gene_name %>%
+      stringr::str_replace_all("-", "_") %>%
+      stringr::str_replace_all("\\.", "_"),
+    gene_biotype = ref[overlap$subjectHits]$gene_biotype %>% as.factor(),
+    gene_strand = ref[overlap$subjectHits] %>% BiocGenerics::strand() %>% as.character(),
+    gene_start = ref[overlap$subjectHits] %>% BiocGenerics::start(),
+    gene_end = ref[overlap$subjectHits] %>% BiocGenerics::end()
+  )
+
+# filter df with ld block & gene info for genes of interest
+loci_genes_filtered <- 
+  loci_genes %>% 
+  dplyr::filter(
+    gene_name %in% genes
+  )
 
 ```
 
@@ -210,12 +263,12 @@ tibble(
   column = colnames(results$univ),
   description = 
     c(
-      "Locus ID",
-      "Locus chromosome",
-      "Locus start base pair",
-      "Locus end base pair",
-      "The number of SNPs within the locus",
-      "The number of PCs retained within the locus",
+      "LD block ID",
+      "LD block chromosome",
+      "LD block start base pair",
+      "LD block end base pair",
+      "The number of SNPs within the LD block",
+      "The number of PCs retained within the LD block",
       "Analysed phenotype",
       "Observed local heritability",
       "P-value from the univariate test (F-test for continuous, Chi-sq for binary)"
@@ -254,12 +307,12 @@ tibble(
   column = colnames(results$bivar),
   description = 
     c(
-      "Locus ID",
-      "Locus chromosome",
-      "Locus start base pair",
-      "Locus end base pair",
-      "The number of SNPs within the locus",
-      "The number of PCs retained within the locus",
+      "LD block ID",
+      "LD block chromosome",
+      "LD block start base pair",
+      "LD block end base pair",
+      "The number of SNPs within the LD block",
+      "The number of PCs retained within the LD block",
       "Phenotype 1",
       "Phenotype 2",
       "Standardised coefficient for the local genetic correlation",
@@ -285,7 +338,8 @@ results$bivar <-
       str_remove("\\..*"),
     phen2 = phen2 %>% 
       str_replace_all("[:digit:]", "") %>% 
-      str_remove("\\..*")
+      str_remove("\\..*"),
+    fdr = p.adjust(p, method = "fdr")
   )
 
 bivar_thres <- 0.05/nrow(results$bivar)
@@ -428,25 +482,27 @@ png(
   units = "mm",
   res = 300
 )
+
 plot_bivar_chord_diagram(
     bivar_corr = bivar_bonf,
     fct_phen = fct_disease,
     palette = RColorBrewer::brewer.pal(n = 6, name = "BrBG")
   )
+
 dev.off()
 
 ```
 
 
-## Signficant phenotype correlations at locus level {.tabset}
+## Signficant phenotype correlations at LD block level {.tabset}
 
 ### Text
-- The LD block with the highest number of significant bivariate local $r_{g}$'s, locus 758 and 1719, were positioned on chromosome 4 and 11, respectively (Figure \@ref(fig:corr-plot), \@ref(fig:edge-diagram)). 
-- The locus on chromosome 4 contains three protein-coding genes (*GPM6A*, *WDR17* and *SPATA4*), while the locus on chromosome 11 contains ten protein-coding genes, one of which includes *DRD2*, which encodes dopamine receptor D2. As perhaps expected, all three neuropsychiatric disorders positively correlate with one another at locus 1719. Somewhat unexpected is the significant negative correlation between LBD and SCZ at locus 1719.
+- The LD block with the highest number of significant bivariate local $r_{g}$'s, LD block 758 and 1719, were positioned on chromosome 4 and 11, respectively (Figure \@ref(fig:corr-plot), \@ref(fig:edge-diagram)). 
+- The locus on chromosome 4 contains three protein-coding genes (*GPM6A*, *WDR17* and *SPATA4*), while the LD block on chromosome 11 contains ten protein-coding genes, one of which includes *DRD2*, which encodes dopamine receptor D2. As perhaps expected, all three neuropsychiatric disorders positively correlate with one another at LD block 1719. Somewhat unexpected is the significant negative correlation between LBD and SCZ at LD block 1719.
 
 ```{r bivar-correlations-locus-count}
 
-print("Top locus when Bonferroni-correcting (p < 0.05/n_bivar_tests):")
+print("Top LD block when Bonferroni-correcting (p < 0.05/n_bivar_tests):")
 
 bivar_bonf %>%
   dplyr::count(locus, chr, start, stop, n_snps) %>% 
@@ -490,7 +546,7 @@ results$bivar %>%
   
 ```
 
-```{r, edge-diagram, fig.height = 14, fig.cap = "Edge diagrams for each locus showing the standardised coefficient for genetic correlation (rho) for each significant bivariate local genetic correlations (p < 0.05/n_tests). Significant negative and positive correlations are indicated by blue and red colour, respectively."}
+```{r, edge-diagram, fig.height = 14, fig.cap = "Edge diagrams for each LD block showing the standardised coefficient for genetic correlation (rho) for each significant bivariate local genetic correlations (p < 0.05/n_tests). Significant negative and positive correlations are indicated by blue and red colour, respectively."}
 
 plot_edge_diagram(
   bivar_corr = 
@@ -536,10 +592,6 @@ ggsave(
 
 ```{r individual-locus-plots, message = F, fig.height = 8}
 
-ref <- import("/data/references/ensembl/gtf_gff3/v87/Homo_sapiens.GRCh37.87.gtf")
-ref <- ref %>% keepSeqlevels(c(1:22), pruning.mode = "coarse") 
-ref <- ref[ref$type == "gene"]
-
 loci_gr <-
   bivar_bonf %>%
   dplyr::count(locus, chr, start, stop, n_snps) %>%
@@ -572,6 +624,152 @@ fig_list
 
 
 ```
+
+## LD blocks with known neurodegenerative pleiotropic genes {.tabset}
+
+### Text
+- Pleiotropic genes include:
+    - APOE (implicated in AD and LBD)
+    - TMEM175 (implicated in PD, LBD, and RBD)
+    - SNCA (implicated in PD, LBD and RBD)
+    - BIN1 (implicated in AD and LBD)
+    - GRN (implicated in AD, PD, FTD, and LBD)
+    - KIF5A (implicated in PD and ALS/FTD)
+- AD and PD had sufficient local genetic signal (i.e. univariate heritability) at all tested LD blocks. LBD had insufficient local heritability in the GRN-, KIF5A and TMEM175-containing LD blocks, and therefore was not carried forward in these loci for bivariate testing.
+- Of the LD blocks that contained implicated genes, only the SNCA- and APOE-containing LD blocks contained local $r_{g}$s that passed the Bonferroni significance cut-off (p < 0.05/n_tests; Figure \@ref(fig:pleiotropic-genes-fig)a). Using a more lenient FDR correction, local $r_{g}$s were observed across all LD blocks, except the GRN- and TMEM175-containing LD blocks (Figure \@ref(fig:pleiotropic-genes-fig)b).
+    - BIN1-containing LD block 319
+        - Bonferroni: no local $r_{g}$s. 
+        - FDR: positive local $r_{g}$ between AD and LBD.
+    - SNCA-containing LD block 681
+        - Bonferroni & FDR: negative local $r_{g}$ between AD and PD.
+    - KIF5A-containing LD block 1794
+        - Bonferroni: no local $r_{g}$s.  
+        - FDR: positive local $r_{g}$s between BIP and SCZ.
+    - APOE-containing LD block 2351
+        - Bonferroni: positive local $r_{g}$ observed between AD and LBD and negative local $r_{g}$ between PD and LBD.
+        - FDR: as above and a negative local $r_{g}$ betyween AD and PD.
+- In terms of expectations, APOE and BIN1 are what we would expect i.e. positive local $r_{g}$ between AD and LBD, but some unexpected local $r_{g}$s too e.g. negative local $r_{g}$ between AD and PD in APOE- and SNCA-containing LD blocks.
+
+### Tables
+```{r pleiotropic-genes-table}
+
+print("LD blocks containing pleiotropic genes:")
+
+loci_genes_filtered %>%
+  DT::datatable(rownames = FALSE,
+                options = list(scrollX = TRUE),
+                class = 'white-space: nowrap')
+
+print("Univariate results filtered for neurodegenerative phenotypes AND LD blocks containing pleiotropic genes. Significant when p < 0.05/n_ld_blocks.")
+
+results$univ %>% 
+  dplyr::inner_join(
+    loci_genes_filtered %>% 
+      dplyr::select(locus, gene_name),
+    by = c("locus")
+  ) %>% 
+  dplyr::filter(
+    phen %in% c("AD", "LBD", "PD")
+  ) %>% 
+  dplyr::mutate(
+    significant =
+      case_when(
+        p < 0.05/nrow(loci) ~ TRUE,
+        TRUE ~ FALSE
+      )
+  ) %>% 
+  dplyr::select(
+    locus, gene_name, significant, everything()
+  ) %>%
+  DT::datatable(rownames = FALSE,
+                options = list(scrollX = TRUE),
+                class = 'white-space: nowrap')
+
+print("Bivariate results filtered for neurodegenerative phenotypes AND LD blocks containing pleiotropic genes.")
+
+results$bivar %>% 
+  dplyr::inner_join(
+    loci_genes_filtered %>% 
+      dplyr::select(locus, gene_name),
+    by = c("locus")
+  ) %>% 
+  dplyr::filter(
+    phen1 %in% c("AD", "LBD", "PD") & phen2 %in% c("AD", "LBD", "PD")
+  ) %>% 
+  dplyr::mutate(
+    bonferroni =
+      case_when(
+        p < bivar_thres ~ TRUE,
+        TRUE ~ FALSE
+      ),
+    fdr =
+      case_when(
+        fdr < 0.05 ~ TRUE,
+        TRUE ~ FALSE
+      )
+  ) %>% 
+  dplyr::select(
+    locus, gene_name, bonferroni, fdr, everything()
+  ) %>%
+  DT::datatable(rownames = FALSE,
+                options = list(scrollX = TRUE),
+                class = 'white-space: nowrap')
+
+
+```
+
+
+
+### Figures
+```{r pleiotropic-genes-fig, fig.height = 8, fig.cap = "Edge diagrams for each LD block showing local genetic correlations when corrected using (a) the stringent Bonferroni  correction or (b) the lenient FDR correction. The standardised coefficient for genetic correlation (rho) is indicated for significant local correlations. Negative and positive correlations are indicated by blue and red colour, respectively."}
+a <- 
+  plot_edge_diagram(
+    bivar_corr = 
+      results$bivar %>% 
+      dplyr::inner_join(
+        loci_genes_filtered %>% 
+          dplyr::select(locus, gene_name),
+        by = c("locus")
+      ) %>% 
+      dplyr::mutate(
+        locus = str_c(locus, ": contains ", gene_name)
+      ),
+    p_threshold = bivar_thres,
+    multiple_corr = FALSE,
+    phen = fct_disease, 
+    ncol = 3
+  )
+
+b <- 
+  plot_edge_diagram(
+    bivar_corr = 
+      results$bivar %>% 
+      dplyr::inner_join(
+        loci_genes_filtered %>% 
+          dplyr::select(locus, gene_name),
+        by = c("locus")
+      ) %>% 
+      dplyr::mutate(
+        locus = str_c(locus, ": contains ", gene_name)
+      ) %>% 
+      dplyr::filter(fdr < 0.05),
+    multiple_corr = FALSE,
+    phen = fct_disease, 
+    ncol = 3
+  ) +
+  theme(legend.position = "none")
+
+cowplot::plot_grid(
+  a,b,
+  ncol = 1, 
+  rel_heights = c(1,2), 
+  align = "v", 
+  axis = "lr",
+  labels = letters[1:2]
+)
+```
+
+
 
 <br><br>
 
