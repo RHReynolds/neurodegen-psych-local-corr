@@ -182,7 +182,8 @@ fread(file_path, nrows = 6)
 AD <-
   fread(file_path) %>%
   dplyr::mutate(
-    N = 21982 + 41944
+    N = 21982 + 41944,
+    Pvalue = as.numeric(Pvalue)
   ) %>% 
   dplyr::select(
     CHR = Chromosome, 
@@ -223,6 +224,7 @@ fread(file_path, nrows = 6)
 
 - Most columns are present, but require renaming.
 - Will also add a SNP column with RS ID. 
+- Remove any SNPs with z-score of infinity.
 
 ```{r AD2021-preprocess, eval = F}
 
@@ -238,6 +240,7 @@ AD <-
     N
   ) %>% 
   dplyr::mutate(CHR = as.factor(CHR)) %>%
+  dplyr::filter(Z != "Inf") %>% 
   colochelpR::convert_loc_to_rs(
     df = .,
     dbsnp_144
