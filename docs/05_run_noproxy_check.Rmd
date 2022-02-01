@@ -291,7 +291,7 @@ For local $r_g$'s, as we already had results from analysis of AD and PD GWASs wi
 
 ## LAVA
 
-Methods are as described in [01_preparing_inputs_gwas.html](01_preparing_inputs_gwas.html). LD blocks were filtered to include only those where significant bivariate local $r_g$'s were observed between LBD and either by-proxy AD or by-proxy PD GWASs. This limited the number of LD blocks to `r nrow(loci)` (locus `r loci$LOC`). Bivariate local correlations were only performed for pairs of traits which both exhibited a significant univariate local genetic signal (p < 0.05/`r nrow(loci)`, where the denominator represents the total number of tested loci). This resulted in a total of **`r nrow(results$bivar)`** bivariate test spanning **`r results$bivar %>% .[["locus"]] %>% unique() %>% length()`** distinct loci. 
+Methods are as described in [01_preparing_inputs_gwas.html](01_preparing_inputs_gwas.html). LD blocks were filtered to include only those where significant bivariate local $r_g$'s were observed between LBD and either by-proxy AD or by-proxy PD GWASs, in addition to between by-proxy AD and by-proxy PD GWASs. This limited the number of LD blocks to `r nrow(loci)` (locus `r loci$LOC`). Bivariate local correlations were only performed for pairs of traits which both exhibited a significant univariate local genetic signal (p < 0.05/`r nrow(loci)`, where the denominator represents the total number of tested loci). This resulted in a total of **`r nrow(results$bivar)`** bivariate test spanning **`r results$bivar %>% .[["locus"]] %>% unique() %>% length()`** distinct loci. 
 
 # Results {.tabset}
 
