@@ -30,6 +30,8 @@ theme_rhr <-
 #'  \item `p`: p-value of the genetic correlation
 #'  }
 #' @param n_phenotypes `integer` vector indicating number of phenotypes run
+#' @param tidy_label `logical` vector indicating whether phenotype labels should
+#'   be "tidied" i.e. remove digits and anything after `.`. Default is TRUE.
 #'
 #' @return `ggplot` displaying the genetic correlations between phenotypes.
 #' \itemize{
@@ -49,7 +51,8 @@ theme_rhr <-
 plot_global_corr <-
   function(
     global_corr,
-    n_phenotypes
+    n_phenotypes,
+    tidy_label = TRUE
   ) {
 
     # Only need first half of matrix, thus must extract appropriate rows from dataframe
@@ -71,18 +74,27 @@ plot_global_corr <-
     n_combn <-
       length(indices) - n_phenotypes
 
+    if(tidy_label == TRUE){
+
+      global_corr <-
+        global_corr %>%
+        dplyr::mutate(
+          p1 = p1 %>%
+            stringr::str_replace_all("[:digit:]", "") %>%
+            stringr::str_remove("\\..*"),
+          p2 = p2 %>%
+            stringr::str_replace_all("[:digit:]", "") %>%
+            stringr::str_remove("\\..*")
+        )
+
+    }
+
     global_corr %>%
       dplyr::mutate(
         rg_fill =
           dplyr::case_when(
             p < 0.05 / n_combn ~ round(rg, 2)
-          ),
-        p1 = p1 %>%
-          stringr::str_replace_all("[:digit:]", "") %>%
-          stringr::str_remove("\\..*"),
-        p2 = p2 %>%
-          stringr::str_replace_all("[:digit:]", "") %>%
-          stringr::str_remove("\\..*")
+          )
       ) %>%
       dplyr::slice(indices) %>%
       ggplot2::ggplot(
