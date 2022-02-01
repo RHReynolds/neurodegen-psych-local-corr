@@ -8,11 +8,11 @@
 Call: 
 ./ldsc.py \
 --ref-ld-chr /data/LDScore/Reference_Files/eur_w_ld_chr/ \
---out /home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/05_noproxy_univar_bivar/ldsc_corr/LBD2020_PD2011_rg \
---rg /data/LDScore/GWAS//LBD2020/LBD2020.sumstats.gz,/data/LDScore/GWAS//PD2011/PD2011.sumstats.gz \
+--out /home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/05_noproxy_univar_bivar/ldsc_corr/LBD2020_AD2019.Kunkle_rg \
+--rg /data/LDScore/GWAS//LBD2020/LBD2020.sumstats.gz,/data/LDScore/GWAS//AD2019_Kunkle/AD2019.Kunkle.sumstats.gz \
 --w-ld-chr /data/LDScore/Reference_Files/eur_w_ld_chr/ 
 
-Beginning analysis at Fri Sep 24 14:39:02 2021
+Beginning analysis at Thu Jan 27 20:21:48 2022
 Reading summary statistics from /data/LDScore/GWAS//LBD2020/LBD2020.sumstats.gz ...
 Read summary statistics for 1076948 SNPs.
 Reading reference panel LD Score from /data/LDScore/Reference_Files/eur_w_ld_chr/[1-22] ... (ldscore_fromlist)
@@ -23,43 +23,43 @@ Read regression weight LD Scores for 1290028 SNPs.
 After merging with reference panel LD, 1071210 SNPs remain.
 After merging with regression SNP LD, 1071210 SNPs remain.
 Computing rg for phenotype 2/2
-Reading summary statistics from /data/LDScore/GWAS//PD2011/PD2011.sumstats.gz ...
+Reading summary statistics from /data/LDScore/GWAS//AD2019_Kunkle/AD2019.Kunkle.sumstats.gz ...
 Read summary statistics for 1217311 SNPs.
 After merging with summary statistics, 1071210 SNPs remain.
-1038911 SNPs with valid alleles.
+1070928 SNPs with valid alleles.
 
 Heritability of phenotype 1
 ---------------------------
-Total Observed scale h2: 0.1534 (0.0837)
+Total Observed scale h2: 0.165 (0.0782)
 Lambda GC: 1.0225
-Mean Chi^2: 1.0253
-Intercept: 1.0047 (0.0087)
-Ratio: 0.1866 (0.3416)
+Mean Chi^2: 1.0243
+Intercept: 1.0026 (0.0075)
+Ratio: 0.1054 (0.3093)
 
 Heritability of phenotype 2/2
 -----------------------------
-Total Observed scale h2: 0.2162 (0.0353)
-Lambda GC: 1.0195
-Mean Chi^2: 1.0393
-Intercept: 0.9642 (0.0072)
-Ratio < 0 (usually indicates GC correction).
+Total Observed scale h2: 0.0468 (0.022)
+Lambda GC: 1.0926
+Mean Chi^2: 1.1178
+Intercept: 1.0585 (0.0382)
+Ratio: 0.4968 (0.3244)
 
 Genetic Covariance
 ------------------
-Total Observed scale gencov: 0.133 (0.0368)
-Mean z1*z2: 0.0148
-Intercept: -0.0138 (0.0051)
+Total Observed scale gencov: 0.0592 (0.0259)
+Mean z1*z2: 0.0587
+Intercept: 0.0347 (0.0112)
 
 Genetic Correlation
 -------------------
-Genetic Correlation: 0.7301 (0.2664)
-Z-score: 2.741
-P: 0.0061
+Genetic Correlation: 0.6733 (0.2393)
+Z-score: 2.8134
+P: 0.0049
 
 
 Summary of Genetic Correlation Results
-                                              p1                                             p2      rg      se      z       p  h2_obs  h2_obs_se  h2_int  h2_int_se  gcov_int  gcov_int_se
- /data/LDScore/GWAS//LBD2020/LBD2020.sumstats.gz  /data/LDScore/GWAS//PD2011/PD2011.sumstats.gz  0.7301  0.2664  2.741  0.0061  0.2162     0.0353  0.9642     0.0072   -0.0138       0.0051
+                                              p1                                                           p2      rg      se       z       p  h2_obs  h2_obs_se  h2_int  h2_int_se  gcov_int  gcov_int_se
+ /data/LDScore/GWAS//LBD2020/LBD2020.sumstats.gz  /data/LDScore/GWAS//AD2019_Kunkle/AD2019.Kunkle.sumstats.gz  0.6733  0.2393  2.8134  0.0049  0.0468      0.022  1.0585     0.0382    0.0347       0.0112
 
-Analysis finished at Fri Sep 24 14:39:18 2021
-Total time elapsed: 15.79s
+Analysis finished at Thu Jan 27 20:22:05 2022
+Total time elapsed: 16.84s

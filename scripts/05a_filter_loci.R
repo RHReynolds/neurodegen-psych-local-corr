@@ -47,8 +47,8 @@ results <-
 
 # Main --------------------------------------------------------------------
 
-# Filter bivariate results to include only loci with significant local rg of phenotypes
-locus_of_interest <-
+# Filter bivariate results to include only loci with significant local rg with >= 2 phenotypes
+loci_of_interest <-
   results %>%
   dplyr::filter(
     p < args$bivar_threshold
@@ -69,14 +69,14 @@ locus_of_interest <-
     true_sum = sum(phenotype_of_interest)
   ) %>%
   dplyr::filter(
-    true_sum == length(args$phenotypes)
+    true_sum >= 2
   ) %>%
   .[["locus"]]
 
 filtered_loci <-
   loci %>%
   dplyr::filter(
-    LOC %in% locus_of_interest
+    LOC %in% loci_of_interest
   )
 
 # Save data ---------------------------------------------------------------

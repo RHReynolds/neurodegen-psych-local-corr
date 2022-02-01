@@ -1,0 +1,65 @@
+*********************************************************************
+* LD Score Regression (LDSC)
+* Version 1.0.1
+* (C) 2014-2019 Brendan Bulik-Sullivan and Hilary Finucane
+* Broad Institute of MIT and Harvard / MIT Department of Mathematics
+* GNU General Public License v3
+*********************************************************************
+Call: 
+./ldsc.py \
+--ref-ld-chr /data/LDScore/Reference_Files/eur_w_ld_chr/ \
+--out /home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/05_noproxy_univar_bivar/ldsc_corr/PD2019.ex23andMe.exUKBB_AD2019_rg \
+--rg /data/LDScore/GWAS//PD2019_meta5_ex23andMe_exUKBB/PD2019.ex23andMe.exUKBB.sumstats.gz,/data/LDScore/GWAS//AD2019/AD2019.sumstats.gz \
+--w-ld-chr /data/LDScore/Reference_Files/eur_w_ld_chr/ 
+
+Beginning analysis at Thu Jan 27 20:26:58 2022
+Reading summary statistics from /data/LDScore/GWAS//PD2019_meta5_ex23andMe_exUKBB/PD2019.ex23andMe.exUKBB.sumstats.gz ...
+Read summary statistics for 1157516 SNPs.
+Reading reference panel LD Score from /data/LDScore/Reference_Files/eur_w_ld_chr/[1-22] ... (ldscore_fromlist)
+Read reference panel LD Scores for 1290028 SNPs.
+Removing partitioned LD Scores with zero variance.
+Reading regression weight LD Score from /data/LDScore/Reference_Files/eur_w_ld_chr/[1-22] ... (ldscore_fromlist)
+Read regression weight LD Scores for 1290028 SNPs.
+After merging with reference panel LD, 1150524 SNPs remain.
+After merging with regression SNP LD, 1150524 SNPs remain.
+Computing rg for phenotype 2/2
+Reading summary statistics from /data/LDScore/GWAS//AD2019/AD2019.sumstats.gz ...
+Read summary statistics for 1217311 SNPs.
+After merging with summary statistics, 1150524 SNPs remain.
+1101262 SNPs with valid alleles.
+
+Heritability of phenotype 1
+---------------------------
+Total Observed scale h2: 0.3142 (0.0291)
+Lambda GC: 1.071
+Mean Chi^2: 1.0955
+Intercept: 0.9739 (0.0062)
+Ratio < 0 (usually indicates GC correction).
+
+Heritability of phenotype 2/2
+-----------------------------
+Total Observed scale h2: 0.0085 (0.0053)
+Lambda GC: 1.0864
+Mean Chi^2: 1.1278
+Intercept: 1.0546 (0.0603)
+Ratio: 0.4273 (0.472)
+
+Genetic Covariance
+------------------
+Total Observed scale gencov: 0.0116 (0.0042)
+Mean z1*z2: 0.0197
+Intercept: -0.0012 (0.0044)
+
+Genetic Correlation
+-------------------
+Genetic Correlation: 0.2247 (0.0944)
+Z-score: 2.3811
+P: 0.0173
+
+
+Summary of Genetic Correlation Results
+                                                                                    p1                                             p2      rg      se       z       p  h2_obs  h2_obs_se  h2_int  h2_int_se  gcov_int  gcov_int_se
+ /data/LDScore/GWAS//PD2019_meta5_ex23andMe_exUKBB/PD2019.ex23andMe.exUKBB.sumstats.gz  /data/LDScore/GWAS//AD2019/AD2019.sumstats.gz  0.2247  0.0944  2.3811  0.0173  0.0085     0.0053  1.0546     0.0603   -0.0012       0.0044
+
+Analysis finished at Thu Jan 27 20:27:15 2022
+Total time elapsed: 16.71s

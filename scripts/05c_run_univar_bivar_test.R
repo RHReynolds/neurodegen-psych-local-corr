@@ -9,7 +9,7 @@ library(stringr)
 
 # Set arguments -----------------------------------------------------------
 
-phenotypes <- c("AD2013", "PD2011", "LBD2020") %>% sort()
+phenotypes = c("AD2019.Kunkle", "PD2019.ex23andMe.exUKBB", "LBD2020") %>% sort()
 
 args <-
   list(
@@ -18,7 +18,7 @@ args <-
     info_file = here::here("results", "05_noproxy_univar_bivar", "input.info.txt"),
     sample_overlap_file = here::here("results", "05_noproxy_univar_bivar", "sample_overlap.txt"),
     phenotypes = phenotypes,
-    output_filename = str_c(phenotypes, collapse = ":")
+    output_filename = stringr::str_c(phenotypes, collapse = ":")
   )
 
 print(args)

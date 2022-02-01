@@ -36,9 +36,21 @@ theme_rhr <- theme_set(
         panel.spacing = unit(0.1, "lines"))
 )
 
+gwas_dir <- "/data/LDScore/GWAS/"
 loci <- LAVA::read.loci(here::here("results", "05_noproxy_univar_bivar", "filtered.loci"))
-fct_disease <- c("AD", "LBD", "PD")
 
+phen_df <-
+  tibble(
+    name = c("AD2013", "AD2019", "AD2019.Kunkle", "AD2021", "PD2011", "PD2019.ex23andMe.exUKBB", "PD2019.meta5.ex23andMe", "LBD2020"),
+    tidy_name = c("AD2013 (no proxy)", "AD2019", "AD2019  (no proxy)", "AD2021", "PD2011  (no proxy)", "PD2019  (no proxy)", "PD2019", "LBD2020 (no proxy)")
+  ) %>% 
+  dplyr::mutate(
+    name =
+      fct_relevel(
+        name,
+        c("AD2013", "AD2019", "AD2019.Kunkle", "AD2021", "LBD2020", "PD2011", "PD2019.ex23andMe.exUKBB", "PD2019.meta5.ex23andMe")
+      )
+  )
 
 ```
 
@@ -47,7 +59,7 @@ fct_disease <- c("AD", "LBD", "PD")
 
 # Background
 
-Both AD and PD GWASs used in this work include by-proxy cases, which are defined as individuals who have a parent with the disease. In AD, it has been shown that the genetic correlation with clinically diagnosed Alzheimer's disease is high (PMID: [29777097](https://pubmed.ncbi.nlm.nih.gov/29777097/)). However, mislabelling by-proxy cases when parents suffer from other types of dementia could lead to spurious genetic correlations. This is particularly relevant in comparisons of AD to LBD, which both present with cognitive decline. To assess the impact of by-proxy inclusions on local $r_g$'s with LBD, we used older releases of the AD and PD GWASs (AD2013 and PD2011) where by-proxy cases were not included.
+Both AD and PD GWASs used in this work include by-proxy cases, which are defined as individuals who have a parent with the disease. In AD, it has been shown that the genetic correlation with clinically diagnosed Alzheimer's disease is high (PMID: [29777097](https://pubmed.ncbi.nlm.nih.gov/29777097/)). However, mislabelling by-proxy cases when parents suffer from other types of dementia could lead to spurious genetic correlations. This is particularly relevant in comparisons of AD to LBD, which both present with cognitive decline. To assess the impact of by-proxy inclusions on local $r_g$'s between pairwise comparisons of AD, LBD and PD, we used releases of the AD and PD GWASs where by-proxy cases were not included. 
 
 # Supplementary code {.tabset}
 
@@ -87,7 +99,7 @@ sample_overlap %>%
 
 ```{r get-input-info, eval = F}
 
-phenotypes <- c("AD2013", "PD2011", "LBD2020") %>% sort()
+phenotypes <- c("AD2019", "AD2019.Kunkle", "PD2019.ex23andMe.exUKBB", "PD2019.meta5.ex23andMe", "LBD2020") %>% sort()
 
 gwas_details <- 
   readxl::read_xlsx(path = "/data/LDScore/GWAS/LDSC_GWAS_details.xlsx") %>% 
@@ -99,13 +111,7 @@ gwas_details <-
     Original_name, 
     cases = N_case,
     controls = N_ctrl
-  ) %>% 
-  dplyr::mutate(
-    # Rename AD to AD2013 to fit with LAVA file
-    Original_name =
-      case_when(Original_name == "AD" ~ "AD2013",
-                TRUE ~ Original_name)
-  )
+  ) 
 
 input_info <- 
   tibble(
@@ -128,24 +134,41 @@ input_info <-
   ) %>% 
   dplyr::mutate(
     phenotype =
-      case_when(phenotype == "AD" ~ "AD2013",
-                TRUE ~ phenotype)
+      case_when(
+        phenotype == "PD2019.meta5.ex23andMe.exUKBB" ~ "PD2019.ex23andMe.exUKBB",
+        TRUE ~ phenotype
+      )
   ) %>% 
   dplyr::filter(phenotype %in% phenotypes) %>% 
   dplyr::inner_join(
     gwas_details,
     by = c("phenotype" = "Original_name")
-    ) %>% 
+  ) %>% 
+  dplyr::mutate(
+    cases = readr::parse_number(cases),
+    controls = readr::parse_number(controls)
+  ) %>% 
   dplyr::select(phenotype, cases, controls, filename)
 
 write_delim(
   input_info,
-  path = file.path(here::here("results", "05_noproxy_univar_bivar"),
+  file = file.path(here::here("results", "05_noproxy_univar_bivar"),
                    "input.info.txt"),
   delim = "\t"
 )
 
 ```
+
+```{r, echo = F}
+
+read_delim(
+  file = here::here("results", "05_noproxy_univar_bivar",
+                   "input.info.txt"),
+  delim = "\t"
+)
+
+```
+
 
 ## Run univariate and bivariate tests
 This was run using `nohup`:
@@ -164,38 +187,73 @@ nohup Rscript \
 Once run, results can be loaded using the following code chunk:
 
 ```{r load-lava-results}
-files <- 
-  list.files(
-  path = 
-    here::here("results",
-               "05_noproxy_univar_bivar"),
-  pattern = ".lava.rds", 
-  full.names = T
-)
+
+result_dir <- 
+  setNames(
+    list(
+      here::here("results",
+               "02_univar_bivar_test"),
+      here::here("results",
+               "05_noproxy_univar_bivar")
+    ),
+    nm = c("proxy", "no_proxy")
+  )
 
 results <- 
   setNames(
-    object = files %>% 
-      lapply(., function(file){
-        
-        list <-
-          file %>% 
-          readRDS() 
-        
-        if(!is.null(list)){
-          list %>%
-            purrr::discard(is.null) %>%
-            qdapTools::list_df2df() %>%
-            dplyr::select(-X1)
-        }
+    vector(mode = "list", length = 2),
+    nm = c("univ", "bivar")
+  ) %>% 
+  lapply(., function(x){
+    
+    setNames(
+      vector(mode = "list", length = 2),
+      nm = c("proxy", "no_proxy")
+    )
+    
+  })
 
-      }),
-    nm = files %>% 
-      basename() %>% 
-      str_remove(".lava.rds") %>% 
-      str_remove(".*:") %>% 
-      str_remove(".*\\.")
-  )
+for(test in names(results)){
+  
+  for(proxy in names(results[[test]])){
+    
+    results[[test]][[proxy]] <- 
+      list.files(
+        path = 
+          result_dir[[proxy]],
+        pattern = str_c(test, ".lava.rds"), 
+        full.names = T
+      )  %>% 
+      readRDS() %>% 
+      purrr::discard(is.null) %>% 
+      qdapTools::list_df2df() %>% 
+      dplyr::select(-X1)
+    
+    if(proxy == "proxy" && test == "univ"){
+      
+      results[[test]][[proxy]] <- 
+        results[[test]][[proxy]] %>% 
+        dplyr::filter(
+          phen %in% c("AD2019", "LBD2020", "PD2019.meta5.ex23andMe"),
+          locus %in% loci$LOC
+          )
+      
+    }
+    
+    if(proxy == "proxy" && test == "bivar"){
+      
+      results[[test]][[proxy]] <- 
+        results[[test]][[proxy]] %>% 
+        dplyr::filter(
+          phen1 %in% c("AD2019", "LBD2020") & phen2 %in% c("LBD2020", "PD2019.meta5.ex23andMe"),
+          locus %in% loci$LOC
+        )
+      
+    }
+    
+  }
+  
+}
 
 ```
 
@@ -219,7 +277,21 @@ source(here::here("R", "plots.R"))
 
 # Methods {.tabset}
 
-Methods are as described in [01_preparing_inputs_gwas.html](01_preparing_inputs_gwas.html). LD blocks were filtered to include only those where significant bivariate local $r_g$'s were observed between LBD and either by-proxy AD or PD GWASs. This limited the number of LD blocks to `r nrow(loci)` (locus `r loci$LOC`). Bivariate local correlations were only performed for pairs of traits which both exhibited a significant univariate local genetic signal (p < 0.05/`r nrow(loci)`, where the denominator represents the total number of tested loci). This resulted in a total of **`r nrow(results$bivar)`** bivariate test spanning **`r results$bivar %>% .[["locus"]] %>% unique() %>% length()`** distinct loci. 
+## AD/PD GWASs used
+
+For global $r_g$'s, we used a total of 5 GWASs, including:
+
+- AD2019, Jansen et al., PMID: [30617256](https://pubmed.ncbi.nlm.nih.gov/30617256/)
+- AD2019, Kunkle et al., PMID: [30820047](https://pubmed.ncbi.nlm.nih.gov/30820047/)
+- LBD2020, Chia et al., PMID: [33589841](https://pubmed.ncbi.nlm.nih.gov/33589841/)
+- PD2019, Nalls et al., excluding 23andMe cohort, PMID: [31701892](https://pubmed.ncbi.nlm.nih.gov/31701892/)
+- PD2019, Nalls et al., excluding 23andMe and UK Biobank cohorts, PMID: [31701892](https://pubmed.ncbi.nlm.nih.gov/31701892/); kindly provided by Cornelis Blauwendraat, IPDGC
+
+For local $r_g$'s, as we already had results from analysis of AD and PD GWASs with by-proxy cases against the LBD GWAS, we simply re-ran the analysis using instead AD and PD GWASs excluding by-proxy cases.
+
+## LAVA
+
+Methods are as described in [01_preparing_inputs_gwas.html](01_preparing_inputs_gwas.html). LD blocks were filtered to include only those where significant bivariate local $r_g$'s were observed between LBD and either by-proxy AD or by-proxy PD GWASs. This limited the number of LD blocks to `r nrow(loci)` (locus `r loci$LOC`). Bivariate local correlations were only performed for pairs of traits which both exhibited a significant univariate local genetic signal (p < 0.05/`r nrow(loci)`, where the denominator represents the total number of tested loci). This resulted in a total of **`r nrow(results$bivar)`** bivariate test spanning **`r results$bivar %>% .[["locus"]] %>% unique() %>% length()`** distinct loci. 
 
 # Results {.tabset}
 
@@ -283,8 +355,21 @@ global_signif %>%
 
 ```
 
-### Univariate results
+### Univariate results (no proxy)
 ```{r univar-table}
+results$univ <- 
+  results$univ %>% 
+  lapply(., function(df){
+    
+    df %>% 
+      dplyr::mutate(
+        phen =
+          phen %>% 
+          stringr::str_remove("\\..*")
+      )
+    
+  })
+
 print("Univariate column descriptions:")
 
 tibble(
@@ -308,26 +393,32 @@ tibble(
 
 print("Univariate results (p < 0.05/n_loci):")
 
-results$univ <- 
-  results$univ %>% 
-  dplyr::mutate(
-    phen = phen %>% 
-      str_replace_all("[:digit:]", "") %>% 
-      str_remove("\\..*") %>% 
-      fct_relevel(
-        fct_disease
-      )
-  )
-
-results$univ %>% 
-  dplyr::filter(p < 0.05/nrow(loci)) %>%   
+results$univ$no_proxy %>% 
+  dplyr::filter(p < 0.05/nrow(loci)) %>%
   DT::datatable(rownames = FALSE,
                 options = list(scrollX = TRUE),
                 class = 'white-space: nowrap')
 ```
 
-### Bivariate results
+### Bivariate results (no proxy)
 ```{r bivar-table}
+
+results$bivar <- 
+  results$bivar %>% 
+  lapply(., function(df){
+    
+    df %>% 
+      dplyr::mutate(
+        fdr = p.adjust(p, method = "fdr"),
+        phen1 =
+          phen1 %>% 
+          stringr::str_remove("\\..*"),
+        phen2 =
+          phen2 %>% 
+          stringr::str_remove("\\..*")
+      )
+    
+  })
 
 print("Bivariate column descriptions:")
 
@@ -349,33 +440,22 @@ tibble(
       "Equivalent of taking the square of rho. Denotes the proportion of variance in genetic signal for phen1 explained by phen2 (and vice versa)",
       "Lower 95% confidence estimate for r2",
       "Upper 95% confidence estimate for r2",
-      "Simulation p-values for the local genetic correlation"
+      "Simulation p-values for the local genetic correlation",
+      "FDR-adjusted p-values."
     )
 ) %>%
   DT::datatable(rownames = FALSE,
                 options = list(scrollX = TRUE),
                 class = 'white-space: nowrap')
 
-print("Bivariate results (p < 0.05/n_bivar_tests):")
+print("Bivariate results (FDR < 0.05):")
 
-results$bivar <- 
+bivar_fdr <- 
   results$bivar %>% 
-  dplyr::mutate(
-    phen1 = phen1 %>% 
-      str_replace_all("[:digit:]", "") %>% 
-      str_remove("\\..*"),
-    phen2 = phen2 %>% 
-      str_replace_all("[:digit:]", "") %>% 
-      str_remove("\\..*")
-  )
+  lapply(., function(df) df %>% dplyr::filter(fdr < 0.05))
+  
 
-bivar_thres <- 0.05/nrow(results$bivar)
-
-bivar_bonf <- 
-  results$bivar %>% 
-  dplyr::filter(p < bivar_thres)
-
-bivar_bonf %>%
+bivar_fdr$no_proxy %>%
   DT::datatable(rownames = FALSE,
                 options = list(scrollX = TRUE),
                 class = 'white-space: nowrap')
@@ -383,54 +463,279 @@ bivar_bonf %>%
 
 ```
 
-## Global correlations versus bivariate tests {.tabset}
+### Overlapping bivariate results (proxy/no proxy)
+
+- This includes:
+    - All LD blocks where significant bivariate local $r_g$'s were observed between LBD and either by-proxy AD or by-proxy PD GWASs
+    - All LD blocks where sufficient univariate signal was detected when using AD and PD GWASs without by-proxy cases
+
+```{r overlap-table}
+
+# Pivot results
+results_long <- 
+  results$bivar %>% 
+  qdapTools::list_df2df(col1 = "proxy_inclusion") %>% 
+  tidyr::pivot_longer( 
+    cols = -c("proxy_inclusion", "locus", "phen1", "phen2"),
+    names_to = "feature",
+    values_to = "value"
+  ) %>% 
+  tidyr::pivot_wider(names_from = "proxy_inclusion") %>% 
+  dplyr::mutate(
+    doe_prox =
+      case_when(
+        feature == "rho" & proxy < 0 ~ "-",
+        feature == "rho" & proxy > 0 ~ "+"
+      ),
+    doe_no_prox =
+      case_when(
+        feature == "rho" & no_proxy < 0 ~ "-",
+        feature == "rho" & no_proxy > 0 ~ "+" 
+      ),
+    doe_same =
+      case_when(
+        doe_prox == doe_no_prox ~ TRUE,
+        doe_prox != doe_no_prox ~ FALSE
+      )
+  )
+
+results_long %>% 
+  dplyr::filter(
+    feature %in% 
+      c("rho", "rho.lower", "rho.upper", "r2", "r2.lower", "r2.upper", "p", "fdr"),
+    !is.na(proxy),
+    !is.na(no_proxy)
+  ) %>% 
+  dplyr::select(-contains("doe")) %>% 
+  DT::datatable(rownames = FALSE,
+                options = list(scrollX = TRUE),
+                class = 'white-space: nowrap')
+
+```
+
+## Global correlations {.tabset}
 
 ### Text
-```{r, echo = F}
+- Global cross-trait correlations revealed a significant positive correlation between LBD and PD2019 (without by-proxy cases), as previously observed when using PD2019 (with by-proxy cases). Notably, the strength of correlation was higher when no by-proxy cases were included in the PD GWAS (no by-proxy, $r_{g}$ = `r global %>% dplyr::filter(p1 == "LBD2020", p2 == "PD2019.ex23andMe.exUKBB") %>% dplyr::pull(rg) %>% round(digits = 2)`; with by-proxy, $r_{g}$ = `r global %>% dplyr::filter(p1 == "LBD2020", p2 == "PD2019.meta5.ex23andMe") %>% dplyr::pull(rg) %>% round(digits = 2)`). Furthermore, global cross-trait correlations revealed a significant positive correlation between LBD and AD when no by-proxy cases were included; this was not detected when using a GWAS that includes by-proxy cases. As expected, the global $r_{g}$ between GWASs of the same disease with and without by-proxy cases was 1 (Figure \@ref(fig:global-corr)). 
 
-by_proxy <- 
-  readRDS(list.files(
-    here::here("results",
-               "02_univar_bivar_test"),
-    pattern = "bivar", 
-    full.names = T
-  )) %>% 
-  purrr::discard(is.null) %>% 
-  qdapTools::list_df2df() %>% 
-  dplyr::select(-X1) %>% 
+### Figures
+
+```{r global-corr, fig.height = 5, fig.cap = "Global genetic correlations between pairs of phenotypes. Significant negative and positive correlations are indicated by blue and red fill, respectively. Non-significant correlations (p >= 0.05/n_tests) have a grey fill."}
+
+global %>% 
+  dplyr::mutate(
+    rg =
+      case_when(
+        rg > 1 ~ 1,
+        TRUE ~ rg
+        )
+  ) %>% 
+  dplyr::inner_join(
+    phen_df,
+    by = c("p1" = "name")
+  ) %>%
+  dplyr::inner_join(
+    phen_df,
+    by = c("p2" = "name")
+  ) %>%
+  dplyr::select(
+    -p1, -p2
+  ) %>%
+  dplyr::rename(
+    p1 = tidy_name.x,
+    p2 = tidy_name.y
+  ) %>%
+  dplyr::mutate(
+    p1 =
+      fct_relevel(
+        p1,
+        phen_df %>%
+          dplyr::arrange(name) %>%
+          dplyr::pull(tidy_name)
+      ),
+    p2 =
+      fct_relevel(
+        p2,
+        phen_df %>%
+          dplyr::arrange(name) %>%
+          dplyr::pull(tidy_name)
+      )
+  ) %>%
+plot_global_corr(
+  n_phenotypes = 5,
+  tidy_label = FALSE
+)
+
+```
+
+## Local correlations
+
+### Text
+
+- In univariate tests, a negative variance estimate was calculated for AD2019 (without by-proxy cases) in 2 LD blocks (472, 1190) likely due to insufficient signal. In addition, AD2019 (without by-proxy cases) had sufficient univariate signal in only `r results$univ$no_proxy %>% dplyr::filter(p < 0.05/nrow(loci) & phen == "AD2019") %>% nrow()` LD blocks. This lack of signal could reflect either (i) a loss of power due to decreased case/control numbers in the AD2019 GWAS without by-proxy cases (as compared to the AD2019 GWAS with by-proxy cases) or (ii) a genuine lack of genetic signal in the tested LD blocks when no by-proxy cases are included. Notably, the PD GWAS without by-proxy cases had sufficient univariate signal in `r results$univ$no_proxy %>% dplyr::filter(p < 0.05/nrow(loci) & phen == "PD2019") %>% nrow()` of the `r nrow(loci)` LD blocks tested, despite a similar decrease in case/control numbers as seen with the AD2019 no by-proxy GWAS.
+- Across those pairs of phenotypes with sufficient univariate signal to carry out a bivariate test using AD/PD GWASs with or without by-proxy cases, bivariate $r^{2}$, $\rho$ and -log10(p-value) estimates were found to be positively correlated (Figure \@ref(fig:proxy-correlation)). Only one $\rho$ estimate was found to have a different direction of effect when using GWASs without by-proxy cases, although this $\rho$ was non-significant.
+- Using a lenient FDR cut-off, we replicated two $r_{g}$'s using AD/PD GWASs without by-proxy cases (out of the `r results$bivar$proxy %>% dplyr::filter(p < 0.05/1603) %>% nrow()` $r_{g}$'s that were significant using AD/PD GWASs with by-proxy cases). This included the positive correlation between AD and PD in LD block 1273 (which contains *CLU*) and the positive correlation between AD and LBD in LD block 2351 (which contains *APOE*). We did not replicate the significant negative correlation between LBD and PD that was observed using the PD GWAS with by-proxy cases; however, it is worth noting that while non-significant, the $\rho$ was negative (no by-proxy: $\rho$ = `r results$bivar$no_proxy %>% dplyr::filter(phen1 == "LBD2020", phen2 == "PD2019", locus == 2351) %>% dplyr::pull(rho) %>% round(digits = 3)` (CI: `r results$bivar$no_proxy %>% dplyr::filter(phen1 == "LBD2020", phen2 == "PD2019", locus == 2351) %>% dplyr::pull(rho.lower) %>% round(digits = 3)` - `r results$bivar$no_proxy %>% dplyr::filter(phen1 == "LBD2020", phen2 == "PD2019", locus == 2351) %>% dplyr::pull(rho.upper) %>% round(digits = 3)`); p = `r results$bivar$no_proxy %>% dplyr::filter(phen1 == "LBD2020", phen2 == "PD2019", locus == 2351) %>% dplyr::pull(p) %>% round(digits = 3)`).
+
+### Figures
+
+```{r proxy-correlation, fig.cap = "Scatter plot of -log10(p-value), r2 and rho for each pair of phenotypes with sufficient univariate signal to carry out a bivariate test using AD/PD GWASs with or without by-proxy cases. The red dashed line represents the line y = x. Points are coloured, where applicable, by whether they share the same direction of effect."}
+
+results_long %>% 
   dplyr::filter(
-    locus %in% unique(bivar_bonf$locus)
+    feature %in% 
+      c("rho", "r2", "p"),
+    !is.na(proxy),
+    !is.na(no_proxy)
+  ) %>% 
+  dplyr::mutate(
+    across(
+      .cols = contains("proxy"),
+      ~ case_when(
+        feature == "p" ~ -log10(.x),
+        TRUE ~ .x
+      )
+    )
+  ) %>%
+  dplyr::mutate(
+    feature = 
+      case_when(
+        feature == "p" ~ "-log10(p)",
+        TRUE ~ feature
+      )
+  ) %>% 
+  ggplot(
+    aes(
+      x = proxy,
+      y = no_proxy
+    )
+  ) + 
+  geom_point(
+    aes(colour = doe_same)
+    ) + 
+  geom_abline(
+    intercept = 0,
+    linetype = "dashed",
+    colour = "#EE442F"
+    ) +
+  ggpubr::stat_cor(
+    method = "spearman",
+    cor.coef.name = "rho"
+  ) +
+  facet_wrap(
+    vars(feature),
+    scales = "free"
+  ) +
+  labs(
+    x = "Proxy",
+    y = "No proxy",
+    colour = "Same direction of effect?"
+  ) +
+  theme_rhr + 
+  theme(
+    legend.position = "top"
   )
 
 ```
 
-- Global cross-trait correlations revealed a significant positive correlation between LBD and PD2011 (without by-proxy cases), as previously observed when using PD2019 (with by-proxy cases).
-- In univariate tests, a negative variance estimate was calculated for PD2011 in locus 2351 (likely due to insufficient signal), thus this trait was dropped from the analysis.
-- The bivariate test revealed a significant positive correlation between AD2013 (without by-proxy cases; rho = `r bivar_bonf$rho %>% round(digits = 2)`, p = $`r bivar_bonf$p`$) and LBD, as previously observed using AD2019 (with by-proxy cases; rho = `r by_proxy %>% dplyr::filter(phen1 == "AD2019", phen2 == "LBD2020") %>% .[["rho"]] %>% round(digits = 2)`, p = $`r by_proxy %>% dplyr::filter(phen1 == "AD2019", phen2 == "LBD2020") %>% .[["p"]]`$). This results suggests that the local $r_g$ observed in locus 2351 between AD and LBD is not driven by the inclusion of by-proxy cases.
+```{r, edge-diagram, fig.height = 6, fig.cap = "Significant bivariate local genetic correlations using AD/PD GWASs (a,b) with or (c,d) without by-proxy cases. (a, c) Edge diagrams for each LD block show the standardised coefficient for genetic correlation (rho) for each significant bivariate local genetic correlations. Significant negative and positive correlations are indicated by blue and red colour, respectively. (b, d) Heatmaps show the standardised coefficient for genetic correlation (rho) for each association within the LD block. Significant negative and positive correlations are indicated by blue and red fill, respectively. Non-significant correlations have a grey fill. (b) Edge diagrams for each LD block showing the standardised coefficient for genetic correlation (rho) for each significant bivariate local genetic correlations (p < 0.05/n_tests). "}
 
-### Figures
+plots <- 
+  vector(mode = "list", length = 4)
 
-```{r global-corr, fig.height = 3, fig.cap = "Global genetic correlations between pairs of phenotypes. Significant negative and positive correlations are indicated by blue and red fill, respectively. Non-significant correlations (p >= 0.05/n_tests) have a grey fill."}
-
-plot_global_corr(
-  global_corr = global,
-  n_phenotypes = 3
-)
-
-```
-
-```{r, edge-diagram, fig.height = 3, fig.cap = "Edge diagram for each locus showing the standardised coefficient for genetic correlation (rho) for each significant bivariate local genetic correlations (p < 0.05/n_tests). Significant negative and positive correlations are indicated by blue and red colour, respectively."}
-
-plot_edge_diagram(
+plots[[1]] <- plot_edge_diagram(
   bivar_corr = 
-    bivar_bonf,
-  phen = fct_disease,
-  multiple_corr = FALSE,
-  ncol = 3
+    bivar_fdr$proxy %>% 
+    dplyr::filter(
+      locus %in% c(bivar_fdr$no_proxy$locus)
+    ),
+  phen = c("AD2019", "LBD2020", "PD2019"),
+  multiple_corr = FALSE, 
+  seed = 77,
+  ncol = 4
 )
 
+plots[[2]] <- 
+  results$bivar$proxy %>% 
+  dplyr::filter(locus %in% unique(bivar_fdr$no_proxy$locus)) %>% 
+  dplyr::mutate(
+    rho_fill = 
+      case_when(
+             p < 0.05/1603 ~ round(rho, 2)
+           )
+  ) %>% 
+  ggplot(
+    aes(
+      x = phen1,
+      y = phen2,
+      fill = rho_fill,
+      label = round(rho, 2)
+    )
+  ) +
+  geom_tile(colour = "black") +
+  geom_text(
+    size = 2
+    ) +
+  labs(x = "", y = "") +
+  facet_wrap(vars(locus), ncol = 5) +
+  scale_fill_distiller(palette = "RdYlBu", direction = -1, na.value = "#cccccc", limits = c(-1, 1)) +
+  theme_rhr
+
+plots[[3]] <-
+  plot_edge_diagram(
+  bivar_corr = 
+    bivar_fdr$no_proxy,
+  phen = c("AD2019", "LBD2020", "PD2019"),
+  multiple_corr = FALSE, 
+  seed = 77,
+  ncol = 4
+)
+
+plots[[4]] <-
+  results$bivar$no_proxy %>% 
+  dplyr::filter(locus %in% unique(bivar_fdr$no_proxy$locus)) %>% 
+  dplyr::mutate(
+    rho_fill = 
+      case_when(
+        fdr < 0.05 ~ round(rho, 2)
+      )
+  ) %>% 
+  ggplot(
+    aes(
+      x = phen1,
+      y = phen2,
+      fill = rho_fill,
+      label = round(rho, 2)
+    )
+  ) +
+  geom_tile(colour = "black") +
+  geom_text(
+    size = 2
+  ) +
+  labs(x = "", y = "") +
+  facet_wrap(vars(locus), ncol = 5) +
+  scale_fill_distiller(palette = "RdYlBu", direction = -1, na.value = "#cccccc", limits = c(-1, 1)) +
+  theme_rhr
+
+ggpubr::ggarrange(
+  plotlist = plots[c(1,3,2,4)], 
+  nrow = 2, ncol = 2, 
+  align = "v",
+  heights = c(1,1.5),
+  labels = c("a", "c", "b", "d"),
+  common.legend = T,
+  legend = "bottom"
+  )
+
+
 ```
+
 <br><br>
+
+# Conclusions
+
+- Global correlations using GWASs without by-proxy cases mirrored global correlations using GWASs with by-proxy cases. The only exception was a significant positive correlation between LBD and AD when no by-proxy cases were included. Further, exclusion of by-proxy cases increased the strength of correlation between LBD and PD.
+- Where sufficient univariate signal existed in GWASs without by-proxy cases, we were able to replicate results using GWASs with by-proxy cases. 
+- However, in those cases where there was insufficient univariate signal, it is hard to know whether this reflects (i) a technical issue (i.e. a lack of statistical power to detect a genetic signal) or (ii) a genuine biological effect (i.e. a genuine lack of genetic signal, as the genetic signal reflected the contribution of by-proxy cases to trait $h^2$ in the region).
 
 # Session info
 
