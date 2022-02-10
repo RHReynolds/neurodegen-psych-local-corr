@@ -268,6 +268,7 @@ plot_bivar_chord_diagram <-
 #' @param bivar_corr a `data.frame` or [tibble][tibble::tbl_df-class] object,
 #'   with the following columns (all of which are output by LAVA's bivariate test):
 #'  \itemize{
+#'  \item `locus`: locus id
 #'  \item `phen1`: name of phenotype 1
 #'  \item `phen2`: name of phenotype 2
 #'  \item `rho`: the estimated genetic correlation
@@ -278,6 +279,8 @@ plot_bivar_chord_diagram <-
 #' @param p_threshold `numeric` vector indicating p-value threshold to filter
 #'   results by. Default is NULL.
 #' @param phen `character` vector indicating phenotypes present.
+#' @param locus_labels named vector indicating labels that should be used for
+#'   facets. Default is to use the locus names in the supplied `data.frame`.
 #' @param multiple_corr logical vector indicating whether to filter loci such
 #'   that only those with more than one bivariate correlation are displayed.
 #'   Default is TRUE.
@@ -298,6 +301,7 @@ plot_edge_diagram <-
     bivar_corr,
     p_threshold = NULL,
     phen,
+    locus_labels = NULL,
     multiple_corr = TRUE,
     ncol = 3,
     seed = 89
@@ -320,7 +324,18 @@ plot_edge_diagram <-
         dplyr::group_by(locus) %>%
         dplyr::filter(n() > 1)
 
-      }
+    }
+
+    # Create locus labels vector with original names if argument set NULL
+    if(is.null(locus_labels)){
+
+      locus_labels <-
+        setNames(
+          unique(bivar_corr$locus),
+          nm = unique(bivar_corr$locus)
+        )
+
+    }
 
     edges <-
       bivar_corr %>%
@@ -390,7 +405,8 @@ plot_edge_diagram <-
       ) +
       ggraph::facet_edges(
         vars(locus),
-        ncol = ncol
+        ncol = ncol,
+        labeller = as_labeller(locus_labels)
       ) +
       ggplot2::theme_bw() +
       ggplot2::theme(

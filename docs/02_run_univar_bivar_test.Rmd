@@ -401,6 +401,98 @@ phen_count
 
 ### Figures
 
+```{r gwas-n, fig.cap = "Heatmap of samples numbers in each GWAS."}
+
+data_to_plot <- 
+  read_delim(
+    file = file.path(here::here("results", "01_input_prep"),
+                     "input.info.txt"),
+    delim = "\t"
+  ) %>% 
+  dplyr::select(-filename) %>% 
+  tidyr::pivot_longer(
+    cols = cases:controls,
+    names_to = "group",
+    values_to = "total"
+  ) %>% 
+  dplyr::mutate(
+     phenotype_group =
+      case_when(
+        phenotype %in% c("AD2019", "LBD2020", "PD2019.meta5.ex23andMe") ~ "Neurodegenerative",
+        TRUE ~ "Neuropsychiatric"
+      ),
+    phenotype =
+      case_when(
+        phenotype == "AD2019" ~ "Alzheimer's disease\n(AD)",
+        phenotype == "LBD2020" ~ "Lewy body dementia\n(LBD)",
+        phenotype == "PD2019.meta5.ex23andMe" ~ "Parkinson's disease\n(PD)",
+        phenotype == "BIP2021" ~ "Bipolar disorder (BIP)",
+        phenotype == "MDD2019" ~ "Major depressive disorder\n(MDD)",
+        phenotype == "SCZ2018" ~ "Schizophrenia\n(SCZ)"
+      )
+  )
+
+plot <- 
+  data_to_plot %>% 
+  dplyr::mutate(
+    n_text_col = 
+      case_when(
+        total > 200009 ~ "high",
+        TRUE ~ "low"
+      ),
+    group = stringr::str_to_title(group)
+  ) %>% 
+  ggplot(
+    aes(
+      x = group,
+      y = 
+        fct_relevel(
+          phenotype,
+          c(data_to_plot %>% dplyr::arrange(phenotype_group, phenotype) %>% dplyr::pull(phenotype) %>% unique() %>% rev())
+        ),
+      fill = total
+    )
+  ) +
+  geom_tile(colour = "black") +
+  geom_text(
+    aes(
+      label = total %>% scales::comma(),
+      colour = n_text_col
+    ), 
+    size = 3
+  ) +
+  coord_equal() +
+  scale_x_discrete(
+    position = "top"
+    ) +
+  labs(x = "", y = "") +
+  scale_fill_distiller(palette = "Greys", direction = 1) +
+  scale_colour_manual(values = c("white", "black")) +
+  guides(colour = F, fill = F) +
+  theme_minimal() + 
+  theme(
+    panel.grid = element_blank(),
+  )
+
+plot
+```
+
+```{r adpd-plot, eval = F, echo = F}
+
+ggsave(
+  plot,
+  device = "png",
+  path = here::here("tmp"), 
+  filename = "20220207_gwas_n.png",
+  height = 120,
+  width = 100,
+  units = "mm",
+  dpi = 300,
+  limitsize = TRUE
+)
+
+```
+
 ```{r global-corr, fig.cap = "Global genetic correlations between pairs of phenotypes. Significant negative and positive correlations are indicated by blue and red fill, respectively. Non-significant correlations (p >= 0.05/n_tests) have a grey fill."}
 
 plot_global_corr(
@@ -559,19 +651,35 @@ plot_edge_diagram(
 
 ```{r asap-subgroup-plot, echo = F, eval = F}
 
+data_to_plot <- 
+  bivar_bonf %>% 
+  dplyr::filter(
+    locus %in% c(681,1273,1719,2351)
+    # locus %in% c(681,2351)
+  ) %>% 
+  dplyr::mutate(
+    locus_labels =
+      stringr::str_c(
+        "chr", chr, ": ", scales::comma(start), "-", scales::comma(stop)
+      )
+  )
+
+locus_labels <- 
+  setNames(
+    unique(data_to_plot$locus_labels),
+    nm = unique(data_to_plot$locus)
+  )
+
 plot <- 
   plot_edge_diagram(
-  bivar_corr = 
-    bivar_bonf %>% 
-    dplyr::filter(
-      locus %in% c(681,1719, 2281, 2351)
-      # locus %in% c(681,2351)
-      ),
-  phen = fct_disease, 
-  multiple_corr = FALSE,
-  ncol = 4,
-  seed = 78
-) + 
+    bivar_corr = 
+      data_to_plot,
+    phen = fct_disease, 
+    locus_labels = locus_labels,
+    multiple_corr = FALSE,
+    ncol = 4,
+    seed = 78
+  ) + 
   theme(
     legend.position = "right"
   )
@@ -579,7 +687,7 @@ plot <-
 ggsave(
   plot,
   path = here::here("tmp"), 
-  filename = "20211006_edgediagrams.png",
+  filename = "20220207_edgediagrams.png",
   device = "png", 
   width = 250, 
   height = 70, 

@@ -473,7 +473,8 @@ devtools<span class="op">::</span><span class="kw">install_github</span>(<span c
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">AD &lt;-
 <span class="st">  </span><span class="kw">fread</span>(file_path) <span class="op">%&gt;%</span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(
-    <span class="dt">N =</span> <span class="dv">21982</span> <span class="op">+</span><span class="st"> </span><span class="dv">41944</span>
+    <span class="dt">N =</span> <span class="dv">21982</span> <span class="op">+</span><span class="st"> </span><span class="dv">41944</span>,
+    <span class="dt">Pvalue =</span> <span class="kw">as.numeric</span>(Pvalue)
   ) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(
     <span class="dt">CHR =</span> Chromosome, 
@@ -515,6 +516,7 @@ devtools<span class="op">::</span><span class="kw">install_github</span>(<span c
 <ul>
 <li>Most columns are present, but require renaming.</li>
 <li>Will also add a SNP column with RS ID.</li>
+<li>Remove any SNPs with z-score of infinity.</li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">AD &lt;-
 <span class="st">  </span><span class="kw">fread</span>(file_path) <span class="op">%&gt;%</span>
@@ -528,6 +530,7 @@ devtools<span class="op">::</span><span class="kw">install_github</span>(<span c
     N
   ) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">CHR =</span> <span class="kw">as.factor</span>(CHR)) <span class="op">%&gt;%</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(Z <span class="op">!=</span><span class="st"> &quot;Inf&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>colochelpR<span class="op">::</span><span class="kw">convert_loc_to_rs</span>(
     <span class="dt">df =</span> .,
     dbsnp_<span class="dv">144</span>
@@ -1041,7 +1044,7 @@ PD &lt;-
 ##  collate  en_GB.UTF-8                 
 ##  ctype    en_GB.UTF-8                 
 ##  tz       Europe/London               
-##  date     2022-01-27                  
+##  date     2022-02-02                  
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 ##  package                          * version  date       lib source                                

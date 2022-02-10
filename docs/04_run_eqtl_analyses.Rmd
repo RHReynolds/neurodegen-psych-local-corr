@@ -57,7 +57,7 @@ Bivariate local $r_{g}$ analyses revealed several loci (representing LD blocks) 
 
 Following section includes any intermediary code used in this `.Rmd`.
 
-## Get gene loci 
+## Get genic regions 
 
 ```{r get-gene-loci, eval = F}
 
@@ -65,7 +65,7 @@ source(here::here("scripts", "04a_get_gene_loci.R"))
 
 ```
 
-All gene loci are shown below. 
+All genic regions are shown below. 
 
 ```{r gene-loci}
 
@@ -267,13 +267,13 @@ Firstly, we determined a number of LD blocks of interest from the LD blocks high
     - Locus 1719, containing *DRD2*
     - Locus 2351, containing *APOE*
 
-From these LD blocks of interest, we defined gene loci. That is, a 100 kb window was added to the start and end of any gene that overlapped a locus of interest. These gene-defined loci ($n$ = `r nrow(gene_loci)`) were carried forward in downstream analyses. Further, to ensure that our results were not driven by window size, we re-ran all analyses using a 50 kb window.
+From these LD blocks of interest, we defined genic regions. That is, a 100 kb window was added to the start and end of any protein-coding, antisense or lincRNA gene that overlapped an LD block of of interest. These genic regions ($n$ = `r nrow(gene_loci)`) were carried forward in downstream analyses. Further, to ensure that our results were not driven by window size, we re-ran all analyses using a 50 kb window.
 
 ## Sample overlap
 Due to the potential sample overlap between cohorts and its impact on any estimated correlations, it is advised to use cross-trait LDSC ([PMID:25642630](https://pubmed.ncbi.nlm.nih.gov/25642630/); [PMID:26414676](https://pubmed.ncbi.nlm.nih.gov/26414676/)) to obtain an estimate of the sample overlap. This, however, is not possible with eQTL summary statistics. Provided a reasonable certainty that there is no sample overlap between eQTL and GWAS summary statistics, it can be assumed to be zero (which precludes any correlations between eQTLGen and PsychENCODE, as both use GTEx samples, albeit from different tissues). **This, however, needs double-checking in terms of eQTL and GWAS cohorts.** 
 
 ## Running univariate and bivariate tests using eQTL summary statistics
-For each gene locus, only those traits that were found to have significant local $r_{g}$ in the associated LD block were used for univariate and bivariate analyses with eQTL summary statistics. As described in [02_run_univar_bivar_test.html](02_run_univar_bivar_test.html), a univariate test was performed as a filtering step for bivariate local $r_{g}$ analyses. Bivariate local correlations were only performed (i) if the eQTL within the gene locus exhibited a significant univariate local genetic signal and (ii) for pairs of traits which both exhibited a significant univariate local genetic signal. A cut-off of p < `r (0.05/nrow(gene_loci)) %>% format(scientific = F)` was used to determine univariate significance. This resulted in a total of **`r nrow(results$bivar)`** bivariate tests spanning **`r results$bivar$window_100000 %>% .[["gene_locus"]] %>% unique() %>% length()`** distinct gene loci. Bivariate results were multiple test corrected using two strategies: (i) a more stringent Bonferroni correction (i.e. p < `r (0.05/nrow(results$bivar)) %>% format(scientific = F)` and (ii) a more lenient FDR correction. 
+For each genic region, only those traits that were found to have significant local $r_{g}$ in the associated LD block were used for univariate and bivariate analyses with eQTL summary statistics. As described in [02_run_univar_bivar_test.html](02_run_univar_bivar_test.html), a univariate test was performed as a filtering step for bivariate local $r_{g}$ analyses. Bivariate local correlations were only performed (i) if the eQTL within the genic region exhibited a significant univariate local genetic signal and (ii) for pairs of traits which both exhibited a significant univariate local genetic signal. A cut-off of p < 0.05/`r nrow(gene_loci) %>% format(scientific = F)` was used to determine univariate significance. This resulted in a total of **`r nrow(results$bivar$window_100000)`** bivariate tests spanning **`r results$bivar$window_100000 %>% .[["gene_locus"]] %>% unique() %>% length()`** distinct genic regions. Bivariate results were multiple test corrected using two strategies: (i) a more stringent Bonferroni correction (i.e. p < 0.05/`r nrow(results$bivar$window_100000) %>% format(scientific = F)` and (ii) a more lenient FDR correction. 
 
 # Results {.tabset}
 
@@ -289,11 +289,11 @@ tibble(
     c(
       "LD block",
       "eQTL dataset used",
-      "Gene locus as identified by ensembl ID",
+      "Genic region as identified by ensembl ID",
       "Gene name",
-      "Gene locus chromosome",
-      "Gene locus start base pair",
-      "Gene locus end base pair",
+      "Genic region chromosome",
+      "Genic region start base pair",
+      "Genic region end base pair",
       "The number of SNPs within the locus",
       "The number of PCs retained within the locus",
       "Analysed phenotype",
@@ -335,7 +335,7 @@ results$univ %>%
 
 ### Bivariate results
 
-- Multiple test correction is complicated by the many overlapping gene loci and the fact that we're repeatedly testing the same disease phenotypes within one LD block (and simply substituting the eQTL-gene)
+- Multiple test correction is complicated by the many overlapping genic regions and the fact that we're repeatedly testing the same disease phenotypes within one LD block (and simply substituting the eQTL-gene)
 - Thus, applied to multiple test correction strategies:
     - A stringent Bonferroni, correcting for all bivariate tests performed
     - A lenient FDR, correcting for all bivariate tests performed
@@ -384,11 +384,11 @@ tibble(
     c(
       "LD block",
       "eQTL dataset used",
-      "Gene locus as identified by ensembl ID",
+      "Genic region as identified by ensembl ID",
       "Gene name",
-      "Gene locus chromosome",
-      "Gene locus start base pair",
-      "Gene locus end base pair",
+      "Genic region chromosome",
+      "Genic region start base pair",
+      "Genic region end base pair",
       "The number of SNPs within the locus",
       "The number of PCs retained within the locus",
       "Phenotype 1",
@@ -437,7 +437,7 @@ bivar_bonf %>%
 
 ### Overlapping bivariate results between windows
 
-- This includes all results that were FDR < 0.05 when using either a window size of 50 kb or 100 kb. Note that there may be some gene loci where a significant genetic correlation was observed using one window size, but not the other.
+- This includes all results that were FDR < 0.05 when using either a window size of 50 kb or 100 kb. Note that there may be some genic regions where a significant genetic correlation was observed using one window size, but not the other.
 
 ```{r ovarlap-table}
 
@@ -485,11 +485,11 @@ overlap %>%
 ## Comparison of bivariate local $r_{g}$'s across 50 kb and 100 kb windows {.tabset}
 
 ### Text
-- Bivariate $r^{2}$, $\rho$ and -log10(p-value) estimates between phenotypes that could be tested using gene loci with a 50 kb or 100 kb window were significantly positively correlated across the two window sizes (Figure \@ref(fig:window-correlation)). Notably, $r^{2}$ estimates (i.e. the proportion of variance in genetic signal for one phenotype explained by the other) tended to be higher when using the 50 kb window, as compared to the 100 kb window, as evidenced by the fitted line falling below the equivalent of $y = x$.
-- Using the more stringent Bonferroni cut-off, we detect a total of `r overlap %>% dplyr::filter(bonferroni_100000 < 0.05 & bonferroni_50000 < 0.05) %>% nrow()` significant bivariate local $r_{g}$'s across `r overlap %>% dplyr::filter(bonferroni_100000 < 0.05 & bonferroni_50000 < 0.05) %>% dplyr::distinct(gene_locus) %>% nrow()` distinct gene loci, which replicate irrespective of the window size used to define gene loci (Figure \@ref(fig:window-n)). 
+- Bivariate $r^{2}$, $\rho$ and -log10(p-value) estimates between phenotypes that could be tested using genic regions with a 50 kb or 100 kb window were significantly positively correlated across the two window sizes (Figure \@ref(fig:window-correlation)). Notably, $r^{2}$ estimates (i.e. the proportion of variance in genetic signal for one phenotype explained by the other) tended to be higher when using the 50 kb window, as compared to the 100 kb window, as evidenced by the fitted line falling below the equivalent of $y = x$.
+- Using the more stringent Bonferroni cut-off, we detect a total of `r overlap %>% dplyr::filter(bonferroni_100000 < 0.05 & bonferroni_50000 < 0.05) %>% nrow()` significant bivariate local $r_{g}$'s across `r overlap %>% dplyr::filter(bonferroni_100000 < 0.05 & bonferroni_50000 < 0.05) %>% dplyr::distinct(gene_locus) %>% nrow()` distinct genic regions, which replicate irrespective of the window size used to define genic regions (Figure \@ref(fig:window-n)). 
     - This equates to `r ((overlap %>% dplyr::filter(bonferroni_100000 < 0.05 & bonferroni_50000 < 0.05) %>% nrow())/(bivar_bonf %>% qdapTools::list_df2df(col1 = "window_size") %>% dplyr::distinct(ld_block, eqtl_dataset, gene_locus, gene_name, phen1, phen2) %>% nrow()) * 100) %>% round(digits = 0)`% of the significant `r bivar_bonf %>% qdapTools::list_df2df(col1 = "window_size") %>% dplyr::distinct(ld_block, eqtl_dataset, gene_locus, gene_name, phen1, phen2) %>% nrow()` bivariate local $r_{g}$'s across both window sizes. 
     - Alternatively, this equates to `r ((overlap %>% dplyr::filter(bonferroni_100000 < 0.05 & bonferroni_50000 < 0.05) %>% nrow())/(bivar_bonf$window_100000 %>% nrow()) * 100) %>% round(digits = 0)`% of the `r bivar_bonf$window_100000 %>% nrow()` significant bivariate local $r_{g}$'s using the 100 kb window and `r ((overlap %>% dplyr::filter(bonferroni_100000 < 0.05 & bonferroni_50000 < 0.05) %>% nrow())/(bivar_bonf$window_50000 %>% nrow()) * 100) %>% round(digits = 0)`% of the `r bivar_bonf$window_50000 %>% nrow()` significant bivariate local $r_{g}$'s using the 50 kb window.
-- By comparison, using the more lenient FDR cut-off, we detect a total of `r overlap %>% dplyr::filter(fdr_100000 < 0.05 & fdr_50000 < 0.05) %>% nrow()` significant bivariate local $r_{g}$'s across `r overlap %>% dplyr::filter(fdr_100000 < 0.05 & fdr_50000 < 0.05) %>% dplyr::distinct(gene_locus) %>% nrow()` distinct gene loci, which replicate irrespective of the window size used to define gene loci (Figure \@ref(fig:window-n)). 
+- By comparison, using the more lenient FDR cut-off, we detect a total of `r overlap %>% dplyr::filter(fdr_100000 < 0.05 & fdr_50000 < 0.05) %>% nrow()` significant bivariate local $r_{g}$'s across `r overlap %>% dplyr::filter(fdr_100000 < 0.05 & fdr_50000 < 0.05) %>% dplyr::distinct(gene_locus) %>% nrow()` distinct genic regions, which replicate irrespective of the window size used to define genic regions (Figure \@ref(fig:window-n)). 
     - This equates to `r ((overlap %>% dplyr::filter(fdr_100000 < 0.05 & fdr_50000 < 0.05) %>% nrow())/(bivar_fdr %>% qdapTools::list_df2df(col1 = "window_size") %>% dplyr::distinct(ld_block, eqtl_dataset, gene_locus, gene_name, phen1, phen2) %>% nrow()) * 100) %>% round(digits = 0)`% of the significant `r bivar_fdr %>% qdapTools::list_df2df(col1 = "window_size") %>% dplyr::distinct(ld_block, eqtl_dataset, gene_locus, gene_name, phen1, phen2) %>% nrow()` bivariate local $r_{g}$'s across both window sizes. 
     - Alternatively, this equates to `r ((overlap %>% dplyr::filter(fdr_100000 < 0.05 & fdr_50000 < 0.05) %>% nrow())/(bivar_fdr$window_100000 %>% nrow()) * 100) %>% round(digits = 0)`% of the `r bivar_fdr$window_100000 %>% nrow()` significant bivariate local $r_{g}$'s using the 100 kb window and `r ((overlap %>% dplyr::filter(fdr_100000 < 0.05 & fdr_50000 < 0.05) %>% nrow())/(bivar_fdr$window_50000 %>% nrow()) * 100) %>% round(digits = 0)`% of the `r bivar_fdr$window_50000 %>% nrow()` significant bivariate local $r_{g}$'s using the 50 kb window.
 - As seen with $r^{2}$ estimates from all phenotype pairs that could be tested across both window sizes, bivariate local $r_{g}$'s that were significant (Bonferroni-corrected p < 0.05) across both window sizes tended to have a higher $r^{2}$ estimate when using the 50 kb window, as compared to the 100 kb window (Figure \@ref(fig:window-r2)). 
@@ -497,7 +497,7 @@ overlap %>%
 
 
 ### Figures
-```{r window-correlation, fig.cap = "Scatter plot of -log10(p-value), r2 and rho for each pair of phenotypes that could be tested across gene loci with a 50 kb or 100 kb window. Points are coloured by the type of phenotypes correlated e.g. GWAS-GWAS or GWAS-eQTL. The black line represents a linear model fitted to the data, with the 99% confidence interval indicated with a grey fill. The red dashed line represents the line y = x."}
+```{r window-correlation, fig.cap = "Scatter plot of -log10(p-value), r2 and rho for each pair of phenotypes that could be tested across genic regions with a 50 kb or 100 kb window. Points are coloured by the type of phenotypes correlated e.g. GWAS-GWAS or GWAS-eQTL. The black line represents a linear model fitted to the data, with the 99% confidence interval indicated with a grey fill. The red dashed line represents the line y = x."}
 
 results_long %>% 
   dplyr::filter(
@@ -681,10 +681,10 @@ ggpubr::ggarrange(
 
 ### Text
 
-- Using the more stringent Bonferroni cut-off, we detect a total of `r bivar_bonf$window_100000 %>% nrow()` significant bivariate local $r_{g}$'s across `r bivar_bonf$window_100000 %>% dplyr::distinct(gene_locus) %>% nrow()` distinct gene loci. When pairs of disease phenotypes (which were tested across multiple genes within an LD block) are collapsed within an LD block, we detect a total of `r bivar_bonf$window_100000 %>% dplyr::distinct(ld_block, phen1, phen2) %>% nrow()` significant bivariate local $r_{g}$'s.
-- By comparison, when the more lenient FDR cut-off, we detect a total of `r bivar_fdr$window_100000 %>% nrow()` significant bivariate local $r_{g}$'s across `r bivar_fdr$window_100000 %>% dplyr::distinct(gene_locus) %>% nrow()` distinct gene loci. When pairs of disease phenotypes (which were tested across multiple genes within an LD block) are collapsed within an LD block, we detect a total of `r bivar_fdr$window_100000 %>% dplyr::distinct(ld_block, phen1, phen2) %>% nrow()` significant bivariate local $r_{g}$'s.
-- Of the two eQTL datasets, the dataset with the highest number of gene loci (i.e. a gene where eQTLs were detected) was PsychENCODE (eQTLGen, n gene loci = `r results$univ$window_100000 %>% dplyr::distinct(eqtl_dataset, gene_locus) %>% dplyr::count(eqtl_dataset) %>% dplyr::filter(eqtl_dataset == "EQTLGEN") %>% .[["n"]]`; PsychENCODE, n gene loci = `r results$univ$window_100000 %>% dplyr::distinct(eqtl_dataset, gene_locus) %>% dplyr::count(eqtl_dataset) %>% dplyr::filter(eqtl_dataset == "PSYCHENCODE") %>% .[["n"]]`). In spite of this, the eQTL dataset with highest number of significant bivariate local $r_{g}$'s was eQTLGen, irrespective of the stringency of multiple test correction (Figure \@ref(fig:chord-diagram-rho-bonf), \@ref(fig:chord-diagram-rho-fdr)). This likely reflects the bias in the selection of the LD blocks, which were weighted towards the AD/PD phenotypes, where we might expect to see a greater association with blood-derived molecular phenotypes.
-- Given that gene loci might vary in size, we plotted the number of SNPs within a locus and the p-value from the univariate test to determine whether there was a relationship between locus size and univariate p-value. There was no apparent relationship between the two (as determined by visual inspection, Figure \@ref(fig:nsnps-univ-pvalue)).
+- Using the more stringent Bonferroni cut-off, we detect a total of `r bivar_bonf$window_100000 %>% nrow()` significant bivariate local $r_{g}$'s across `r bivar_bonf$window_100000 %>% dplyr::distinct(gene_locus) %>% nrow()` distinct genic regions. When pairs of disease phenotypes (which were tested across multiple genes within an LD block) are collapsed within an LD block, we detect a total of `r bivar_bonf$window_100000 %>% dplyr::distinct(ld_block, phen1, phen2) %>% nrow()` significant bivariate local $r_{g}$'s.
+- By comparison, when the more lenient FDR cut-off, we detect a total of `r bivar_fdr$window_100000 %>% nrow()` significant bivariate local $r_{g}$'s across `r bivar_fdr$window_100000 %>% dplyr::distinct(gene_locus) %>% nrow()` distinct genic regions. When pairs of disease phenotypes (which were tested across multiple genes within an LD block) are collapsed within an LD block, we detect a total of `r bivar_fdr$window_100000 %>% dplyr::distinct(ld_block, phen1, phen2) %>% nrow()` significant bivariate local $r_{g}$'s.
+- Of the two eQTL datasets, the dataset with the highest number of genic regions (i.e. a gene where eQTLs were detected) was PsychENCODE (eQTLGen, n genic regions = `r results$univ$window_100000 %>% dplyr::distinct(eqtl_dataset, gene_locus) %>% dplyr::count(eqtl_dataset) %>% dplyr::filter(eqtl_dataset == "EQTLGEN") %>% .[["n"]]`; PsychENCODE, n genic regions = `r results$univ$window_100000 %>% dplyr::distinct(eqtl_dataset, gene_locus) %>% dplyr::count(eqtl_dataset) %>% dplyr::filter(eqtl_dataset == "PSYCHENCODE") %>% .[["n"]]`). In spite of this, the eQTL dataset with highest number of significant bivariate local $r_{g}$'s was eQTLGen, irrespective of the stringency of multiple test correction (Figure \@ref(fig:chord-diagram-rho-bonf), \@ref(fig:chord-diagram-rho-fdr)). This likely reflects the bias in the selection of the LD blocks, which were weighted towards the AD/PD phenotypes, where we might expect to see a greater association with blood-derived molecular phenotypes.
+- Given that genic regions might vary in size, we plotted the number of SNPs within a locus and the p-value from the univariate test to determine whether there was a relationship between locus size and univariate p-value. There was no apparent relationship between the two (as determined by visual inspection, Figure \@ref(fig:nsnps-univ-pvalue)).
 
 ### Figures
 
@@ -750,7 +750,7 @@ plot_bivar_chord_diagram(
 
 ```
 
-```{r nsnps-univ-pvalue, fig.cap = "Scatter plot of number of SNPs in a tested gene locus and the p-value from the univariate test for each trait."}
+```{r nsnps-univ-pvalue, fig.cap = "Scatter plot of number of SNPs in a tested genic region and the p-value from the univariate test for each trait."}
 
 results$univ$window_100000 %>% 
   dplyr::mutate(
@@ -780,7 +780,7 @@ results$univ$window_100000 %>%
 
 ```
 
-## Phenotype correlations at gene locus level (100 kb window) using lenient FDR multiple test correction {.tabset}
+## Phenotype correlations at genic region level (100 kb window) using lenient FDR multiple test correction {.tabset}
 
 ### Text
 
@@ -788,16 +788,16 @@ results$univ$window_100000 %>%
 
 - Locus 681
     - Across the entire LD block, a negative local $r_{g}$ was observed between AD and PD.
-    - When locus 681 was subsetted by gene locus, a significant negative $r_{g}$ between AD and PD was only observed in the *SNCA* gene locus. 
+    - When locus 681 was subsetted by genic region, a significant negative $r_{g}$ between AD and PD was only observed in the *SNCA* genic region. 
     - In addition, a significant negative $r_{g}$ was observed between PD and eQTLGen-derived *SNCA* eQTLs (implying that increased PD risk is correlated with decreased *SNCA* expression). 
         - While initially this may seem contrary to expectation, given that *SNCA* duplication/triplication events cause familial PD, it is important to bear in mind that this correlation is using blood-derived *SNCA* eQTLs. *SNCA* transcript counts in circulating blood cells have been observed to be reduced in early PD, an association that was seen in two PD case-control studies (Harvard Biomarker Study and the multicentre PROBE study) and a study of patients near disease onset (PPMI; PMID: [26220939](https://pubmed.ncbi.nlm.nih.gov/26220939/)). Importantly, this reduction in indviduals with PD remained significant after adjusting for covariates of gender, white and red blood cell counts.
         - Worth noting that the $r^2$ (proportion of variance in genetic signal for one phenotype explained by the other) was $r^2$ = `r results$bivar$window_100000 %>% dplyr::filter(ld_block == 681, phen1== "PD", phen2 == "ENSG00000145335") %>% .[["r2"]] %>% round(digits = 2)` (as compared to the $r^2$ between AD and PD at this locus, which was $r^2$ = `r results$bivar$window_100000 %>% dplyr::filter(ld_block == 681, gene_locus == "ENSG00000145335", phen1== "AD", phen2 == "PD") %>% .[["r2"]] %>% round(digits = 2)`). 
 - Locus 1273
     - Across the entire LD block, a positive local $r_{g}$ was observed between AD and PD.
-    - When locus 1273 was subsetted by gene locus, a significant positive local $r_{g}$ was observed between AD and PD in `r results$bivar$window_100000 %>% dplyr::filter(ld_block == 1273, phen1== "AD", phen2 == "PD", fdr < 0.05, rho > 0) %>% .[["gene_locus"]] %>% unique() %>% length()` out of `r gene_filtered_loci %>% dplyr::filter(locus == 1273) %>% nrow()` gene loci (in the remaining gene loci, local $r_{g}$'s between AD and PD were non-significant). This included the *SCARA5* gene locus, where significant negative local $r_{g}$'s were observed between AD and eQTLGen-derived *SCARA5* eQTLs, as well as, PD and eQTLGen-derived *SCARA5* eQTLs.
+    - When locus 1273 was subsetted by genic region, a significant positive local $r_{g}$ was observed between AD and PD in `r results$bivar$window_100000 %>% dplyr::filter(ld_block == 1273, phen1== "AD", phen2 == "PD", fdr < 0.05, rho > 0) %>% .[["gene_locus"]] %>% unique() %>% length()` out of `r gene_filtered_loci %>% dplyr::filter(locus == 1273) %>% nrow()` genic regions (in the remaining genic regions, local $r_{g}$'s between AD and PD were non-significant). This included the *SCARA5* genic region, where significant negative local $r_{g}$'s were observed between AD and eQTLGen-derived *SCARA5* eQTLs, as well as, PD and eQTLGen-derived *SCARA5* eQTLs.
         - *SCARA5* is a ferritin receptor that internalises ferritin (protein that stores iron), after which iron is liberated and transported to the cytosol. It is important for non-transferrin iron delivery (PMID: [19154717](https://pubmed.ncbi.nlm.nih.gov/19154717/)). 
         - This is notable, as ferritin has found to be increased in AD and PD and, more generally, several studies have implicated cellular iron overload and iron-induced oxidative stress in AD, PD and other neurodegenerative diseases (as reviewed in PMID: [28154410](https://pubmed.ncbi.nlm.nih.gov/28154410/)).
-    - A significant positive local $r_{g}$ between AD and PD was also observed at the *ELP3* gene locus, together with a positive local $r_{g}$ between PD and eQTLGen-derived *ELP3* eQTLs. *ELP3* is a component of the RNA polymerase II elongator complex (specifically it is the catalytic tRNA acetyltransferase subunit), which is required for multiple tRNA modifications. It is thought to be involved in neurogenesis (PMID: [19185337](https://pubmed.ncbi.nlm.nih.gov/19185337/)). Emil Gustavsson mentioned that ELP3 was a PD candidate risk gene he had been working on, but was unable to link to PD risk. 
+    - A significant positive local $r_{g}$ between AD and PD was also observed at the *ELP3* genic region, together with a positive local $r_{g}$ between PD and eQTLGen-derived *ELP3* eQTLs. *ELP3* is a component of the RNA polymerase II elongator complex (specifically it is the catalytic tRNA acetyltransferase subunit), which is required for multiple tRNA modifications. It is thought to be involved in neurogenesis (PMID: [19185337](https://pubmed.ncbi.nlm.nih.gov/19185337/)). Emil Gustavsson mentioned that ELP3 was a PD candidate risk gene he had been working on, but was unable to link to PD risk. 
     - Notably, while no local $r_{g}$ was observed between AD and PD in the *CLU* locus, a significant positive local $r_{g}$ was observed between AD and eQTLGen-derived *CLU* eQTLs and a negative local $r_{g}$ was observed between PD and eQTLGen-derived *CLU* eQTLs. *CLU* has been associated with AD (PMID: [30872998](https://pubmed.ncbi.nlm.nih.gov/30872998/)), although the mechanism by which it might confer risk or protection is not known.
 - Locus 1719
     - Across the entire LD block, a positive local $r_{g}$ was observed between BIP, MDD and SCZ and a negative local $r_{g}$ between SCZ and LBD.
@@ -811,21 +811,21 @@ results$univ$window_100000 %>%
     - Worth noting that *DRD2* is not expressed in whole blood (GTEx v8, median TPM = 0, n = 755), which would explain why no eQTLs were found to regulate *DRD2* in the eQTLGen dataset. In the PsychENCODE dataset, eQTLs were detected and had sufficient local heritability ($h^2$ = `r results$univ$window_100000  %>% dplyr::filter(phen == "ENSG00000149295") %>% .[["h2.obs"]] %>% round(digits = 3)`, p = `r results$univ$window_100000  %>% dplyr::filter(phen == "ENSG00000149295") %>% .[["p"]] %>% round(digits = 4)`), but no significant local $r_{g}$'s were detected.
 - Locus 2281
     - Across the entire LD block, a positive local $r_{g}$ was observed between (i) BIP and SCZ, (ii) MDD and SCZ and (iii) AD and PD.
-    - The positive local $r_{g}$ observed between MDD and SCZ was replicated in the *TCF4* gene locus. In addition, a significant negative local $r_{g}$ was observed between (i) MDD and eQTLGen-derived *TCF4* eQTLs and (ii) AD and eQTLGen-derived *TCF4* eQTLs.
-    - In the *RAB27B* gene locus, a positive local $r_{g}$ was observed between (i) BIP and SCZ and (ii) BIP and MDD. 
+    - The positive local $r_{g}$ observed between MDD and SCZ was replicated in the *TCF4* genic region. In addition, a significant negative local $r_{g}$ was observed between (i) MDD and eQTLGen-derived *TCF4* eQTLs and (ii) AD and eQTLGen-derived *TCF4* eQTLs.
+    - In the *RAB27B* genic region, a positive local $r_{g}$ was observed between (i) BIP and SCZ and (ii) BIP and MDD. 
     - In addition, a negative local $r_{g}$ was observed between MDD and eQTLGen-derived *RAB27B* eQTLs. Notably, when using PsychENCODE-derived *RAB27B* eQTLs, a positive local $r_{g}$ was observed between MDD and *RAB27B* eQTLs. In other words, the direction of effect changed depending on the tissue.
 - Locus 2351
     - Across the entire LD block, a positive local $r_{g}$ was observed between AD and LBD and a negative local $r_{g}$ between PD and LBD. While the correlation between AD and PD did not pass the Bonferroni cut-off of p = `r (0.05/300) %>% format(scientific = F)`, it was nominally significant at p = `r (1.19e-04) %>% format(scientific = F)`, with a rho = -0.18.
-    - While each of these correlations was not replicated in every gene locus with a significant local $r_{g}$ between a disease phenotype and eQTL, where they were, they shared the same direction of effect as the local $r_{g}$ observed across the entire LD block. 
-    - A total of `r bivar_fdr$window_100000 %>% dplyr::filter(ld_block == 2351, str_detect(phen2, "ENSG")) %>% .[["gene_locus"]] %>% unique() %>% length()` gene loci contained a local $r_{g}$ between a disease phenotype and eQTL. 
+    - While each of these correlations was not replicated in every genic region with a significant local $r_{g}$ between a disease phenotype and eQTL, where they were, they shared the same direction of effect as the local $r_{g}$ observed across the entire LD block. 
+    - A total of `r bivar_fdr$window_100000 %>% dplyr::filter(ld_block == 2351, str_detect(phen2, "ENSG")) %>% .[["gene_locus"]] %>% unique() %>% length()` genic regions contained a local $r_{g}$ between a disease phenotype and eQTL. 
     - No significant local $r_{g}$ was observed between *APOE* eQTLs and any of the disease traits. In part this was because there was insufficient heritability in the region using PsychENCODE eQTLs (univariate p-value = `r results$univ$window_100000  %>% dplyr::filter(gene_name == "APOE", str_detect(phen, "ENSG"), eqtl_dataset == "PSYCHENCODE") %>% .[["p"]] %>% round(digits = 2)`). While there was sufficient heritability using eQTLGen eQTLs, bivariate p-values did not pass FDR-correction (AD-APOE, rho = `r results$bivar$window_100000 %>% dplyr::filter(gene_name == "APOE", phen1 == "AD", str_detect(phen2, "ENSG")) %>% .[["rho"]] %>% round(digits = 2)`, p = `r results$bivar$window_100000 %>% dplyr::filter(gene_name == "APOE", phen1 == "AD", str_detect(phen2, "ENSG")) %>% .[["p"]] %>% round(digits = 3)`; LBD-APOE, rho = `r results$bivar$window_100000 %>% dplyr::filter(gene_name == "APOE", phen1 == "LBD", str_detect(phen2, "ENSG")) %>% .[["rho"]] %>% round(digits = 2)`, p = `r results$bivar$window_100000 %>% dplyr::filter(gene_name == "APOE", phen1 == "LBD", str_detect(phen2, "ENSG")) %>% .[["p"]] %>% round(digits = 3)`; PD-APOE, rho = `r results$bivar$window_100000 %>% dplyr::filter(gene_name == "APOE", phen1 == "PD", str_detect(phen2, "ENSG")) %>% .[["rho"]] %>% round(digits = 2)`, p = `r results$bivar$window_100000 %>% dplyr::filter(gene_name == "APOE", phen1 == "PD", str_detect(phen2, "ENSG")) %>% .[["p"]] %>% round(digits = 3)`). However, as seen at the level of LD block, AD and LBD were positively correlated, while (i) AD and PD and (ii) LBD and PD were negatively correlated. 
-    - At the *TOMM40* gene locus (which is adjacent to the *APOE* gene locus), disease phenotypes were correlated as observed at the level of LD block. In addition significant positive local $r_{g}$'s were observed between eQTLGen-derived *TOMM40* eQTLs and both AD and LBD (*TOMM40* has been previously associated with AD). Similar local $r_{g}$ patterns were seen at the *PVRL2* gene locus, which is adjacent to the *TOMM40* gene locus. Notably, haplotypes in the *PVRL2* have been found to exert risk effects on AD in an APOE-E4 and APOE-E2 genotype-independent manner (PMID: [31346172](https://pubmed.ncbi.nlm.nih.gov/31346172/))
+    - At the *TOMM40* genic region (which is adjacent to the *APOE* genic region), disease phenotypes were correlated as observed at the level of LD block. In addition significant positive local $r_{g}$'s were observed between eQTLGen-derived *TOMM40* eQTLs and both AD and LBD (*TOMM40* has been previously associated with AD). Similar local $r_{g}$ patterns were seen at the *PVRL2* genic region, which is adjacent to the *TOMM40* genic region. Notably, haplotypes in the *PVRL2* have been found to exert risk effects on AD in an APOE-E4 and APOE-E2 genotype-independent manner (PMID: [31346172](https://pubmed.ncbi.nlm.nih.gov/31346172/))
     - Other notable eQTL-trait associations include:
         - A positive correlation between AD and *GEMIN7* eQTLs (across both eQTLGen and PyschENCODE, albeit stronger in PsychENCODE).  *GEMIN7* is a component of the core SMN complex (PMID: [12065586](https://pubmed.ncbi.nlm.nih.gov/12065586/)), which is required for pre-mRNA splicing in the nucleus.
     
 ### Figures
 
-```{r edge-diagram-fdr, fig.height= 10, fig.cap = "(a) Locus plot. Gene loci with a significant bivariate local genetic correlation between a disease phenotype and eQTL are highlighted in blue (FDR-corrected p < 0.05). (b) Edge diagrams for gene loci where a significant bivariate local genetic correlation was observed between a disease phenotype and eQTL (FDR-corrected p < 0.05). Edges display the standardised coefficient for genetic correlation (rho) for significant bivariate local genetic correlations, with negative and positive correlations indicated by blue and red colour, respectively. GWAS and eQTL nodes are indicated by grey and white fill, respectively."}
+```{r edge-diagram-fdr, fig.height= 10, fig.cap = "(a) Locus plot. Genic regions with a significant bivariate local genetic correlation between a disease phenotype and eQTL are highlighted in blue (FDR-corrected p < 0.05). (b) Edge diagrams for genic regions where a significant bivariate local genetic correlation was observed between a disease phenotype and eQTL (FDR-corrected p < 0.05). Edges display the standardised coefficient for genetic correlation (rho) for significant bivariate local genetic correlations, with negative and positive correlations indicated by blue and red colour, respectively. GWAS and eQTL nodes are indicated by grey and white fill, respectively."}
 
 ld_blocks <- 
   bivar_fdr$window_100000$ld_block %>% unique() %>% sort()
@@ -843,7 +843,7 @@ bivar_list <-
     nm = 
       str_c("locus_", ld_blocks)
   )
-  
+
 ref <- import("/data/references/ensembl/gtf_gff3/v87/Homo_sapiens.GRCh37.87.gtf")
 ref <- ref %>% keepSeqlevels(c(1:22), pruning.mode = "coarse") 
 ref <- ref[ref$type == "gene"]
@@ -861,6 +861,7 @@ loci_gr <-
     start.field = "START",
     end.field = "STOP"
   )
+  
 
 fig_list <- vector(mode = "list", length = length(ld_blocks))
 
@@ -913,11 +914,11 @@ fig_list[1:4]
 
 ```
 
-```{r edge-diagram-fdr-apoe, fig.height=18, fig.cap = "(a) Locus plot. Gene loci with a significant bivariate local genetic correlation between a disease phenotype and eQTL are highlighted in blue (FDR-corrected p < 0.05). (b) Edge diagrams for gene loci where a significant bivariate local genetic correlation was observed between a disease phenotype and eQTL (FDR-corrected p < 0.05). Edges display the standardised coefficient for genetic correlation (rho) for significant bivariate local genetic correlations, with negative and positive correlations indicated by blue and red colour, respectively. GWAS and eQTL nodes are indicated by grey and white fill, respectively."}
+```{r edge-diagram-fdr-apoe, fig.height=18, fig.cap = "(a) Locus plot. Genic regions with a significant bivariate local genetic correlation between a disease phenotype and eQTL are highlighted in blue (FDR-corrected p < 0.05). (b) Edge diagrams for genic regions where a significant bivariate local genetic correlation was observed between a disease phenotype and eQTL (FDR-corrected p < 0.05). Edges display the standardised coefficient for genetic correlation (rho) for significant bivariate local genetic correlations, with negative and positive correlations indicated by blue and red colour, respectively. GWAS and eQTL nodes are indicated by grey and white fill, respectively."}
 fig_list[5]
 ```
 
-## Phenotype correlations at gene locus level (100 kb window) using stringent bonferroni multiple test correction {.tabset}
+## Phenotype correlations at genic region level (100 kb window) using stringent bonferroni multiple test correction {.tabset}
 
 ### Text
 
@@ -939,7 +940,7 @@ fig_list[5]
 
 ### Figures
 
-```{r edge-diagram-bonf, fig.height= 10, fig.cap = "(a) Locus plot. Gene loci with a significant bivariate local genetic correlation between a disease phenotype and eQTL are highlighted in blue (Bonferroni-corrected p < 0.05). (b) Edge diagrams for gene loci where a significant bivariate local genetic correlation was observed between a disease phenotype and eQTL (Bonferroni-corrected p < 0.05). Edges display the standardised coefficient for genetic correlation (rho) for significant bivariate local genetic correlations, with negative and positive correlations indicated by blue and red colour, respectively. GWAS and eQTL nodes are indicated by grey and white fill, respectively."}
+```{r edge-diagram-bonf, fig.height= 10, fig.cap = "(a) Locus plot. Genic regions with a significant bivariate local genetic correlation between a disease phenotype and eQTL are highlighted in blue (Bonferroni-corrected p < 0.05). (b) Edge diagrams for genic regions where a significant bivariate local genetic correlation was observed between a disease phenotype and eQTL (Bonferroni-corrected p < 0.05). Edges display the standardised coefficient for genetic correlation (rho) for significant bivariate local genetic correlations, with negative and positive correlations indicated by blue and red colour, respectively. GWAS and eQTL nodes are indicated by grey and white fill, respectively."}
 
 ld_blocks <- 
   bivar_bonf$window_100000 %>%
@@ -1014,7 +1015,7 @@ fig_list[1:4]
 
 ```
 
-```{r edge-diagram-bonf-apoe, fig.height= 18, fig.cap = "(a) Locus plot. Gene loci with a significant bivariate local genetic correlation between a disease phenotype and eQTL are highlighted in blue (Bonferroni-corrected p < 0.05). (b) Edge diagrams for gene loci where a significant bivariate local genetic correlation was observed between a disease phenotype and eQTL (Bonferroni-corrected p < 0.05). Edges display the standardised coefficient for genetic correlation (rho) for significant bivariate local genetic correlations, with negative and positive correlations indicated by blue and red colour, respectively. GWAS and eQTL nodes are indicated by grey and white fill, respectively."}
+```{r edge-diagram-bonf-apoe, fig.height= 18, fig.cap = "(a) Locus plot. Genic regions with a significant bivariate local genetic correlation between a disease phenotype and eQTL are highlighted in blue (Bonferroni-corrected p < 0.05). (b) Edge diagrams for genic regions where a significant bivariate local genetic correlation was observed between a disease phenotype and eQTL (Bonferroni-corrected p < 0.05). Edges display the standardised coefficient for genetic correlation (rho) for significant bivariate local genetic correlations, with negative and positive correlations indicated by blue and red colour, respectively. GWAS and eQTL nodes are indicated by grey and white fill, respectively."}
 
 fig_list[5]
 
@@ -1136,6 +1137,104 @@ ggsave(
   device = "png", 
   width = 150, 
   height = 100, 
+  dpi = 300, 
+  units = "mm"
+)
+
+```
+
+```{r adpd-plot, echo = F, eval = F}
+
+ld_blocks <- 
+  c(1273)
+
+qtl_genes <-
+  bivar_fdr$window_100000 %>%
+  dplyr::group_by(eqtl_dataset, gene_locus) %>%
+  dplyr::filter(str_detect(phen2, "ENSG")) %>% 
+  .[["gene_locus"]] %>% 
+  unique()
+
+bivar_list <- 
+  setNames(
+    bivar_fdr$window_100000 %>% 
+      dplyr::filter(ld_block %in% ld_blocks) %>% 
+      dplyr::group_split(ld_block),
+    nm = 
+      str_c("locus_", ld_blocks)
+  )
+  
+ld_fig_list <- vector(mode = "list", length = length(ld_blocks))
+edge_fig_list <- vector(mode = "list", length = length(ld_blocks))
+
+for(block in ld_blocks){
+  
+  ld_fig_list[[which(ld_blocks == block)]] <- 
+    plot_locus(
+      locus_gr = loci_gr[loci_gr$locus == block], 
+      ref = ref,
+      highlight_gene = qtl_genes,
+      highlight_gene_label = "QTL - local rg?"
+    ) +
+    scale_x_continuous(position = "top") +
+      ggplot2::theme_bw(
+        base_size = 9
+      ) +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 0, vjust = 1),
+      strip.text.y = element_text(angle = 45),
+      legend.position = "bottom"
+    )
+  
+  names(ld_fig_list)[which(ld_blocks == block)] <- str_c("locus_", block)
+  
+}
+
+for(block in ld_blocks){
+  
+  data_to_plot <- 
+    bivar_list[[str_c("locus_", block)]] %>% 
+    dplyr::filter(gene_name %in% c("CLU", "SCARA5"))
+  
+  edge_fig_list[[which(ld_blocks == block)]] <- 
+    plot_qtl_edge_diagram(
+      bivar_corr_qtl = data_to_plot,
+      phen = fct_disease,
+      seed = 89
+    )
+  
+  edge_fig_list[[which(ld_blocks == block)]] <-
+    ggpubr::ggarrange(
+      plotlist = edge_fig_list[[which(ld_blocks == block)]],
+      ncol = 1,
+      nrow = 2, 
+      common.legend = TRUE,
+      legend = "none"
+    )
+  
+  
+  names(edge_fig_list)[which(ld_blocks == block)] <- str_c("locus_", block)
+  
+}
+
+ggsave(
+  ld_fig_list[[1]],
+  path = here::here("tmp"), 
+  filename = "20220207_clu_ld_block.png",
+  device = "png", 
+  width = 90, 
+  height = 110, 
+  dpi = 300, 
+  units = "mm"
+)
+
+ggsave(
+  edge_fig_list[[1]],
+  path = here::here("tmp"), 
+  filename = "20220207_clu_edge.png",
+  device = "png", 
+  width = 60, 
+  height = 130, 
   dpi = 300, 
   units = "mm"
 )
