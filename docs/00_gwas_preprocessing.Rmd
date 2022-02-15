@@ -41,6 +41,17 @@ PD <-
     )
   )
 
+# Set defaults for ggplots 
+theme_rhr <- theme_set(
+  theme_bw(base_family = "Helvetica",
+           base_size = 10) + 
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "top",
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        axis.title.y = element_text(vjust = 0.6),
+        panel.spacing = unit(0.1, "lines"))
+)
+
 knitr::opts_chunk$set(echo = T, warning = F, message = F)
 ```
 
@@ -707,17 +718,6 @@ fwrite(
     lava_ext
   ),
   sep = "\t"
-)
-```
-
-# Listing available LAVA files
-```{r list-lava-files}
-
-list.files(
-  path = gwas_dir,
-  full.names = F,
-  recursive = T,
-  pattern = lava_ext
 )
 ```
 

@@ -190,6 +190,26 @@ read_delim(
 )
 ```
 
+## Trait heritability
+
+```{r get-trait-h2, eval = F}
+
+source(here::here("scripts", "00_trait_h2.R"))
+
+```
+
+```{r load-trait-h2}
+
+h2 <-
+  read_delim(
+    here::here("results", "00_trait_h2", "h2.txt")
+  )
+
+h2
+
+```
+
+
 # Results {.tabset}
 
 ## Distribution of LD blocks across chromosomes {.tabset}
@@ -238,7 +258,7 @@ loci %>%
 
 ### Text
 - A total of `r readRDS(here::here("results", "01_input_prep", "gwas_filtered_loci.rds")) %>% dplyr::distinct(GWAS_SNP) %>% nrow()` genome-wide significant SNPs were found to overlap an LD block.
-- The number of AD, BIP, LBD, MDD, PD and SCZ SNPs across LD blocks (Figure \@ref(fig:loci-per-block)) and chromosomes (Figure \@ref(fig:loci-per-chr)) was not equally distributed. However, across most chromosomes, $\geq$ neurodegenerative or neuropsychiatric traits had overlapping genome-wide significant SNPs (Figure \@ref(fig:phenotypes-per-chr)). 
+- The number of AD, BIP, LBD, MDD, PD and SCZ SNPs across LD blocks (Figure \@ref(fig:loci-per-block)) and chromosomes (Figure \@ref(fig:loci-per-chr)) was not equally distributed. However, across most chromosomes, $\geq$ 2 neurodegenerative or neuropsychiatric traits had overlapping genome-wide significant SNPs (Figure \@ref(fig:phenotypes-per-chr)). 
 - The same unequal distribution of SNPs across chromosomes was also reflected in the number of LD blocks with overlapping genome-wide significant SNPs across chromosomes (Figure \@ref(fig:phenotype-ld-blocks-per-chr)). 
 - It is worth noting that `r readRDS(here::here("results", "01_input_prep", "gwas_filtered_loci.rds")) %>% dplyr::group_by(GWAS, LD_LOC) %>% dplyr::count() %>% dplyr::filter(n <= 5) %>% nrow()` LD blocks were overlapped by $\leq$ 5 genome-wide significant SNPs.
 
@@ -419,6 +439,52 @@ ggpubr::ggarrange(
   common.legend = TRUE
 )
 
+```
+
+## Trait heritability
+
+```{r trait-h2, fig.cap = "Heatmap of trait heritability, as determined by LDSC. Standard error is shown in brackets."}
+
+data_to_plot <-
+  h2 %>% 
+  dplyr::mutate(
+    h2 =
+      (h2*100) %>% round(digits = 1),
+    se = 
+      (se * 100) %>% round(digits = 1),
+    label = 
+      str_c(
+        h2, "%\n(", se, ")"
+      )
+  )
+
+data_to_plot %>% 
+  ggplot(
+    aes(
+      x = 1,
+      y = fct_rev(phen),
+      fill = h2,
+      label = label
+    )
+  ) +
+  ggplot2::geom_tile(colour = "black") +
+  ggplot2::geom_text(
+    size = 2.5
+  ) +
+  ggplot2::coord_equal() +
+  ggplot2::labs(x = "", y = "", fill = "Global SNP heritability (h2)") +
+  ggplot2::scale_fill_distiller(
+    palette = "GnBu",
+    limits = c(0, 100)
+  ) +
+  ggplot2::guides(colour = F) +
+  theme_rhr +
+  ggplot2::theme(
+    panel.border = element_blank(),
+    panel.grid = element_blank(),
+    axis.ticks = element_blank(),
+    axis.text.x = element_blank()
+  )
 ```
 
 
