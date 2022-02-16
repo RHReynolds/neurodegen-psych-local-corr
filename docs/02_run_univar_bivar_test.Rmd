@@ -182,7 +182,10 @@ loci_genes_filtered <-
 
 ```{r load-plot-func}
 
-source(here::here("R", "plots.R"))
+source(here::here("R", "plot_global_corr.R"))
+source(here::here("R", "plot_chord_diagram.R"))
+source(here::here("R", "plot_locus.R"))
+source(here::here("R", "plot_edge_diagram.R"))
 
 ```
 
@@ -360,42 +363,11 @@ bivar_bonf %>%
 
 ### Text
 - Global cross-trait correlations revealed `r nrow(global_signif)` significant global $r_{g}$'s (Figure \@ref(fig:global-corr)). These global $r_{g}$'s are very much in line with what we expect from previous literature e.g. significant positive correlations between the three neuropsychiatric disorders (PMID: [29930110](https://pubmed.ncbi.nlm.nih.gov/29930110/)). Between neurodegenerative disorders, we only observe a significant postive $r_{g}$ between LBD and PD.
-- With a Bonferroni cut-off of `r signif(bivar_thres, digits = 2) %>% format(scientific = F)`, we detect a total of `r bivar_bonf %>% nrow()` significant bivariate local $r_{g}$'s across `r bivar_bonf %>% dplyr::distinct(locus) %>% nrow()` distinct LD blocks, of which `r bivar_bonf %>% dplyr::count(locus) %>% dplyr::filter(n > 1) %>% nrow()` were associated with more than one trait pair. 
+- With a Bonferroni cut-off of `r signif(bivar_thres, digits = 2) %>% format(scientific = F)`, we detect a total of `r bivar_bonf %>% nrow()` significant bivariate local $r_{g}$'s across `r bivar_bonf %>% dplyr::distinct(locus) %>% nrow()` distinct LD blocks, of which `r bivar_bonf %>% dplyr::count(locus) %>% dplyr::filter(n > 1) %>% nrow()` were associated with more than one trait pair. Notably, we detected local genetic correlations between pairs of phenotypes in the absence of a significant global genetic correlation (\@ref(fig:global-local-plot)).
 - The phenotype with the highest number of significant bivariate local $r_{g}$'s was SCZ followed by BIP. Notably, the number of significant bivariate local $r_{g}$'s did not appear to correlate with GWAS sample size (Figure \@ref(fig:bivar-sample-size)). 
 - As seen from the table below and Figure \@ref(fig:chord-diagram-rho), the phenotype pairs with the most local $r_{g}$'s were (i) BIP and SCZ and (ii) AD and PD. 
 - For some of these local $r_{g}$'s, the 95% confidence intervals (CI’s) for the explained variance (r2) included 
-1 (see table below), which is consistent with a scenario where the genetic signal of those pairs of phenotypes in these LD blocks is completely shared.  
-
-```{r bivar-correlations-bonf-phen-count}
-
-# proportion of correlations where CI 97.5% for explained variance (r2) = 1
-# consistent with scenario where genetic signal of those pairs of phenotypes in these loci is completely shared
-n_upper_r2_ci <-
-  bivar_bonf %>% 
-  dplyr::filter(
-    r2.upper == 1
-  ) %>% 
-  dplyr::count(phen1, phen2)
-
-phen_count <- 
-  bivar_bonf %>% 
-  dplyr::count(phen1, phen2, name = "total_n") %>% 
-  dplyr::left_join(n_upper_r2_ci) %>% 
-  dplyr::mutate(
-    prop_upper_r2_ci_equals_one = 
-      n/total_n,
-    prop_upper_r2_ci_equals_one =
-      case_when(
-        is.na(prop_upper_r2_ci_equals_one) ~ 0,
-        TRUE ~ prop_upper_r2_ci_equals_one
-        )
-  ) %>% 
-  dplyr::select(contains("phen"), total_n, prop_upper_r2_ci_equals_one)
-
-phen_count
-
-```
-
+1 (Figure \@ref(fig:)), which is consistent with a scenario where the genetic signal of those pairs of phenotypes in these LD blocks is completely shared.  
 - Within neuropsychiatric disorders, all significant bivariate local $r_{g}$'s were positive (matching the overall positive global $r_{g}$), while within neurodegenerative disorders there was a mix of positive and negative local $r_{g}$'s (Figure \@ref(fig:chord-diagram-rho)).
 - All three neurodegenerative disorders shared one significant local $r_{g}$ with SCZ, and also PD shared one negative local $r_{g}$ with BIP. 
 
@@ -502,6 +474,35 @@ plot_global_corr(
 
 ```
 
+```{r global-local-plot, fig.cap = "Comparison between the global genetic correlation estimated by LDSC (bottom) and the mean local genetic correlation from LAVA (top) across all tested LD blocks. Significant global correlations (p < 0.05/n_tests) are indicated with an asterisk ('*'). The number of significant local genetic correlations (p < 0.05/n_tests) is indicated by a number in each tile."}
+
+plot_global_bivar(
+  global_corr = 
+    global %>%
+    dplyr::mutate(
+      p1 = p1 %>%
+        stringr::str_replace_all("[:digit:]", "") %>%
+        stringr::str_remove("\\..*"),
+      p2 = p2 %>%
+        stringr::str_replace_all("[:digit:]", "") %>%
+        stringr::str_remove("\\..*")
+    ),
+  bivar_corr = 
+    results$bivar %>%
+    dplyr::mutate(
+      phen1 = phen1 %>%
+        stringr::str_replace_all("[:digit:]", "") %>%
+        stringr::str_remove("\\..*"),
+      phen2 = phen2 %>%
+        stringr::str_replace_all("[:digit:]", "") %>%
+        stringr::str_remove("\\..*")
+    ),
+  n_phenotypes = 6
+)
+
+```
+
+
 ```{r bivar-sample-size, fig.cap = "Plot of total number of significant bivariate local genetic correlations for each phenotype across all LD blocks versus GWAS sample size."}
 
 bivar_bonf %>% 
@@ -585,6 +586,67 @@ dev.off()
 
 ```
 
+```{r bivar-correlations-bonf-phen-count, fig.cap = "Number of significant local genetic correlations between trait pairs. The fill of the bars indicates the number of significant LD blocks for which the 95% confidence interval included 1."}
+
+n_upper_r2_ci <-
+  bivar_bonf %>% 
+  dplyr::filter(
+    r2.upper == 1
+  ) %>% 
+  dplyr::count(phen1, phen2, name = "n_upper_r2_ci") 
+
+phen_count <-
+  bivar_bonf %>% 
+  dplyr::count(phen1, phen2, name = "total_n") %>% 
+  dplyr::left_join(n_upper_r2_ci) %>% 
+  dplyr::mutate(
+    label = str_c(phen1, " vs ", phen2),
+    n_upper_r2_ci =
+      case_when(
+        is.na(n_upper_r2_ci) ~ 0,
+        TRUE ~ as.numeric(n_upper_r2_ci)
+      ),
+    n_upper_r2_ci_not_one =
+      total_n - n_upper_r2_ci
+  ) %>% 
+  tidyr::pivot_longer(
+    cols = contains("n_upper_r2")
+  ) %>% 
+  dplyr::mutate(
+    name =
+      case_when(
+        name == "n_upper_r2_ci" ~ "TRUE",
+        TRUE ~ "FALSE"
+      )
+  )
+  
+phen_count %>% 
+  ggplot(
+    aes(
+      x = 
+        fct_reorder(
+          .f = label,
+          .x = total_n,
+          .fun = max,
+          .desc = T
+        ),
+      y = value,
+      fill = fct_rev(name)
+    )
+  ) +
+  geom_col(
+    colour = "black"
+  ) +
+  scale_fill_grey() +
+  labs(
+    x = "",
+    y = "Number of significant\nlocal genetic correlations",
+    fill = "Does r2 95% confidence interval include 1?"
+  ) +
+  
+  theme_rhr
+
+```
 
 ## Signficant phenotype correlations at LD block level {.tabset}
 
