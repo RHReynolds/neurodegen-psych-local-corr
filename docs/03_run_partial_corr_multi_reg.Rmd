@@ -172,15 +172,6 @@ multireg <-
 
 ```
 
-## Loading plotting functions
-
-```{r load-plot-func}
-
-source(here::here("R", "plots.R"))
-
-```
-
-
 # Results 
 
 ## Partial correlation {.tabset}

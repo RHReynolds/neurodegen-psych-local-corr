@@ -247,7 +247,9 @@ for(test in names(results)){
 
 ```{r load-plot-func}
 
-source(here::here("R", "plots.R"))
+source(here::here("R", "plot_chord_diagram.R"))
+source(here::here("R", "plot_locus.R"))
+source(here::here("R", "plot_edge_diagram.R"))
 
 ```
 
