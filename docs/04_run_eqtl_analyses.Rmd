@@ -1247,9 +1247,14 @@ ggsave(
 
 # Session info
 
+<details>
+  <summary>Show/hide</summary>
+
 ```{r reproducibility, echo = FALSE}
 # Session info
 library("sessioninfo")
 options(width = 120)
 session_info()
 ```
+
+</details> 

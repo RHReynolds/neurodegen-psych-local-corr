@@ -489,11 +489,16 @@ data_to_plot %>%
 
 
 # Session info
-```{r session-info}
+
+<details>
+  <summary>Show/hide</summary>
+
+```{r reproducibility, echo = FALSE}
 # Session info
 library("sessioninfo")
-
 options(width = 120)
-
 session_info()
 ```
+
+</details> 
+

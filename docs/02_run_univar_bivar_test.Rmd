@@ -366,8 +366,7 @@ bivar_bonf %>%
 - With a Bonferroni cut-off of `r signif(bivar_thres, digits = 2) %>% format(scientific = F)`, we detect a total of `r bivar_bonf %>% nrow()` significant bivariate local $r_{g}$'s across `r bivar_bonf %>% dplyr::distinct(locus) %>% nrow()` distinct LD blocks, of which `r bivar_bonf %>% dplyr::count(locus) %>% dplyr::filter(n > 1) %>% nrow()` were associated with more than one trait pair. Notably, we detected local genetic correlations between pairs of phenotypes in the absence of a significant global genetic correlation (\@ref(fig:global-local-plot)).
 - The phenotype with the highest number of significant bivariate local $r_{g}$'s was SCZ followed by BIP. Notably, the number of significant bivariate local $r_{g}$'s did not appear to correlate with GWAS sample size (Figure \@ref(fig:bivar-sample-size)). 
 - As seen from the table below and Figure \@ref(fig:chord-diagram-rho), the phenotype pairs with the most local $r_{g}$'s were (i) BIP and SCZ and (ii) AD and PD. 
-- For some of these local $r_{g}$'s, the 95% confidence intervals (CI’s) for the explained variance (r2) included 
-1 (Figure \@ref(fig:)), which is consistent with a scenario where the genetic signal of those pairs of phenotypes in these LD blocks is completely shared.  
+- For `r bivar_bonf %>% dplyr::filter(r2.upper == 1) %>% nrow()` local $r_{g}$'s, the 95% confidence intervals (CI’s) for the explained variance (r2) included 1 (Figure \@ref(fig:bivar-correlations-bonf-phen-count)), which is consistent with a scenario where the genetic signal of those pairs of phenotypes in these LD blocks is completely shared.  
 - Within neuropsychiatric disorders, all significant bivariate local $r_{g}$'s were positive (matching the overall positive global $r_{g}$), while within neurodegenerative disorders there was a mix of positive and negative local $r_{g}$'s (Figure \@ref(fig:chord-diagram-rho)).
 - All three neurodegenerative disorders shared one significant local $r_{g}$ with SCZ, and also PD shared one negative local $r_{g}$ with BIP. 
 
@@ -641,9 +640,8 @@ phen_count %>%
   labs(
     x = "",
     y = "Number of significant\nlocal genetic correlations",
-    fill = "Does r2 95% confidence interval include 1?"
+    fill = "Does upper limit of r2 95% confidence\n interval include 1?"
   ) +
-  
   theme_rhr
 
 ```
@@ -764,6 +762,10 @@ ggsave(
 
 loci_gr <-
   bivar_bonf %>%
+  dplyr::filter(
+    phen1 %in% c("AD", "LBD", "PD"),
+    phen2 %in% c("AD", "LBD", "PD")
+  ) %>% 
   dplyr::count(locus, chr, start, stop, n_snps) %>%
   dplyr::arrange(locus) %>% 
   GenomicRanges::makeGRangesFromDataFrame(
@@ -945,9 +947,14 @@ cowplot::plot_grid(
 
 # Session info
 
+<details>
+  <summary>Show/hide</summary>
+
 ```{r reproducibility, echo = FALSE}
 # Session info
 library("sessioninfo")
 options(width = 120)
 session_info()
 ```
+
+</details> 
