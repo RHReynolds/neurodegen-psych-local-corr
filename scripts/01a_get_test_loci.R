@@ -27,6 +27,10 @@ gwas_list <-
     nm = c("ad", "lbd", "pd", "bip", "mdd", "scz")
   )
 
+ref <- import("/data/references/ensembl/gtf_gff3/v87/Homo_sapiens.GRCh37.87.gtf")
+ref <- ref %>% keepSeqlevels(c(1:22), pruning.mode = "coarse")
+ref <- ref[ref$type == "gene"]
+
 # Main --------------------------------------------------------------------
 
 # Filter for only genome-wide significant loci and convert to granges
@@ -164,6 +168,55 @@ overlap_df <-
   overlap_df_list %>%
   qdapTools::list_df2df(col1= "GWAS")
 
+# Generate df of associated GWAS and genes that overlap investigated LD blocks
+loci_gr <-
+  loci %>%
+  GenomicRanges::makeGRangesFromDataFrame(
+    .,
+    keep.extra.columns = TRUE,
+    ignore.strand = TRUE,
+    seqinfo = NULL,
+    seqnames.field = "CHR",
+    start.field = "START",
+    end.field = "STOP"
+  )
+
+overlap <-
+  GenomicRanges::findOverlaps(loci_gr, ref) %>%
+  tibble::as_tibble()
+
+loci_genes <-
+  tibble::tibble(
+    locus = loci_gr[overlap$queryHits]$LOC,
+    chr = loci_gr[overlap$queryHits] %>% GenomeInfoDb::seqnames() %>% as.character(),
+    locus_start = loci_gr[overlap$queryHits] %>% BiocGenerics::start(),
+    locus_end = loci_gr[overlap$queryHits] %>% BiocGenerics::end(),
+    gene_id = ref[overlap$subjectHits]$gene_id,
+    gene_name =
+      ref[overlap$subjectHits]$gene_name %>%
+      stringr::str_replace_all("-", "_") %>%
+      stringr::str_replace_all("\\.", "_")
+  ) %>%
+  dplyr::group_by(locus, chr, locus_start, locus_end) %>%
+  dplyr::summarise(
+    n_overlapping_genes = n(),
+    overlapping_gene_id = list(gene_id),
+    overlapping_gene_name = list(gene_name)
+      )
+
+loci_genes_gwas_df <-
+  loci_genes %>%
+  dplyr::inner_join(
+    overlap_df %>%
+      dplyr::distinct(GWAS, LD_LOC) %>%
+      dplyr::group_by(LD_LOC) %>%
+      dplyr::summarise(
+        n_assoc_gwas = n(),
+        assoc_gwas = list(str_to_upper(GWAS))
+        ),
+    by = c("locus" = "LD_LOC")
+  )
+
 # Save data ---------------------------------------------------------------
 
 out_dir <- here::here("results", "01_input_prep")
@@ -177,3 +230,7 @@ saveRDS(
   overlap_df,
   file = file.path(out_dir, "gwas_filtered_loci.rds")
   )
+saveRDS(
+  loci_genes_gwas_df,
+  file = file.path(out_dir, "gwas_filtered_loci_w_genes.rds")
+)
