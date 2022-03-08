@@ -41,14 +41,14 @@ loci <- LAVA::read.loci(here::here("results", "05_noproxy_univar_bivar", "filter
 
 phen_df <-
   tibble(
-    name = c("AD2013", "AD2019", "AD2019.Kunkle", "AD2021", "PD2011", "PD2019.ex23andMe.exUKBB", "PD2019.meta5.ex23andMe", "LBD2020"),
-    tidy_name = c("AD2013 (no proxy)", "AD2019", "AD2019  (no proxy)", "AD2021", "PD2011  (no proxy)", "PD2019  (no proxy)", "PD2019", "LBD2020 (no proxy)")
+    name = c("AD2019", "AD2019.Kunkle", "PD2011", "PD2019.ex23andMe.exUKBB", "PD2019.meta5.ex23andMe", "LBD2020"),
+    tidy_name = c("AD2019", "AD2019  (no proxy)", "PD2011  (no proxy)", "PD2019  (no proxy)", "PD2019", "LBD2020 (no proxy)")
   ) %>% 
   dplyr::mutate(
     name =
       fct_relevel(
         name,
-        c("AD2013", "AD2019", "AD2019.Kunkle", "AD2021", "LBD2020", "PD2011", "PD2019.ex23andMe.exUKBB", "PD2019.meta5.ex23andMe")
+        c("AD2019", "AD2019.Kunkle", "LBD2020", "PD2011", "PD2019.ex23andMe.exUKBB", "PD2019.meta5.ex23andMe")
       )
   )
 
@@ -183,9 +183,23 @@ nohup Rscript \
 
 ```
 
+## Run multiple regression
+This was run using `nohup`:
+
+```{bash bash-run-multireg, eval = F}
+# Have to navigate to root project folder for script to work (as it uses here package)
+cd /home/rreynolds/misc_projects/neurodegen-psych-local-corr
+
+nohup Rscript \
+/home/rreynolds/misc_projects/neurodegen-psych-local-corr/scripts/05d_run_multi_reg.R \
+&>/home/rreynolds/misc_projects/neurodegen-psych-local-corr/logs/05d_run_multi_reg.log&
+
+```
+
 ## Loading results
 Once run, results can be loaded using the following code chunk:
 
+### LAVA bivariate
 ```{r load-lava-results}
 
 result_dir <- 
@@ -257,7 +271,49 @@ for(test in names(results)){
 
 ```
 
+### LAVA multiple regression
+```{r load-multireg}
 
+multireg <-
+  list.files(
+    here::here(
+      "results", 
+      "05_noproxy_univar_bivar"
+      ),
+    pattern = ".multireg.lava.rds", 
+    full.names = T
+  ) %>% 
+  readRDS() %>% 
+  lapply(., function(x){
+    
+    x %>% 
+      lapply(., function(y){
+        
+        y %>% 
+          lapply(., function(z){
+            
+            z %>% 
+              qdapTools::list_df2df(col1 = "model_number")
+            
+          }) %>% 
+          qdapTools::list_df2df(col1 = "list_name")
+        
+      }) %>% 
+      qdapTools::list_df2df()
+    
+  }) %>% 
+    qdapTools::list_df2df(col1 = "locus") %>% 
+    dplyr::select(-X1) %>% 
+    dplyr::select(
+      locus, contains("model"), 
+      outcome, predictors, 
+      everything(), -contains("list")
+      )
+
+```
+
+
+### LDSC
 ```{r load-ldsc}
 global <- 
   read_delim(
@@ -295,6 +351,9 @@ For local $r_g$'s, as we already had results from analysis of AD and PD GWASs wi
 ## LAVA
 
 Methods are as described in [01_preparing_inputs_gwas.html](01_preparing_inputs_gwas.html). LD blocks were filtered to include only those where significant bivariate local $r_g$'s were observed between LBD and either by-proxy AD or by-proxy PD GWASs, in addition to between by-proxy AD and by-proxy PD GWASs. This limited the number of LD blocks to `r nrow(loci)` (locus `r loci$LOC`). Bivariate local correlations were only performed for pairs of traits which both exhibited a significant univariate local genetic signal (p < 0.05/`r nrow(loci)`, where the denominator represents the total number of tested loci). This resulted in a total of **`r nrow(results$bivar)`** bivariate test spanning **`r results$bivar %>% .[["locus"]] %>% unique() %>% length()`** distinct loci. 
+
+## Multiple regression
+For LD block 2351, multiple regression was used to determine the extent to which the genetic component of LBD could be explained by the genetic components of AD and PD when by-proxy cases were excluded. 
 
 # Results {.tabset}
 
@@ -650,7 +709,7 @@ plots[[1]] <- plot_edge_diagram(
   bivar_corr = 
     bivar_fdr$proxy %>% 
     dplyr::filter(
-      locus %in% c(bivar_fdr$no_proxy$locus)
+      locus %in% unique(bivar_fdr$no_proxy$locus)
     ),
   phen = c("AD2019", "LBD2020", "PD2019"),
   multiple_corr = FALSE, 
@@ -733,6 +792,115 @@ ggpubr::ggarrange(
 
 ```
 
+## Multiple regression {.tabset}
+
+### Text
+
+- AD (without by-proxy cases) was found to be a significant predictor of LBD in LD block 2351 and was positively associated we LBD, replicating what we observed when including by-proxy cases. In contrast, PD (without by-proxy cases) was not found to be a significant predictor of LBD. Notably, the regression coefficient for PD (without by-proxy cases) was negative (95% confidence interval: `r multireg %>% dplyr::filter(predictors == "PD2019.ex23andMe.exUKBB") %>% dplyr::pull(gamma.lower) %>% round(., 2)`-`r multireg %>% dplyr::filter(predictors == "PD2019.ex23andMe.exUKBB") %>% dplyr::pull(gamma.upper) %>% round(2)`), as observed when by-proxy cases were included.
+- The multivariate r2 in LD block 2351, which was modelled with LBD as the outcome and AD and PD (both without by-proxy cases) as predictors, was `r multireg %>% dplyr::pull(r2) %>% unique() %>% round(2)` (95% confidence interval: `r multireg %>% dplyr::pull(r2.lower) %>% unique() %>% round(2)`-`r multireg %>% dplyr::pull(r2.upper) %>% unique() %>% round(2)`). This is comparable with what was observed when by-proxy cases were included (r2 = 0.43; 95% confidence interval = 0.38-0.5).
+
+### Figures
+
+```{r plot-multireg, fig.cap = "Results for multiple regression models across LD block 2351. (a) Plots of standardised coefficients for each predictor in multiple regression model in LD block 2351, with whiskers spanning the 95% confidence interval for the coefficients. (b) Mulivariate r2 for LD block 2351, where multivariate r2 represents the proportion of variance in genetic signal for LBD explained by AD and PD simultaneously. Whiskers span the 95% confidence interval for the r2. 3 asterisks, p < 0.001; 2 asterisks, p < 0.01; 1 asterisk, p < 0.05."}
+
+data_to_plot <-   
+  multireg %>% 
+  dplyr::mutate(
+    predictors = predictors %>%
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*"),
+    outcome = outcome %>% 
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*"),
+    p_text = case_when(
+      p < 0.001 ~ "***",
+      p < 0.01 ~ "**",
+      p < 0.05 ~ "*"
+    ),
+    locus = 
+      as.numeric(locus)
+  )
+
+data_to_plot <- 
+  data_to_plot %>% 
+  dplyr::inner_join(
+    data_to_plot %>% 
+      dplyr::group_by(outcome, locus) %>% 
+      dplyr::summarise(predictors = str_c(predictors, collapse = " + ")) %>% 
+      dplyr::mutate(model = str_c(outcome, " ~ ", predictors)) %>% 
+      dplyr::select(outcome, locus, model)
+  )
+
+a <- 
+  data_to_plot %>% 
+  ggplot2::ggplot(
+    ggplot2::aes(
+      x = predictors, 
+      y = gamma, 
+      ymin = gamma.lower, 
+      ymax = gamma.upper
+      )
+    ) +
+  ggplot2::geom_pointrange(
+    colour = "#888888", fatten = 0.25
+    ) +
+  ggplot2::geom_hline(yintercept = 0, linetype = "dashed") +
+  ggplot2::geom_text(
+    aes(
+      y = gamma.upper + (0.1 * gamma.upper), 
+      label = p_text
+      )
+    ) +
+  ggplot2::facet_wrap(
+    vars(locus, model), 
+    scales = "free_x",
+    nrow = 1
+    ) +
+  ggplot2::labs(x = "Predictors", y = "Standardised multiple\nregression coefficient") +
+  theme_rhr
+
+b <- 
+    data_to_plot %>% 
+  dplyr::mutate(
+    locus_model =
+      str_c(locus, model, sep = "\n")
+  ) %>% 
+  dplyr::distinct(
+    locus, locus_model, r2, r2.lower, r2.upper
+  ) %>% 
+  ggplot2::ggplot(
+    ggplot2::aes(
+      x = locus_model %>% 
+        fct_reorder(., .x = as.numeric(locus), .fun = max),
+      y = r2,
+      ymin = r2.lower,
+      ymax = r2.upper
+    )
+  ) +
+  geom_col() + 
+  geom_errorbar(width=.2) +
+  labs(
+    x = "Locus and model",
+    y = "Multivariate r2"
+  ) +
+  theme_rhr
+
+  
+plot <- 
+  cowplot::plot_grid(
+    a,b, 
+    nrow = 1, 
+    axis = "bt", 
+    align = "h",
+    rel_widths = c(3,1),
+    labels = letters[1:2]
+  )
+
+plot
+
+```
+
+
 <br><br>
 
 # Conclusions
@@ -743,9 +911,14 @@ ggpubr::ggarrange(
 
 # Session info
 
+<details>
+  <summary>Show/hide</summary>
+
 ```{r reproducibility, echo = FALSE}
 # Session info
 library("sessioninfo")
 options(width = 120)
 session_info()
 ```
+
+</details> 
