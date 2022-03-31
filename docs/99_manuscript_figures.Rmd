@@ -1,0 +1,1011 @@
+---
+title: "Manuscript figures"
+author: 
+- name: "Regina H. Reynolds"
+  affiliation: UCL
+output: 
+  bookdown::html_document2:
+    figure_caption: yes
+    code_folding: hide
+    theme: paper
+    highlight: kate
+    df_print: paged
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+```{r setup, include = FALSE}
+
+library(circlize) # For chord diagram
+library(cowplot) # For plot arrangement
+library(ggplot2) # For plotting
+library(ggraph) # For edge diagrams
+library(tidyverse) # For tidy manipulation of data
+library(stringr) # For string manipulation
+library(rtracklayer) # For loading of reference gtf
+
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+
+# Set defaults for ggplots 
+source(here::here("R", "theme_rhr.R"))
+
+loci <- LAVA::read.loci(here::here("results", "01_input_prep", "gwas_filtered.loci"))
+fct_disease <- c("AD", "LBD", "PD", "BIP", "MDD", "SCZ")
+
+```
+
+> Aim: generate figures for draft manuscript
+<br><br>
+
+# Supplementary code {.tabset}
+Following section includes any intermediary code used in this `.Rmd`.
+
+## Create output directory
+```{r outdir}
+
+out_dir <- here::here("results", "99_manuscript_figures")
+dir.create(out_dir, showWarnings = T)
+
+```
+
+## Loading plotting functions
+
+```{r load-plot-func}
+
+source(here::here("R", "plot_global_corr.R"))
+source(here::here("R", "plot_chord_diagram.R"))
+source(here::here("R", "plot_locus.R"))
+source(here::here("R", "plot_edge_diagram.R"))
+
+```
+
+# Figure 1 {.tabset}
+
+Overview of  local and global genetic correlations between neurodegenerative diseases and neuropsychiatric disorders. 
+
+## Load data
+
+```{r fig1-data}
+
+# LAVA results
+files <- 
+  list.files(
+  path = 
+    here::here("results",
+               "02_univar_bivar_test"),
+  pattern = ".lava.rds", 
+  full.names = T
+)
+
+results <- 
+  setNames(
+    object = files %>% 
+      lapply(., function(file){
+        
+        list <- 
+          file %>% 
+          readRDS() 
+        
+        list %>% 
+          purrr::discard(is.null) %>% 
+          qdapTools::list_df2df() %>% 
+          dplyr::select(-X1)
+        
+      }),
+    nm = files %>% 
+      basename() %>% 
+      str_remove(".lava.rds") %>% 
+      str_remove(".*:") %>% 
+      str_remove(".*\\.")
+  )
+
+# LDSC results
+global <- 
+  read_delim(
+    file = here::here("results", "01_input_prep", "ldsc_corr", "ldsc_correlations.txt"),
+    delim = "\t"
+    ) 
+
+# GWAS loci
+gwas_loci <- 
+  readRDS(here::here("results", "01_input_prep", "gwas_filtered_loci.rds"))
+
+# LD blocks
+ld_blocks <- 
+  readRDS(here::here("results", "01_input_prep", "gwas_filtered_loci_w_genes.rds")) %>% 
+  dplyr::ungroup()
+
+```
+
+## Data wrangling
+
+```{r fig1-wrangle}
+
+p_threshold <- 0.05/nrow(results$bivar)
+
+# Tidy labels
+bivar_tidy <- 
+  results$bivar %>% 
+  as_tibble() %>% 
+  dplyr::mutate(
+    phen1 = phen1 %>%
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*"),
+    phen2 = phen2 %>%
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*")
+  )  %>% 
+  dplyr::inner_join(
+    ld_blocks %>% 
+      dplyr::select(locus, assoc_gwas)
+  ) 
+
+global_tidy <- 
+  global %>%
+  dplyr::mutate(
+    p1 = p1 %>%
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*"),
+    p2 = p2 %>%
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*")
+  )
+
+# N of phen with CI 97.5 == 1
+n_upper_r2_ci <-
+  bivar_tidy %>% 
+  dplyr::filter(
+    p < p_threshold,
+    r2.upper == 1
+  ) %>% 
+  dplyr::count(phen1, phen2, name = "n_upper_r2_ci") 
+
+bivar_count <-
+  bivar_tidy %>% 
+  dplyr::filter(
+    p < p_threshold
+  ) %>% 
+  dplyr::count(phen1, phen2, name = "total_n") %>% 
+  dplyr::left_join(n_upper_r2_ci) %>% 
+  dplyr::mutate(
+    label = str_c(phen1, " vs ", phen2),
+    n_upper_r2_ci =
+      case_when(
+        is.na(n_upper_r2_ci) ~ 0,
+        TRUE ~ as.numeric(n_upper_r2_ci)
+      ),
+    n_upper_r2_ci_not_one =
+      total_n - n_upper_r2_ci
+  ) %>% 
+  tidyr::pivot_longer(
+    cols = contains("n_upper_r2")
+  ) %>% 
+  dplyr::mutate(
+    name =
+      case_when(
+        name == "n_upper_r2_ci" ~ "TRUE",
+        TRUE ~ "FALSE"
+      )
+  )
+
+```
+
+## Main figure {.active}
+
+```{r fig1, fig.height = 6, fig.cap = "(a) Chord diagram showing the number of significant bivariate local rg’s (p < 0.05/1603) between each of the disease traits across all LD blocks. Positive and negative correlations are coloured red and blue, respectively. (b) Comparison between the global rg’s estimated by LDSC (bottom) and the mean local rg’s from LAVA (top) across all tested LD blocks. Significant global rg’s (p < 0.05/15) are indicated with an asterisk ('*'). The number of significant local rg’s is indicated by a number in each tile. (c) Bar plot showing the number of significant local rg’s between disease trait pairs. The fill of the bars indicates the number of significant LD blocks for which the upper limit of the r2 95% confidence interval (CI) included 1."}
+
+plot <- vector(mode = "list", length = 2)
+
+plot[[1]] <- 
+  plot_global_bivar(
+    global_corr = 
+      global_tidy,
+    bivar_corr = 
+      bivar_tidy,
+    n_phenotypes = 6
+  ) + 
+  theme(legend.position = "bottom")
+
+plot[[2]] <- 
+  bivar_count %>% 
+  ggplot(
+    aes(
+      x = 
+        fct_reorder(
+          .f = label,
+          .x = total_n,
+          .fun = max,
+          .desc = T
+        ),
+      y = value,
+      fill = fct_rev(name)
+    )
+  ) +
+  geom_col(
+    colour = "black"
+  ) +
+  scale_fill_grey() +
+  labs(
+    x = "",
+    y = "Number of significant\nlocal genetic correlations",
+    fill = "Does upper limit of\nr2 95% CI include 1?"
+  ) +
+  theme_rhr +
+  theme(legend.position = "bottom")
+
+fig <-
+  cowplot::plot_grid(
+    cowplot::plot_grid(
+      NULL, plot[[1]],
+      labels = letters[1:2]
+    ),
+    plot[[2]],
+    ncol = 1,
+    labels = c("", "c"),
+    rel_heights = c(1.5,1)
+  )
+  
+  
+
+fig
+
+```
+
+```{r fig1-save, eval = F}
+
+png(
+  file = file.path(out_dir, "fig_1a_global_local.png"),
+  bg = "transparent", 
+  width = 120, 
+  height = 120, 
+  units = "mm",
+  res = 300
+)
+
+plot_bivar_chord_diagram(
+    bivar_corr = 
+      bivar_tidy %>% 
+      dplyr::filter(
+        p < p_threshold
+      ),
+    fct_phen = fct_disease,
+    palette = RColorBrewer::brewer.pal(n = 6, name = "BrBG")
+  )
+
+dev.off()
+
+ggsave(
+  fig,
+  path = out_dir, 
+  filename = "fig_1bc_global_local.png",
+  device = "png", 
+  width = 150, 
+  height = 180, 
+  dpi = 300, 
+  units = "mm"
+)
+
+```
+
+## Supplementary figures
+
+```{r fig1-supp-fig}
+
+plot <- list()
+
+plot[[1]] <- 
+  gwas_loci %>% 
+  dplyr::distinct(LD_LOC, LD_CHR, LD_start, LD_end) %>% 
+  dplyr::count(LD_CHR) %>% 
+  ggplot(
+    aes(
+      x = 
+        forcats::fct_reorder(
+          .f = as.factor(LD_CHR), 
+          .x = n, 
+          .fun = median, 
+          .desc = FALSE
+        ),
+      y = n
+    )
+  ) +
+  geom_col(colour = "black") +
+  labs(
+    x = "Chromosome",
+    y = "Number of LD blocks"
+  ) +
+  coord_flip() + 
+  theme_rhr + 
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5))
+
+plot[[2]] <- 
+  gwas_loci %>% 
+  dplyr::count(LD_CHR, GWAS) %>% 
+  dplyr::mutate(
+    LD_CHR = as.factor(LD_CHR),
+    GWAS = str_to_upper(GWAS)
+  ) %>% 
+  ggplot(
+    aes(
+      x = fct_rev(LD_CHR),
+      y = n,
+      fill = GWAS
+    )
+  ) +
+  geom_col(
+    position = position_dodge2(preserve = "single"),
+    colour = "black"
+  ) +
+  scale_fill_brewer(
+    palette = "BrBG",
+    type = "div"
+  ) +
+  labs(
+    x = "Chromosome",
+    y = "Number of SNPs"
+  ) + 
+  coord_flip() + 
+  theme_rhr +
+  theme(
+    axis.text.x = element_text(angle = 0, hjust = 0.5),
+    legend.position = "right"
+    )
+
+suppfig <- 
+  cowplot::plot_grid(
+    plotlist = plot,
+    align = "v",
+    axis = "lr",
+    ncol = 1,
+    nrow = 2,
+    rel_heights = c(1,2),
+    labels = letters[1:length(plot)]
+  )
+
+suppfig
+
+```
+
+```{r fig1-supp-fig-save, eval = F}
+
+ggsave(
+  suppfig,
+  path = out_dir, 
+  filename = "suppfig_1_ldblocks.png",
+  device = "png", 
+  width = 150, 
+  height = 180, 
+  dpi = 300, 
+  units = "mm"
+)
+
+```
+
+
+## Supplementary tables
+
+### LD blocks
+
+```{r fig1-supp-tables-ldblocks, eval = F}
+
+xlsx <- 
+  setNames(
+    vector(mode = "list", length = 2),
+    c("column_descriptions", "results")
+  )
+
+xlsx[[2]] <-
+  ld_blocks
+  
+xlsx[[1]] <-
+  tibble(
+    column_name = colnames(ld_blocks),
+    description = 
+      c(
+        "LD block ID",
+        "LD block chromosome",
+        "LD block start base pair",
+        "LD block end base pair",
+        "Number of genes overlapping LD block",
+        "Genes overlapping LD block (ensembl ID)",
+        "Genes overlapping LD block (gene name)",
+        "Number of GWAS with genome-wide significant SNPs overlapping LD block",
+        "GWAS with genome-wide significant SNPs overlapping LD block"
+      )
+  )
+
+openxlsx::write.xlsx(
+  xlsx,
+  file = file.path(out_dir, "SupplementaryTable1_ld_blocks.xlsx"),
+  row.names = FALSE,
+  headerStyle = openxlsx::createStyle(textDecoration = "BOLD"),
+  firstRow = TRUE,
+  append = TRUE,
+  overwrite = TRUE
+)
+
+```
+
+
+### Global correlations
+
+```{r fig1-supp-tables-global, eval = F}
+
+xlsx <- 
+  setNames(
+    vector(mode = "list", length = 2),
+    c("column_descriptions", "results")
+  )
+
+xlsx[[2]] <-
+  global
+
+xlsx[[1]] <-
+tibble(
+  column_name = colnames(global),
+  description = 
+    c(
+      "Phenotype 1",
+      "Phenotype 2",
+      "The estimated genetic correlation",
+      "The bootstrap standard error of the genetic correlation estimate",
+      "The bootstrap standard error of the genetic correlation estimate",
+      "P-value for genetic correlation",
+      "Estimated snp-heritability of the second phenotype ",
+      "Standard error of h2 for phenotype 2",
+      "Single-trait LD score regression intercept for phenotype 2",
+      "Standard error for single-trait LD score regression intercept for phenotype 2",
+      "Estimated genetic covariance between p1 and p2",
+      "Bootstrap standard error of cross-trait LD score regression intercept"
+    )
+)
+
+openxlsx::write.xlsx(
+  xlsx,
+  file = file.path(out_dir, "SupplementaryTable2_ldsc_global.xlsx"),
+  row.names = FALSE,
+  headerStyle = openxlsx::createStyle(textDecoration = "BOLD"),
+  firstRow = TRUE,
+  append = TRUE,
+  overwrite = TRUE
+)
+
+```
+
+### Univariate/bivariate correlations
+
+```{r fig1-supp-tables-lava, eval = F}
+
+xlsx <- 
+  setNames(
+    vector(mode = "list", length = 3),
+    c("column_descriptions", "univariate", "bivariate")
+  )
+
+xlsx[[2]] <-
+  results$univ
+
+xlsx[[3]] <-
+  results$bivar
+
+xlsx[[1]] <-
+  tibble(
+    column = colnames(results$univ),
+    description = 
+      c(
+        "LD block ID",
+        "LD block chromosome",
+        "LD block start base pair",
+        "LD block end base pair",
+        "The number of SNPs within the LD block",
+        "The number of PCs retained within the LD block",
+        "Analysed phenotype",
+        "Observed local heritability",
+        "P-value from the univariate test (F-test for continuous, Chi-sq for binary)"
+      )
+  ) %>%
+  dplyr::mutate(sheet = "univariate") %>% 
+  dplyr::bind_rows(
+    tibble(
+      column = colnames(results$bivar),
+      description = 
+        c(
+          "LD block ID",
+          "LD block chromosome",
+          "LD block start base pair",
+          "LD block end base pair",
+          "The number of SNPs within the LD block",
+          "The number of PCs retained within the LD block",
+          "Phenotype 1",
+          "Phenotype 2",
+          "Standardised coefficient for the local genetic correlation",
+          "Lower 95% confidence estimate for rho",
+          "Upper 95% confidence estimate for rho",
+          "Equivalent of taking the square of rho. Denotes the proportion of variance in genetic signal for phen1 explained by phen2 (and vice versa)",
+          "Lower 95% confidence estimate for r2",
+          "Upper 95% confidence estimate for r2",
+          "Simulation p-values for the local genetic correlation"
+        )
+    ) %>% 
+      dplyr::mutate(sheet = "bivariate")
+  ) %>% 
+  dplyr::select(sheet, everything())
+
+openxlsx::write.xlsx(
+  xlsx,
+  file = file.path(out_dir, "SupplementaryTable3_lava_local.xlsx"),
+  row.names = FALSE,
+  headerStyle = openxlsx::createStyle(textDecoration = "BOLD"),
+  firstRow = TRUE,
+  append = TRUE,
+  overwrite = TRUE
+)
+
+```
+
+# Figure 2 {.tabset}
+
+## Data wrangling
+
+```{r fig2-wrangle}
+
+bivar_pair_type <-
+  bivar_tidy  %>% 
+  dplyr::filter(
+    p < p_threshold
+  ) %>%  
+  dplyr::group_by(locus, phen1, phen2) %>% 
+  dplyr::mutate(
+    phen1_overlapping_assoc_gwas =
+      any(phen1 %in% unlist(assoc_gwas)),
+    phen2_overlapping_assoc_gwas =
+      any(phen2 %in% unlist(assoc_gwas)),
+    sum_phen_overlapping_assoc_gwas =
+      sum(phen1_overlapping_assoc_gwas, phen2_overlapping_assoc_gwas),
+    phen1_is_neurodegen = 
+      phen1 %in% c("AD", "PD", "LBD"),
+    phen2_is_neurodegen = 
+      phen2 %in% c("AD", "PD", "LBD"),
+    sum_phen_is_neurodegen =
+      sum(phen1_is_neurodegen, phen2_is_neurodegen),
+    trait_pair_type =
+      case_when(
+        sum_phen_is_neurodegen == 2 ~ "Both neurodegenerative",
+        sum_phen_is_neurodegen == 1 ~ "Mixed",
+        sum_phen_is_neurodegen == 0 ~ "Both neuropsychiatric"
+      )
+  ) %>% 
+  dplyr::group_by(locus, phen1, phen2) %>% 
+  dplyr::mutate(
+    locus_labels =
+      stringr::str_c(
+        "LD block ", locus, 
+        " (", str_c(unlist(assoc_gwas), collapse = ", "), ")",
+        "\nchr", chr, ": ", scales::comma(start), "-", scales::comma(stop)
+      )
+  )
+
+locus_labels <- 
+  setNames(
+    nm = unique(bivar_pair_type$locus),
+    object = unique(bivar_pair_type$locus_labels)
+  )
+
+```
+
+## Main figure {.active}
+
+```{r fig2, fig.cap = "(a) Bar plot (left) showing the number of traits within trait pairs demonstrating significant local genetic correlation that had genome-wide significant SNPs overlapping the tested LD block (as illustrated by the schematic on the right). (b) Two LD blocks illustrating the situations depicted in (a). Edge diagrams for each LD block show the standardised coefficient for genetic correlation (rho) for each significant bivariate local genetic correlation. Significant negative and positive correlations are indicated by blue and red colour, respectively. Edge diagrams are labelled by the LD block identifier, which traits had genome-wide significant SNPs overlapping the LD block (indicated in the brackets), and the genomic coordinates of the LD block (in the format chromosome:start-end). (c) Heatmaps show the standardised coefficient for genetic correlation (rho) for each bivariate local genetic correlation within the LD block. Asterisks indicate local genetic correlations that were replicated when using AD and PD GWASs which exclude by-proxy cases. Significant negative and positive correlations are indicated by blue and red fill, respectively. Non-significant correlations have a grey fill."}
+
+plot <- vector(mode = "list", length = 4)
+
+plot[[1]] <- 
+  bivar_pair_type %>% 
+  ggplot(
+    aes(
+      x = as.factor(sum_phen_overlapping_assoc_gwas),
+      fill = trait_pair_type
+    )
+  ) + 
+  geom_bar(colour = "black") +
+  scale_fill_manual(
+    values = RColorBrewer::brewer.pal(n = 3, name = "BrBG")[c(1,3,2)],
+    name = "Traits in pair"
+  ) + 
+  labs(x = "Number of traits in pair with genome-\nwide significant SNPs overlapping LD block", y = "Count") +
+  coord_flip() +
+  guides(
+    fill = guide_legend(
+      nrow = 3,
+      title.position = "top"
+      )
+    ) +
+  theme_rhr +
+  theme(
+    legend.position = "bottom",
+    axis.text.x = element_text(angle = 0, hjust = 0.5, vjust = 0)
+  )
+
+plot[[2]] <-
+  ggplot +
+  geom_blank()
+
+plot[[3]] <-
+  plot_edge_diagram(
+    bivar_corr = 
+      bivar_pair_type %>% 
+      dplyr::filter(locus %in% c(1719, 2281)),
+    phen = fct_disease, 
+    locus_labels = locus_labels,
+    multiple_corr = FALSE,
+    geom_node_size = 2,
+    geom_label_size = 1.7,
+    base_size = 8,
+    ncol = 1,
+    seed = 57 #26,35
+  ) +
+  theme(
+    legend.position = "none"
+  )
+
+plot[[4]] <-
+  bivar_tidy %>% 
+  dplyr::filter(
+    locus %in% c(681, 1273, 2351),
+    phen1 %in% c("AD", "LBD", "PD"),
+    phen2 %in% c("AD", "LBD", "PD")
+  ) %>% 
+  dplyr::mutate(
+    rho_fill = 
+      case_when(
+        p < p_threshold ~ round(rho, 2)
+      ),
+    rho_label =
+      case_when(
+        locus == 1273 & phen1 == "AD" & phen2 == "PD" |
+          locus == 2351 & phen1 == "AD" & phen2 == "LBD" ~ str_c(round(rho, 2), "*"),
+        TRUE ~ as.character(round(rho, 2))
+      )
+  ) %>% 
+  ggplot(
+    aes(
+      x = phen1,
+      y = phen2
+    )
+  ) +
+  geom_tile(
+    aes(fill = rho_fill),
+    colour = "black"
+  ) +
+  geom_text(
+    aes(label = rho_label),
+    size = 2.5
+  ) +
+  labs(x = "", y = "", fill = "rho") +
+  facet_wrap(
+    vars(locus), 
+    ncol = 3,
+    labeller = as_labeller(locus_labels)
+  ) +
+  scale_fill_distiller(
+    palette = "RdYlBu", 
+    direction = -1, 
+    na.value = "#cccccc", 
+    limits = c(-1, 1)
+    ) +
+  theme_rhr + 
+  theme(
+    axis.text.x = element_text(angle = 0, hjust = 0.5),
+    panel.grid = element_blank()
+    )
+
+fig <-
+  cowplot::plot_grid(
+    cowplot::plot_grid(
+      plotlist = plot[c(1:3)],
+      ncol = 3,
+      nrow = 1,
+      # align = "hv",
+      # axis = "bt",
+      rel_widths = c(1,0.8,1.5),
+      labels = c("", "b", ""), 
+      # move "b" to right of middle blank plot
+      label_x = 0.9, label_y = 1 
+    ),
+    plot[[4]],
+    ncol = 1,
+    nrow = 2,
+    # align = "v",
+    # axis = "lr",
+    rel_heights = c(1.5,1),
+    labels = c("a", "c")
+  )
+
+
+fig
+```
+
+```{r fig2-save, eval = F}
+
+ggsave(
+  fig,
+  path = out_dir, 
+  filename = "fig_2_local_regions.png",
+  device = "png", 
+  width = 180, 
+  height = 160, 
+  dpi = 300, 
+  units = "mm"
+)
+
+```
+
+
+## Supplementary figure(s)
+
+Refer to [05_run_noproxy_check.html](https://rhreynolds.github.io/neurodegen-psych-local-corr/05_run_noproxy_check.html).
+
+## Supplementary table(s)
+
+Refer to [05_run_noproxy_check.html](https://rhreynolds.github.io/neurodegen-psych-local-corr/05_run_noproxy_check.html).
+
+# Figure 3 {.tabset}
+
+## Load data
+
+```{r fig3-data}
+multireg <-
+  list.files(
+    here::here(
+      "results", 
+      "03_partial_corr_multi_reg"
+      ),
+    pattern = ".multireg.lava.rds", 
+    full.names = T
+  ) %>% 
+  readRDS() %>% 
+  lapply(., function(x){
+    
+    x %>% 
+      lapply(., function(y){
+        
+        y %>% 
+          lapply(., function(z){
+            
+            z %>% 
+              qdapTools::list_df2df(col1 = "model_number")
+            
+          }) %>% 
+          qdapTools::list_df2df(col1 = "list_name")
+        
+      }) %>% 
+      qdapTools::list_df2df()
+    
+  }) %>% 
+    qdapTools::list_df2df(col1 = "locus") %>% 
+    dplyr::select(-X1) %>% 
+    dplyr::mutate(
+      model_type = 
+        case_when(
+          locus == 1719 & list_name == "L1" ~ "intermediate",
+          locus == 1719 & list_name == "L2" ~ "full",
+          TRUE ~ "full"
+          )
+    ) %>% 
+    dplyr::select(
+      locus, contains("model"), 
+      outcome, predictors, 
+      everything(), -contains("list")
+      )
+
+```
+
+## Data wrangling
+
+```{r fig3-wrangle}
+
+multireg_tidy <-
+  # filter outcomes w. significant predictors
+  multireg %>% 
+  dplyr::filter(
+    p < 0.05
+  ) %>%
+  dplyr::select(locus, contains("model"), outcome) %>% 
+  dplyr::distinct() %>% 
+  # join all predictors
+  dplyr::inner_join(
+    multireg,
+    c("locus", "model_number", "model_type", "outcome")
+  ) %>% 
+  dplyr::mutate(
+    predictors = predictors %>%
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*"),
+    outcome = outcome %>% 
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*"),
+    p_text = case_when(
+      p < 0.001 ~ "***",
+      p < 0.01 ~ "**",
+      p < 0.05 ~ "*"
+    ),
+    locus = 
+      as.numeric(locus)
+  )
+
+multireg_tidy <- 
+  multireg_tidy %>% 
+  dplyr::inner_join(
+    multireg_tidy %>% 
+      dplyr::group_by(outcome, locus) %>% 
+      dplyr::summarise(predictors = str_c(predictors, collapse = " + ")) %>% 
+      dplyr::mutate(model = str_c(outcome, " ~ ", predictors)) %>% 
+      dplyr::select(outcome, locus, model)
+  )
+
+```
+
+## Main figure {.active}
+
+```{r fig3, fig.cap = "Results for multiple regression models across LD blocks with significant bivariate results between a phenotype and at least 2 others. For both plots, only those multiple regression models with at least one significant predictor (p < 0.05) are shown. (a) Plots of standardised coefficients for each predictor in multiple regression models across several LD blocks, with whiskers spanning the 95% confidence interval for the coefficients. (b) Mulivariate r2 for each LD block and model, where multivariate r2 represents the proportion of variance in genetic signal for the outcome phenotype explained by all predictor phenotypes simultaneously. Whiskers span the 95% confidence interval for the r2.  3 asterisks, p < 0.001; 2 asterisks, p < 0.01; 1 asterisk, p < 0.05."}
+
+plot <- vector(mode = "list", length = 2)
+
+plot[[1]] <- 
+  multireg_tidy %>% 
+  ggplot(
+    aes(
+      x = predictors, 
+      y = gamma, 
+      ymin = gamma.lower, 
+      ymax = gamma.upper
+      )
+    ) +
+  geom_pointrange(
+    colour = "#888888", fatten = 0.25
+    ) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_text(
+    aes(
+      y = gamma.upper + (0.1 * gamma.upper), 
+      label = p_text
+      )
+    ) +
+  facet_wrap(
+    vars(locus, model), 
+    scales = "free_x",
+    nrow = 1
+    ) +
+  labs(x = "Predictors", y = "Standardised multiple\nregression coefficient") +
+  theme_rhr
+
+plot[[2]] <- 
+  multireg_tidy %>% 
+  dplyr::mutate(
+    locus_model =
+      str_c(locus, model, sep = "\n")
+  ) %>% 
+  dplyr::distinct(
+    locus, locus_model, r2, r2.lower, r2.upper
+  ) %>% 
+  ggplot(
+    aes(
+      x = locus_model %>% 
+        fct_reorder(., .x = as.numeric(locus), .fun = max),
+      y = r2,
+      ymin = r2.lower,
+      ymax = r2.upper
+    )
+  ) +
+  geom_col() + 
+  geom_errorbar(width=.2) +
+  labs(
+    x = "Locus and model",
+    y = "Multivariate r2"
+  ) +
+  theme_rhr
+
+  
+fig <- 
+  cowplot::plot_grid(
+    plotlist = plot, 
+    ncol = 1, 
+    axis = "lr", 
+    align = "v",
+    labels = letters[1:length(plot)]
+  )
+
+fig
+```
+
+```{r fig3-save, eval = F}
+
+ggsave(
+  fig,
+  path = out_dir, 
+  filename = "fig_3_multireg.png",
+  device = "png", 
+  width = 130, 
+  height = 120, 
+  dpi = 300, 
+  units = "mm"
+)
+
+```
+
+## Supplementary tables
+
+```{r fig3-supp-tables , eval = F}
+
+xlsx <- 
+  setNames(
+    vector(mode = "list", length = 2),
+    c("column_descriptions", "results")
+  )
+
+xlsx[[2]] <-
+  multireg
+
+xlsx[[1]] <-
+  tibble(
+    column = colnames(multireg),
+    description = 
+      c(
+        "LD block ID",
+        "For multiple regressions with multiple intermediate models, this is a model identifier",
+        "Whether the regression model is an intermediate or full model",
+        "Outcome phenotype",
+        "Predictor phenotype",
+        "Standardised multiple regression coefficient",
+        "Lower bound of 95% confidence interval for gamma",
+        "Upper bound of 95% confidence interval for gamma",
+        "Proportion of variance in genetic signal for the outcome phenotype explained by all predictor phenotypes simultaneously",
+        "Lower bound of 95% confidence interval for r2",
+        "Upper bound of 95% confidence interval for r2",
+        "Simulation p-values for the gammas"
+      )
+  )
+
+openxlsx::write.xlsx(
+  xlsx,
+  file = file.path(out_dir, "SupplementaryTable5_multireg.xlsx"),
+  row.names = FALSE,
+  headerStyle = openxlsx::createStyle(textDecoration = "BOLD"),
+  firstRow = TRUE,
+  append = TRUE,
+  overwrite = TRUE
+)
+
+
+```
+
+
+# Figure 4 {.tabset}
+
+## Load data
+
+## Data wrangling
+
+## Main figure {.active}
+
+## Supplementary figure(s)
+
+## Supplementary table(s)
+
+
+<br><br>
+
+# Session info
+
+<details>
+  <summary>Show/hide</summary>
+
+```{r reproducibility, echo = FALSE}
+# Session info
+library("sessioninfo")
+options(width = 120)
+session_info()
+```
+
+</details> 

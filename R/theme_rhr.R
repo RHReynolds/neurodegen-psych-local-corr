@@ -2,7 +2,7 @@
 theme_rhr <-
   ggplot2::theme_bw(
     base_family = "Helvetica",
-    base_size = 10
+    base_size = 8
   ) +
   ggplot2::theme(
     panel.grid.major.x = element_blank(),

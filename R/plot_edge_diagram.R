@@ -24,6 +24,11 @@
 #' @param multiple_corr logical vector indicating whether to filter loci such
 #'   that only those with more than one bivariate correlation are displayed.
 #'   Default is TRUE.
+#' @param geom_node_size `integer` vector indicating node size. Default is 3.
+#' @param geom_label_size `integer` vector indicating edge link label size.
+#'   Default is 3.
+#' @param base_size `integer` vector indicating base font size in pts. Default
+#'   is 11, i.e. default of \code{ggplot2::\link[ggplot2:theme_bw]{theme_bw}}.
 #' @param ncol `integer` vector indicating number of columns in facet.
 #' @param seed `integer` vector indicating seed to be used for generating the
 #'   layout of the graph (i.e. how nodes are placed on the plot), which is
@@ -43,6 +48,9 @@ plot_edge_diagram <-
     phen,
     locus_labels = NULL,
     multiple_corr = TRUE,
+    geom_node_size = 3,
+    geom_label_size = 2,
+    base_size = 11,
     ncol = 3,
     seed = 89
   ) {
@@ -124,7 +132,7 @@ plot_edge_diagram <-
         ),
         angle_calc = 'along',
         label_dodge = unit(1.5, 'mm'),
-        label_size = 2,
+        label_size = geom_label_size,
         width = 1
       ) +
       ggraph::geom_node_label(
@@ -135,7 +143,7 @@ plot_edge_diagram <-
         repel = T,
         color = 'black',
         fill = 'white',
-        size = 3
+        size = geom_node_size
       ) +
       ggplot2::scale_y_reverse() +
       ggraph::scale_edge_colour_distiller(
@@ -148,7 +156,7 @@ plot_edge_diagram <-
         ncol = ncol,
         labeller = as_labeller(locus_labels)
       ) +
-      ggplot2::theme_bw() +
+      ggplot2::theme_bw(base_size = base_size) +
       ggplot2::theme(
         axis.title = element_blank(),
         axis.text = element_blank(),

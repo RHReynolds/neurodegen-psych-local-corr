@@ -229,7 +229,7 @@ plot_global_bivar <-
       ) +
       ggplot2::geom_tile(colour = "black") +
       ggplot2::geom_text(
-        size = 4
+        size = 3
       ) +
       ggplot2::coord_fixed() +
       ggplot2::labs(
@@ -243,7 +243,7 @@ plot_global_bivar <-
       ) +
       ggplot2::theme_bw(
         base_family = "Helvetica",
-        base_size = 10
+        base_size = 8
       ) +
       ggplot2::theme(
         panel.border = element_blank(),
