@@ -28,7 +28,7 @@ knitr::opts_chunk$set(echo = T, warning = F, message = F)
 # Set defaults for ggplots 
 theme_rhr <- theme_set(
   theme_bw(base_family = "Helvetica",
-           base_size = 10) + 
+           base_size = 8) + 
   theme(panel.grid.major.x = element_blank(),
         legend.position = "top",
         axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
@@ -350,7 +350,7 @@ For local $r_g$'s, as we already had results from analysis of AD and PD GWASs wi
 
 ## LAVA
 
-Methods are as described in [01_preparing_inputs_gwas.html](01_preparing_inputs_gwas.html). LD blocks were filtered to include only those where significant bivariate local $r_g$'s were observed between LBD and either by-proxy AD or by-proxy PD GWASs, in addition to between by-proxy AD and by-proxy PD GWASs. This limited the number of LD blocks to `r nrow(loci)` (locus `r loci$LOC`). Bivariate local correlations were only performed for pairs of traits which both exhibited a significant univariate local genetic signal (p < 0.05/`r nrow(loci)`, where the denominator represents the total number of tested loci). This resulted in a total of **`r nrow(results$bivar)`** bivariate test spanning **`r results$bivar %>% .[["locus"]] %>% unique() %>% length()`** distinct loci. 
+Methods are as described in [01_preparing_inputs_gwas.html](01_preparing_inputs_gwas.html). LD blocks were filtered to include only those where significant bivariate local $r_g$'s were observed between LBD and either by-proxy AD or by-proxy PD GWASs, in addition to between by-proxy AD and by-proxy PD GWASs. This limited the number of LD blocks to `r nrow(loci)` (locus `r loci$LOC`). Bivariate local correlations were only performed for pairs of traits which both exhibited a significant univariate local genetic signal (p < 0.05/`r nrow(loci)`, where the denominator represents the total number of tested loci). This resulted in a total of **`r nrow(results$bivar$no_proxy)`** bivariate tests spanning **`r results$bivar$no_proxy %>% .[["locus"]] %>% unique() %>% length()`** distinct loci. 
 
 ## Multiple regression
 For LD block 2351, multiple regression was used to determine the extent to which the genetic component of LBD could be explained by the genetic components of AD and PD when by-proxy cases were excluded. 
@@ -637,16 +637,17 @@ plot_global_corr(
 - In univariate tests, a negative variance estimate was calculated for AD2019 (without by-proxy cases) in 2 LD blocks (472, 1190) likely due to insufficient signal. In addition, AD2019 (without by-proxy cases) had sufficient univariate signal in only `r results$univ$no_proxy %>% dplyr::filter(p < 0.05/nrow(loci) & phen == "AD2019") %>% nrow()` LD blocks. This lack of signal could reflect either (i) a loss of power due to decreased case/control numbers in the AD2019 GWAS without by-proxy cases (as compared to the AD2019 GWAS with by-proxy cases) or (ii) a genuine lack of genetic signal in the tested LD blocks when no by-proxy cases are included. 
 - In univariate tests, the PD GWAS without by-proxy cases had sufficient univariate signal in `r results$univ$no_proxy %>% dplyr::filter(p < 0.05/nrow(loci) & phen == "PD2019") %>% nrow()` of the `r nrow(loci)` LD blocks tested; this included `r results$univ$no_proxy %>% dplyr::filter(p < 0.05/nrow(loci), locus %in% c(results$univ$no_proxy %>% dplyr::filter(p < 0.05/nrow(loci), phen == "AD2019") %>% dplyr::pull(locus)), phen == "PD2019") %>% nrow()` of the LD blocks where there was sufficient AD2019 univariate signal. 
 - Across those pairs of phenotypes with sufficient univariate signal to carry out a bivariate test using AD/PD GWASs with or without by-proxy cases, bivariate $r^{2}$, $\rho$ and -log10(p-value) estimates were found to be positively correlated (Figure \@ref(fig:proxy-correlation)). Only one $\rho$ estimate was found to have a different direction of effect when using GWASs without by-proxy cases, although this $\rho$ was non-significant.
-- Using a lenient FDR cut-off, we replicated two $r_{g}$'s using AD/PD GWASs without by-proxy cases (out of the `r results$bivar$proxy %>% dplyr::filter(p < 0.05/1603) %>% nrow()` $r_{g}$'s that were significant using AD/PD GWASs with by-proxy cases). This included the positive correlation between AD and PD in LD block 1273 (which contains *CLU*) and the positive correlation between AD and LBD in LD block 2351 (which contains *APOE*). In LD block 2351, we did not replicate the significant negative correlation between LBD and PD that was observed using the PD GWAS with by-proxy cases; however, it is worth noting that while non-significant, the $\rho$ was negative (no by-proxy: $\rho$ = `r results$bivar$no_proxy %>% dplyr::filter(phen1 == "LBD2020", phen2 == "PD2019", locus == 2351) %>% dplyr::pull(rho) %>% round(digits = 3)` (CI: `r results$bivar$no_proxy %>% dplyr::filter(phen1 == "LBD2020", phen2 == "PD2019", locus == 2351) %>% dplyr::pull(rho.lower) %>% round(digits = 3)` - `r results$bivar$no_proxy %>% dplyr::filter(phen1 == "LBD2020", phen2 == "PD2019", locus == 2351) %>% dplyr::pull(rho.upper) %>% round(digits = 3)`); p = `r results$bivar$no_proxy %>% dplyr::filter(phen1 == "LBD2020", phen2 == "PD2019", locus == 2351) %>% dplyr::pull(p) %>% round(digits = 3)`).
+- Using a lenient FDR cut-off, we replicated two $r_{g}$'s using AD/PD GWASs without by-proxy cases (out of the `r results$bivar$proxy %>% dplyr::filter(p < 0.05/1603) %>% nrow()` $r_{g}$'s that were significant using AD/PD GWASs with by-proxy cases). This included the positive correlation between AD and PD in LD block 1273 (which contains *CLU*) and the positive correlation between AD and LBD in LD block 2351 (which contains *APOE*). In LD block 2351, we did not replicate the significant negative correlation between LBD and PD that was observed using the PD GWAS with by-proxy cases; however, it is worth noting that while non-significant, the $\rho$ was negative (no by-proxy: $\rho$ = `r results$bivar$no_proxy %>% dplyr::filter(phen1 == "LBD2020", phen2 == "PD2019", locus == 2351) %>% dplyr::pull(rho) %>% round(digits = 3)` (CI: `r results$bivar$no_proxy %>% dplyr::filter(phen1 == "LBD2020", phen2 == "PD2019", locus == 2351) %>% dplyr::pull(rho.lower) %>% round(digits = 3)` - `r results$bivar$no_proxy %>% dplyr::filter(phen1 == "LBD2020", phen2 == "PD2019", locus == 2351) %>% dplyr::pull(rho.upper) %>% round(digits = 3)`); p = `r results$bivar$no_proxy %>% dplyr::filter(phen1 == "LBD2020", phen2 == "PD2019", locus == 2351) %>% dplyr::pull(p) %>% round(digits = 3)`; by-proxy: $\rho$ = `r results$bivar$proxy %>% dplyr::filter(phen1 == "LBD2020", phen2 == "PD2019", locus == 2351) %>% dplyr::pull(rho) %>% round(digits = 3)` (CI: `r results$bivar$proxy %>% dplyr::filter(phen1 == "LBD2020", phen2 == "PD2019", locus == 2351) %>% dplyr::pull(rho.lower) %>% round(digits = 3)` - `r results$bivar$proxy %>% dplyr::filter(phen1 == "LBD2020", phen2 == "PD2019", locus == 2351) %>% dplyr::pull(rho.upper) %>% round(digits = 3)`); p = `r results$bivar$proxy %>% dplyr::filter(phen1 == "LBD2020", phen2 == "PD2019", locus == 2351) %>% dplyr::pull(p) %>% signif(digits = 3)`).
 
 ### Figures
 
-```{r proxy-correlation, fig.cap = "Scatter plot of -log10(p-value), r2 and rho for each pair of phenotypes with sufficient univariate signal to carry out a bivariate test using AD/PD GWASs with or without by-proxy cases. The red dashed line represents the line y = x. Points are coloured, where applicable, by whether they share the same direction of effect."}
+```{r proxy-correlation, fig.cap = "Scatter plot of -log10(p-value) and rho for each pair of phenotypes with sufficient univariate signal to carry out a bivariate test using AD/PD GWASs with or without by-proxy cases.  In each panel, Spearman’s rho (ρ) and associated p-value (p) are displayed. The black dashed line represents the line x = y. Points are coloured, where applicable, by whether they share the same direction of effect."}
 
-results_long %>% 
+temp <- 
+  results_long %>% 
   dplyr::filter(
     feature %in% 
-      c("rho", "r2", "p"),
+      c("rho", "p"),
     !is.na(proxy),
     !is.na(no_proxy)
   ) %>% 
@@ -673,16 +674,21 @@ results_long %>%
     )
   ) + 
   geom_point(
-    aes(colour = doe_same)
-    ) + 
+    size = 1.5,
+    alpha = 0.8,
+    shape = 21,
+    colour = "black",
+    aes(fill = doe_same)
+  ) + 
   geom_abline(
     intercept = 0,
     linetype = "dashed",
-    colour = "#EE442F"
-    ) +
+    colour = "black"
+  ) +
   ggpubr::stat_cor(
     method = "spearman",
-    cor.coef.name = "rho"
+    cor.coef.name = "rho",
+    size = 1.8
   ) +
   facet_wrap(
     vars(feature),
@@ -691,29 +697,50 @@ results_long %>%
   labs(
     x = "Proxy",
     y = "No proxy",
-    colour = "Same direction of effect?"
+    fill = "Same direction of effect?"
   ) +
+  scale_fill_discrete(na.translate = F) +
   theme_rhr + 
   theme(
+    axis.text.x = element_text(angle = 0, hjust = 0.5),
     legend.position = "top"
   )
 
+temp
+
 ```
 
-```{r, edge-diagram, fig.height = 6, fig.cap = "Significant bivariate local genetic correlations using AD/PD GWASs (a,b) with or (c,d) without by-proxy cases. (a, c) Edge diagrams for each LD block show the standardised coefficient for genetic correlation (rho) for each significant bivariate local genetic correlations. Significant negative and positive correlations are indicated by blue and red colour, respectively. (b, d) Heatmaps show the standardised coefficient for genetic correlation (rho) for each association within the LD block. Significant negative and positive correlations are indicated by blue and red fill, respectively. Non-significant correlations have a grey fill. (b) Edge diagrams for each LD block showing the standardised coefficient for genetic correlation (rho) for each significant bivariate local genetic correlations (p < 0.05/n_tests). "}
+```{r, edge-diagram, fig.height = 6, fig.cap = "Significant bivariate local genetic correlations using AD/PD GWASs (a,b) with or (c,d) without by-proxy cases. (a, c) Edge diagrams for each LD block show the standardised coefficient for genetic correlation (rho) for each significant bivariate local genetic correlations (p < 0.05/n_tests). Significant negative and positive correlations are indicated by blue and red colour, respectively. (b, d) Heatmaps show the standardised coefficient for genetic correlation (rho) for each association within the LD block. Significant negative and positive correlations are indicated by blue and red fill, respectively. Non-significant correlations have a grey fill."}
 
 plots <- 
   vector(mode = "list", length = 4)
 
-plots[[1]] <- plot_edge_diagram(
+plots[[1]] <- 
+  plot_edge_diagram(
   bivar_corr = 
     bivar_fdr$proxy %>% 
     dplyr::filter(
       locus %in% unique(bivar_fdr$no_proxy$locus)
+    ) %>% 
+    dplyr::mutate(
+      phen1 = phen1 %>%
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*"),
+    phen2 = phen2 %>%
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*")
     ),
-  phen = c("AD2019", "LBD2020", "PD2019"),
+  phen = c("AD", "LBD", "PD"),
   multiple_corr = FALSE, 
+  locus_labels = 
+    setNames(
+      nm = c(1273, 2351),
+      object = c("1273\nProxy", "2351\nProxy")
+    ),
   seed = 77,
+  geom_node_size = 2,
+  geom_label_size = 1.7,
+  base_size = 8,
   ncol = 4
 )
 
@@ -724,7 +751,15 @@ plots[[2]] <-
     rho_fill = 
       case_when(
              p < 0.05/1603 ~ round(rho, 2) # use cut-off from original analyses in 02_*.Rmd
-           )
+           ),
+    locus_label =
+      str_c(locus, "\nProxy"),
+    phen1 = phen1 %>%
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*"),
+    phen2 = phen2 %>%
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*")
   ) %>% 
   ggplot(
     aes(
@@ -739,19 +774,38 @@ plots[[2]] <-
     size = 2
     ) +
   labs(x = "", y = "") +
-  facet_wrap(vars(locus), ncol = 5) +
+  facet_wrap(vars(locus_label), ncol = 5) +
   scale_fill_distiller(palette = "RdYlBu", direction = -1, na.value = "#cccccc", limits = c(-1, 1)) +
-  theme_rhr
+  theme_rhr + 
+  theme(
+    axis.text.x = element_text(angle = 0, hjust = 0.5)
+  )
 
 plots[[3]] <-
   plot_edge_diagram(
-  bivar_corr = 
-    bivar_fdr$no_proxy,
-  phen = c("AD2019", "LBD2020", "PD2019"),
-  multiple_corr = FALSE, 
-  seed = 77,
-  ncol = 4
-)
+    bivar_corr = 
+      bivar_fdr$no_proxy %>% 
+      dplyr::mutate(
+        phen1 = phen1 %>%
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*"),
+    phen2 = phen2 %>%
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*")
+      ),
+    phen = c("AD", "LBD", "PD"),
+    multiple_corr = FALSE, 
+    locus_labels = 
+      setNames(
+        nm = c(1273, 2351),
+        object = c("1273\nNo proxy", "2351\nNo proxy")
+      ),
+    seed = 77,
+    geom_node_size = 2,
+    geom_label_size = 1.7,
+    base_size = 8,
+    ncol = 4
+  )
 
 plots[[4]] <-
   results$bivar$no_proxy %>% 
@@ -760,7 +814,15 @@ plots[[4]] <-
     rho_fill = 
       case_when(
         fdr < 0.05 ~ round(rho, 2)
-      )
+      ),
+    locus_label =
+      str_c(locus, "\nNo proxy"),
+    phen1 = phen1 %>%
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*"),
+    phen2 = phen2 %>%
+      stringr::str_replace_all("[:digit:]", "") %>%
+      stringr::str_remove("\\..*")
   ) %>% 
   ggplot(
     aes(
@@ -775,9 +837,12 @@ plots[[4]] <-
     size = 2
   ) +
   labs(x = "", y = "") +
-  facet_wrap(vars(locus), ncol = 5) +
+  facet_wrap(vars(locus_label), ncol = 5) +
   scale_fill_distiller(palette = "RdYlBu", direction = -1, na.value = "#cccccc", limits = c(-1, 1)) +
-  theme_rhr
+  theme_rhr + 
+  theme(
+    axis.text.x = element_text(angle = 0, hjust = 0.5)
+  )
 
 ggpubr::ggarrange(
   plotlist = plots[c(1,3,2,4)], 
@@ -788,7 +853,6 @@ ggpubr::ggarrange(
   common.legend = T,
   legend = "bottom"
   )
-
 
 ```
 
@@ -908,6 +972,141 @@ plot
 - Global correlations using GWASs without by-proxy cases mirrored global correlations using GWASs with by-proxy cases. The only exception was a significant positive correlation between LBD and AD when no by-proxy cases were included. Further, exclusion of by-proxy cases increased the strength of correlation between LBD and PD.
 - Where sufficient univariate signal existed in GWASs without by-proxy cases, we were able to replicate results using GWASs with by-proxy cases. 
 - However, in those cases where there was insufficient univariate signal, it is hard to know whether this reflects (i) a technical issue (i.e. a lack of statistical power to detect a genetic signal) or (ii) a genuine biological effect (i.e. a genuine lack of genetic signal, as the genetic signal reflected the contribution of by-proxy cases to trait $h^2$ in the region).
+
+# Manuscript {.tabset}
+
+## Supplementary figure
+
+```{r manuscript-supp-fig, eval = F, fig.height = 10}
+
+supp_fig <- 
+  cowplot::plot_grid(
+    ggpubr::ggarrange(
+      temp +
+        facet_wrap(
+          vars(feature),
+          ncol = 1,
+          scales = "free"
+        ) +
+        guides(
+          fill = guide_legend(
+            nrow = 2,
+            title.position = "top"
+          )
+        ) +
+        theme_rhr +
+        theme(
+          axis.text.x = element_text(angle = 0, hjust = 0.5),
+          legend.position = "bottom"
+          ),
+      ggpubr::ggarrange(
+        plotlist = plots[c(1,3,2,4)], 
+        nrow = 2, ncol = 2, 
+        align = "v",
+        heights = c(1,1.5),
+        common.legend = T,
+        legend = "bottom"
+      ),
+      ncol = 2,
+      align = "h", 
+      widths = c(1,2.5),
+      labels = c("a", "b")
+    ),
+    cowplot::plot_grid(
+      a,b, 
+      nrow = 1, 
+      axis = "bt", 
+      align = "h",
+      rel_widths = c(3,1)
+    ),
+    ncol = 1,
+    rel_heights = c(2,1),
+    labels = c("", "c")
+  )
+
+ggsave(
+  supp_fig,
+  path = here::here("results", "99_manuscript_figures"), 
+  filename = "suppfig_2_proxy_analysis.png",
+  device = "png", 
+  width = 160, 
+  height = 180, 
+  dpi = 300, 
+  units = "mm"
+)
+
+```
+
+## Supplemtary table
+
+```{r manuscript-supp-table, eval = F}
+
+xlsx <- 
+  setNames(
+    vector(mode = "list", length = 3),
+    c("column_descriptions", "univariate", "bivariate")
+  )
+
+xlsx[[2]] <-
+  results$univ$no_proxy
+
+xlsx[[3]] <-
+   results$bivar$no_proxy
+
+xlsx[[1]] <-
+  tibble(
+    column = colnames(results$univ),
+    description = 
+      c(
+        "LD block ID",
+        "LD block chromosome",
+        "LD block start base pair",
+        "LD block end base pair",
+        "The number of SNPs within the LD block",
+        "The number of PCs retained within the LD block",
+        "Analysed phenotype",
+        "Observed local heritability",
+        "P-value from the univariate test (F-test for continuous, Chi-sq for binary)"
+      )
+  ) %>%
+  dplyr::mutate(sheet = "univariate") %>% 
+  dplyr::bind_rows(
+    tibble(
+      column = colnames(results$bivar),
+      description = 
+        c(
+          "LD block ID",
+          "LD block chromosome",
+          "LD block start base pair",
+          "LD block end base pair",
+          "The number of SNPs within the LD block",
+          "The number of PCs retained within the LD block",
+          "Phenotype 1",
+          "Phenotype 2",
+          "Standardised coefficient for the local genetic correlation",
+          "Lower 95% confidence estimate for rho",
+          "Upper 95% confidence estimate for rho",
+          "Equivalent of taking the square of rho. Denotes the proportion of variance in genetic signal for phen1 explained by phen2 (and vice versa)",
+          "Lower 95% confidence estimate for r2",
+          "Upper 95% confidence estimate for r2",
+          "Simulation p-values for the local genetic correlation"
+        )
+    ) %>% 
+      dplyr::mutate(sheet = "bivariate")
+  ) %>% 
+  dplyr::select(sheet, everything())
+
+openxlsx::write.xlsx(
+  xlsx,
+  file = file.path(here::here("results", "99_manuscript_figures"), "SupplementaryTable4_lava_local_noproxy.xlsx"),
+  row.names = FALSE,
+  headerStyle = openxlsx::createStyle(textDecoration = "BOLD"),
+  firstRow = TRUE,
+  append = TRUE,
+  overwrite = TRUE
+)
+
+```
 
 # Session info
 
