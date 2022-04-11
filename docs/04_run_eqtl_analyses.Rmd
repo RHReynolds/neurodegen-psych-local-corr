@@ -376,7 +376,43 @@ results_long <-
     names_to = "feature",
     values_to = "value"
   ) %>% 
-  tidyr::pivot_wider(names_from = "window_size")
+  tidyr::pivot_wider(names_from = "window_size") %>% 
+  dplyr::mutate(
+    across(
+      .cols = contains("window"),
+      ~ case_when(
+        feature == "p" ~ -log10(.x),
+        TRUE ~ .x
+      )
+    )
+  ) %>%
+  dplyr::mutate(
+    feature = 
+      case_when(
+        feature == "p" ~ "-log10(p)",
+        TRUE ~ feature
+      ), 
+    phenotype_corr =
+      case_when(
+        str_detect(phen2, "ENSG") ~ "gwas-eqtl",
+        TRUE ~ "gwas-gwas"
+      ),
+    doe_100000 =
+      case_when(
+        feature == "rho" & window_100000 < 0 ~ "-",
+        feature == "rho" & window_100000 > 0 ~ "+"
+      ),
+    doe_50000 =
+      case_when(
+        feature == "rho" & window_50000 < 0 ~ "-",
+        feature == "rho" & window_50000 > 0 ~ "+" 
+      ),
+    doe_same =
+      case_when(
+        doe_100000 == doe_50000 ~ TRUE,
+        doe_100000 != doe_50000 ~ FALSE
+      )
+  )
 
 print("Bivariate column descriptions:")
 
@@ -487,13 +523,16 @@ overlap %>%
 ## Comparison of bivariate local $r_{g}$'s across 50-kb and 100-kb windows {.tabset}
 
 ### Text
-- Bivariate $r^{2}$, $\rho$ and -log10(p-value) estimates between phenotypes that could be tested using genic regions with a 50-kb or 100-kb window were significantly positively correlated across the two window sizes (Figure \@ref(fig:window-correlation)). Notably, $r^{2}$ estimates (i.e. the proportion of variance in genetic signal for one phenotype explained by the other) tended to be higher when using the 50-kb window, as compared to the 100-kb window, as evidenced by the fitted line falling below the equivalent of $y = x$.
-- Using the more stringent Bonferroni cut-off, we detect a total of `r overlap %>% dplyr::filter(bonferroni_100000 < 0.05 & bonferroni_50000 < 0.05) %>% nrow()` significant bivariate local $r_{g}$'s across `r overlap %>% dplyr::filter(bonferroni_100000 < 0.05 & bonferroni_50000 < 0.05) %>% dplyr::distinct(gene_locus) %>% nrow()` distinct genic regions, which replicate irrespective of the window size used to define genic regions (Figure \@ref(fig:window-n)). 
-    - This equates to `r ((overlap %>% dplyr::filter(bonferroni_100000 < 0.05 & bonferroni_50000 < 0.05) %>% nrow())/(bivar_bonf %>% qdapTools::list_df2df(col1 = "window_size") %>% dplyr::distinct(ld_block, eqtl_dataset, gene_locus, gene_name, phen1, phen2) %>% nrow()) * 100) %>% round(digits = 0)`% of the significant `r bivar_bonf %>% qdapTools::list_df2df(col1 = "window_size") %>% dplyr::distinct(ld_block, eqtl_dataset, gene_locus, gene_name, phen1, phen2) %>% nrow()` bivariate local $r_{g}$'s across both window sizes. 
-    - Alternatively, this equates to `r ((overlap %>% dplyr::filter(bonferroni_100000 < 0.05 & bonferroni_50000 < 0.05) %>% nrow())/(bivar_bonf$window_100000 %>% nrow()) * 100) %>% round(digits = 0)`% of the `r bivar_bonf$window_100000 %>% nrow()` significant bivariate local $r_{g}$'s using the 100-kb window and `r ((overlap %>% dplyr::filter(bonferroni_100000 < 0.05 & bonferroni_50000 < 0.05) %>% nrow())/(bivar_bonf$window_50000 %>% nrow()) * 100) %>% round(digits = 0)`% of the `r bivar_bonf$window_50000 %>% nrow()` significant bivariate local $r_{g}$'s using the 50-kb window.
-- By comparison, using the more lenient FDR cut-off, we detect a total of `r overlap %>% dplyr::filter(fdr_100000 < 0.05 & fdr_50000 < 0.05) %>% nrow()` significant bivariate local $r_{g}$'s across `r overlap %>% dplyr::filter(fdr_100000 < 0.05 & fdr_50000 < 0.05) %>% dplyr::distinct(gene_locus) %>% nrow()` distinct genic regions, which replicate irrespective of the window size used to define genic regions (Figure \@ref(fig:window-n)). 
+- Bivariate $r^{2}$, $\rho$ and -log10(p-value) estimates between phenotypes that could be tested using genic regions with a 50-kb or 100-kb window were significantly positively correlated across the two window sizes (Figure \@ref(fig:window-correlation)). 
+    - Notably, $r^{2}$ estimates (i.e. the proportion of variance in genetic signal for one phenotype explained by the other) tended to be higher when using the 50-kb window, as compared to the 100-kb window, as evidenced by the fitted line falling below the equivalent of $y = x$.
+    - P-values between GWAS and eQTLs tended to be more significant when using the 50-kb window, as compared to the 100-kb window, as evidenced by the fitted line falling below the equivalent of $y = x$. In contrast, p-values between gwas traits were comparable across the two window sizes.
+    - While rho estimates between the two window sizes were positively correlated, `r results_long %>% dplyr::filter(doe_same == FALSE) %>% nrow()` local correlations (of the total `r results_long %>% dplyr::filter(!is.na(doe_same)) %>% nrow()` testable) did not share the same direction of effect.  
+- Using the more lenient FDR cut-off, we detect a total of `r overlap %>% dplyr::filter(fdr_100000 < 0.05 & fdr_50000 < 0.05) %>% nrow()` significant bivariate local $r_{g}$'s across `r overlap %>% dplyr::filter(fdr_100000 < 0.05 & fdr_50000 < 0.05) %>% dplyr::distinct(gene_locus) %>% nrow()` distinct genic regions, which replicate irrespective of the window size used to define genic regions (Figure \@ref(fig:window-n)). 
     - This equates to `r ((overlap %>% dplyr::filter(fdr_100000 < 0.05 & fdr_50000 < 0.05) %>% nrow())/(bivar_fdr %>% qdapTools::list_df2df(col1 = "window_size") %>% dplyr::distinct(ld_block, eqtl_dataset, gene_locus, gene_name, phen1, phen2) %>% nrow()) * 100) %>% round(digits = 0)`% of the significant `r bivar_fdr %>% qdapTools::list_df2df(col1 = "window_size") %>% dplyr::distinct(ld_block, eqtl_dataset, gene_locus, gene_name, phen1, phen2) %>% nrow()` bivariate local $r_{g}$'s across both window sizes. 
     - Alternatively, this equates to `r ((overlap %>% dplyr::filter(fdr_100000 < 0.05 & fdr_50000 < 0.05) %>% nrow())/(bivar_fdr$window_100000 %>% nrow()) * 100) %>% round(digits = 0)`% of the `r bivar_fdr$window_100000 %>% nrow()` significant bivariate local $r_{g}$'s using the 100-kb window and `r ((overlap %>% dplyr::filter(fdr_100000 < 0.05 & fdr_50000 < 0.05) %>% nrow())/(bivar_fdr$window_50000 %>% nrow()) * 100) %>% round(digits = 0)`% of the `r bivar_fdr$window_50000 %>% nrow()` significant bivariate local $r_{g}$'s using the 50-kb window.
+- By comparison, using the more stringent Bonferroni cut-off, we detect a total of `r overlap %>% dplyr::filter(bonferroni_100000 < 0.05 & bonferroni_50000 < 0.05) %>% nrow()` significant bivariate local $r_{g}$'s across `r overlap %>% dplyr::filter(bonferroni_100000 < 0.05 & bonferroni_50000 < 0.05) %>% dplyr::distinct(gene_locus) %>% nrow()` distinct genic regions, which replicate irrespective of the window size used to define genic regions (Figure \@ref(fig:window-n)). 
+    - This equates to `r ((overlap %>% dplyr::filter(bonferroni_100000 < 0.05 & bonferroni_50000 < 0.05) %>% nrow())/(bivar_bonf %>% qdapTools::list_df2df(col1 = "window_size") %>% dplyr::distinct(ld_block, eqtl_dataset, gene_locus, gene_name, phen1, phen2) %>% nrow()) * 100) %>% round(digits = 0)`% of the significant `r bivar_bonf %>% qdapTools::list_df2df(col1 = "window_size") %>% dplyr::distinct(ld_block, eqtl_dataset, gene_locus, gene_name, phen1, phen2) %>% nrow()` bivariate local $r_{g}$'s across both window sizes. 
+    - Alternatively, this equates to `r ((overlap %>% dplyr::filter(bonferroni_100000 < 0.05 & bonferroni_50000 < 0.05) %>% nrow())/(bivar_bonf$window_100000 %>% nrow()) * 100) %>% round(digits = 0)`% of the `r bivar_bonf$window_100000 %>% nrow()` significant bivariate local $r_{g}$'s using the 100-kb window and `r ((overlap %>% dplyr::filter(bonferroni_100000 < 0.05 & bonferroni_50000 < 0.05) %>% nrow())/(bivar_bonf$window_50000 %>% nrow()) * 100) %>% round(digits = 0)`% of the `r bivar_bonf$window_50000 %>% nrow()` significant bivariate local $r_{g}$'s using the 50-kb window.
 - As seen with $r^{2}$ estimates from all phenotype pairs that could be tested across both window sizes, bivariate local $r_{g}$'s that were significant (Bonferroni-corrected p < 0.05) across both window sizes tended to have a higher $r^{2}$ estimate when using the 50-kb window, as compared to the 100-kb window (Figure \@ref(fig:window-r2)). 
 - Irrespective of stringency used, more significant bivariate local $r_{g}$'s were identified using the 100-kb window. Further, there were some significant bivariate local $r_{g}$'s that were only identified when using one of the window sizes (Figure \@ref(fig:window-n)).
 
@@ -507,43 +546,7 @@ results_long %>%
       c("chr", "start", "stop", "fdr", "bonferroni", "n_pcs", "n_snps"),
     !str_detect(feature, "upper"),
     !str_detect(feature, "lower")
-  ) %>% 
-  dplyr::mutate(
-    across(
-      .cols = contains("window"),
-      ~ case_when(
-        feature == "p" ~ -log10(.x),
-        TRUE ~ .x
-      )
-    )
   ) %>%
-  dplyr::mutate(
-    feature = 
-      case_when(
-        feature == "p" ~ "-log10(p)",
-        TRUE ~ feature
-      ), 
-    phenotype_corr =
-      case_when(
-        str_detect(phen2, "ENSG") ~ "gwas-eqtl",
-        TRUE ~ "gwas-gwas"
-      ),
-    doe_100000 =
-      case_when(
-        feature == "rho" & window_100000 < 0 ~ "-",
-        feature == "rho" & window_100000 > 0 ~ "+"
-      ),
-    doe_50000 =
-      case_when(
-        feature == "rho" & window_50000 < 0 ~ "-",
-        feature == "rho" & window_50000 > 0 ~ "+" 
-      ),
-    doe_same =
-      case_when(
-        doe_100000 == doe_50000 ~ TRUE,
-        doe_100000 != doe_50000 ~ FALSE
-      )
-  ) %>% 
   ggplot(
     aes(
       x = window_50000,
@@ -553,18 +556,18 @@ results_long %>%
   geom_point(
     aes(
       fill = doe_same
-      ),
+    ),
     shape = 21,
     colour = "black",
     alpha = 0.4
-    ) + 
+  ) + 
   geom_smooth(
-    method = "lm", 
+    method = "lm",
     formula = "y~x",
-    level = 0.99, 
-    colour = "black", 
+    level = 0.99,
+    colour = "black",
     fill = "grey"
-    ) +
+  ) +
   ggpubr::stat_cor(
     method = "pearson",
     cor.coef.name = "R"
@@ -573,7 +576,7 @@ results_long %>%
     intercept = 0,
     linetype = "dashed",
     colour = "#EE442F"
-    ) +
+  ) +
   facet_wrap(
     vars(phenotype_corr, feature),
     scales = "free"
@@ -641,13 +644,13 @@ results$bivar %>%
 ```
 
 
-```{r window-r2, fig.cap = "(a) Boxplot displaying r2 estimates between phenotype pairs that demonstrated significant bivariate local genetic correlation (Bonferroni-corrected p < 0.05) across both window sizes. Grey lines indicate paired estimates. (b) Density plot displaying difference in r2 estimates between phenotype pairs that demonstrated significant bivariate local genetic correlation (Bonferroni-corrected p < 0.05) across both window sizes."}
+```{r window-r2, fig.cap = "(a) Boxplot displaying r2 estimates between phenotype pairs that demonstrated significant bivariate local genetic correlation (FDR < 0.05) across both window sizes. Grey lines indicate paired estimates. (b) Density plot displaying difference in r2 estimates between phenotype pairs that demonstrated significant bivariate local genetic correlation (FDR < 0.05) across both window sizes."}
 
 a <-
   results_long %>% 
   inner_join(
     overlap %>%
-      dplyr::filter(bonferroni_100000 < 0.05 & bonferroni_50000 < 0.05) %>% 
+      dplyr::filter(fdr_100000 < 0.05 & fdr_50000 < 0.05) %>% 
       dplyr::select(ld_block, eqtl_dataset, gene_locus, gene_name, phen1, phen2)
   ) %>% 
   dplyr::filter(feature == "r2") %>% 
@@ -673,7 +676,7 @@ b <-
   results_long %>% 
   inner_join(
     overlap %>%
-      dplyr::filter(bonferroni_100000 < 0.05 & bonferroni_50000 < 0.05) %>% 
+      dplyr::filter(fdr_100000 < 0.05 & fdr_50000 < 0.05) %>% 
       dplyr::select(ld_block, eqtl_dataset, gene_locus, gene_name, phen1, phen2)
   ) %>%
   dplyr::filter(
@@ -703,23 +706,23 @@ ggpubr::ggarrange(
 
 ### Text
 
-- Using the more stringent Bonferroni cut-off, we detect a total of `r bivar_bonf$window_100000 %>% nrow()` significant bivariate local $r_{g}$'s across `r bivar_bonf$window_100000 %>% dplyr::distinct(gene_locus) %>% nrow()` distinct genic regions, `r bivar_bonf$window_100000 %>% dplyr::filter(str_detect(phen2, "ENSG")) %>% nrow()` of which involved a GWAS-eQTL pairing (`r bivar_bonf$window_100000 %>% dplyr::filter(str_detect(phen2, "ENSG")) %>% dplyr::distinct(gene_locus) %>% nrow()` distinct genic regions). When pairs of disease phenotypes (which were tested across multiple genes within an LD block) are collapsed within an LD block, we detect a total of `r bivar_bonf$window_100000 %>% dplyr::distinct(ld_block, phen1, phen2) %>% nrow()` significant bivariate local $r_{g}$'s.
-- By comparison, when the more lenient FDR cut-off, we detect a total of `r bivar_fdr$window_100000 %>% nrow()` significant bivariate local $r_{g}$'s across `r bivar_fdr$window_100000 %>% dplyr::distinct(gene_locus) %>% nrow()` distinct genic regions, `r bivar_fdr$window_100000 %>% dplyr::filter(str_detect(phen2, "ENSG")) %>% nrow()` of which involved a GWAS-eQTL pairing (`r bivar_fdr$window_100000 %>% dplyr::filter(str_detect(phen2, "ENSG")) %>% dplyr::distinct(gene_locus) %>% nrow()` distinct genic regions). When pairs of disease phenotypes (which were tested across multiple genes within an LD block) are collapsed within an LD block, we detect a total of `r bivar_fdr$window_100000 %>% dplyr::distinct(ld_block, phen1, phen2) %>% nrow()` significant bivariate local $r_{g}$'s.
+- Using the more lenient FDR cut-off, we detect a total of `r bivar_fdr$window_100000 %>% nrow()` significant bivariate local $r_{g}$'s across `r bivar_fdr$window_100000 %>% dplyr::distinct(gene_locus) %>% nrow()` distinct genic regions, `r bivar_fdr$window_100000 %>% dplyr::filter(str_detect(phen2, "ENSG")) %>% nrow()` of which involved a GWAS-eQTL pairing (`r bivar_fdr$window_100000 %>% dplyr::filter(str_detect(phen2, "ENSG")) %>% dplyr::distinct(gene_locus) %>% nrow()` distinct genic regions). When pairs of disease phenotypes (which were tested across multiple genes within an LD block) are collapsed within an LD block, we detect a total of `r bivar_fdr$window_100000 %>% dplyr::distinct(ld_block, phen1, phen2) %>% nrow()` significant bivariate local $r_{g}$'s.
+- By comparison, using the more stringent Bonferroni cut-off, we detect a total of `r bivar_bonf$window_100000 %>% nrow()` significant bivariate local $r_{g}$'s across `r bivar_bonf$window_100000 %>% dplyr::distinct(gene_locus) %>% nrow()` distinct genic regions, `r bivar_bonf$window_100000 %>% dplyr::filter(str_detect(phen2, "ENSG")) %>% nrow()` of which involved a GWAS-eQTL pairing (`r bivar_bonf$window_100000 %>% dplyr::filter(str_detect(phen2, "ENSG")) %>% dplyr::distinct(gene_locus) %>% nrow()` distinct genic regions). When pairs of disease phenotypes (which were tested across multiple genes within an LD block) are collapsed within an LD block, we detect a total of `r bivar_bonf$window_100000 %>% dplyr::distinct(ld_block, phen1, phen2) %>% nrow()` significant bivariate local $r_{g}$'s.
 - Of the two eQTL datasets, the dataset with the highest number of genic regions (i.e. a gene where eQTLs were detected) was PsychENCODE (eQTLGen, n genic regions = `r results$univ$window_100000 %>% dplyr::distinct(eqtl_dataset, gene_locus) %>% dplyr::count(eqtl_dataset) %>% dplyr::filter(eqtl_dataset == "EQTLGEN") %>% .[["n"]]`; PsychENCODE, n genic regions = `r results$univ$window_100000 %>% dplyr::distinct(eqtl_dataset, gene_locus) %>% dplyr::count(eqtl_dataset) %>% dplyr::filter(eqtl_dataset == "PSYCHENCODE") %>% .[["n"]]`). In spite of this, the eQTL dataset with highest number of significant bivariate local $r_{g}$'s was eQTLGen, irrespective of the stringency of multiple test correction (Figure \@ref(fig:chord-diagram-rho-bonf), \@ref(fig:chord-diagram-rho-fdr)). This likely reflects the bias in the selection of the LD blocks, which were weighted towards the AD/PD phenotypes, where we might expect to see a greater association with blood-derived molecular phenotypes.
 - Given that genic regions might vary in size, we plotted the number of SNPs within a locus and the p-value from the univariate test to determine whether there was a relationship between locus size and univariate p-value. There was no apparent relationship between the two (as determined by visual inspection, Figure \@ref(fig:nsnps-univ-pvalue)).
 
 ### Figures
 
-```{r chord-diagram-rho-bonf, fig.height = 6, fig.cap = "Chord diagram showing the number of **distinct** significant bivariate local genetic correlations between each of the traits across all LD blocks (Bonferroni-corrected p < 0.05). Pairs of disease phenotypes (which were tested across multiple genes within an LD block) were collapsed and their average rho within the LD block used. Positive and negative correlations are coloured red and blue, respectively."}
+```{r chord-diagram-rho-fdr, fig.height = 6, fig.cap = "Chord diagram showing the number of **distinct** significant bivariate local genetic correlations between each of the traits across all LD blocks (FDR-corrected p < 0.05). Pairs of disease phenotypes (which were tested across multiple genes within an LD block) were collapsed and their average rho within the LD block used. Positive and negative correlations are coloured red and blue, respectively."}
 
 data_to_plot <-
-  bivar_bonf$window_100000 %>% 
+  bivar_fdr$window_100000 %>% 
   dplyr::filter(!str_detect(phen2, "ENSG")) %>% 
   dplyr::distinct(ld_block, phen1, phen2, rho) %>% 
   dplyr::group_by(ld_block, phen1, phen2) %>% 
   dplyr::summarise(rho = mean(rho)) %>% 
   dplyr::bind_rows(
-    bivar_bonf$window_100000 %>% 
+    bivar_fdr$window_100000 %>% 
       dplyr::filter(str_detect(phen2, "ENSG")) %>% 
       dplyr::distinct(eqtl_dataset, ld_block, phen1, phen2, rho) %>% 
       dplyr::mutate(
@@ -741,16 +744,16 @@ plot_bivar_chord_diagram(
 
 ```
 
-```{r chord-diagram-rho-fdr, fig.height = 6, fig.cap = "Chord diagram showing the number of **distinct** significant bivariate local genetic correlations between each of the traits across all LD blocks (FDR-corrected p < 0.05). Pairs of disease phenotypes (which were tested across multiple genes within an LD block) were collapsed and their average rho within the LD block used. Positive and negative correlations are coloured red and blue, respectively."}
+```{r chord-diagram-rho-bonf, fig.height = 6, fig.cap = "Chord diagram showing the number of **distinct** significant bivariate local genetic correlations between each of the traits across all LD blocks (Bonferroni-corrected p < 0.05). Pairs of disease phenotypes (which were tested across multiple genes within an LD block) were collapsed and their average rho within the LD block used. Positive and negative correlations are coloured red and blue, respectively."}
 
 data_to_plot <-
-  bivar_fdr$window_100000 %>% 
+  bivar_bonf$window_100000 %>% 
   dplyr::filter(!str_detect(phen2, "ENSG")) %>% 
   dplyr::distinct(ld_block, phen1, phen2, rho) %>% 
   dplyr::group_by(ld_block, phen1, phen2) %>% 
   dplyr::summarise(rho = mean(rho)) %>% 
   dplyr::bind_rows(
-    bivar_fdr$window_100000 %>% 
+    bivar_bonf$window_100000 %>% 
       dplyr::filter(str_detect(phen2, "ENSG")) %>% 
       dplyr::distinct(eqtl_dataset, ld_block, phen1, phen2, rho) %>% 
       dplyr::mutate(
@@ -847,7 +850,7 @@ results$univ$window_100000 %>%
     
 ### Figures
 
-```{r edge-diagram-fdr, fig.height= 10, fig.cap = "(a) Locus plot. Genic regions with a significant bivariate local genetic correlation between a disease phenotype and eQTL are highlighted in blue (FDR-corrected p < 0.05). (b) Edge diagrams for genic regions where a significant bivariate local genetic correlation was observed between a disease phenotype and eQTL (FDR-corrected p < 0.05). Edges display the standardised coefficient for genetic correlation (rho) for significant bivariate local genetic correlations, with negative and positive correlations indicated by blue and red colour, respectively. GWAS and eQTL nodes are indicated by grey and white fill, respectively."}
+```{r edge-diagram-fdr, fig.height= 10, fig.cap = "(a) Locus plot. Genic regions (including 100-kb window) with a significant bivariate local genetic correlation between a disease phenotype and eQTL are highlighted in blue (FDR-corrected p < 0.05). (b) Edge diagrams for genic regions where a significant bivariate local genetic correlation was observed between a disease phenotype and eQTL (FDR-corrected p < 0.05). Edges display the standardised coefficient for genetic correlation (rho) for significant bivariate local genetic correlations, with negative and positive correlations indicated by blue and red colour, respectively. GWAS and eQTL nodes are indicated by grey and white fill, respectively."}
 
 ld_blocks <- 
   bivar_fdr$window_100000$ld_block %>% unique() %>% sort()
@@ -893,6 +896,7 @@ for(block in ld_blocks){
     plot_locus(
     locus_gr = loci_gr[loci_gr$locus == block], 
     ref = ref,
+    window = 50000,
     highlight_gene = qtl_genes,
     highlight_gene_label = "QTL - local rg?"
     )
@@ -962,7 +966,7 @@ fig_list[5]
 
 ### Figures
 
-```{r edge-diagram-bonf, fig.height= 10, fig.cap = "(a) Locus plot. Genic regions with a significant bivariate local genetic correlation between a disease phenotype and eQTL are highlighted in blue (Bonferroni-corrected p < 0.05). (b) Edge diagrams for genic regions where a significant bivariate local genetic correlation was observed between a disease phenotype and eQTL (Bonferroni-corrected p < 0.05). Edges display the standardised coefficient for genetic correlation (rho) for significant bivariate local genetic correlations, with negative and positive correlations indicated by blue and red colour, respectively. GWAS and eQTL nodes are indicated by grey and white fill, respectively."}
+```{r edge-diagram-bonf, fig.height= 10, fig.cap = "(a) Locus plot. Genic regions (including 100-kb window) with a significant bivariate local genetic correlation between a disease phenotype and eQTL are highlighted in blue (Bonferroni-corrected p < 0.05). (b) Edge diagrams for genic regions where a significant bivariate local genetic correlation was observed between a disease phenotype and eQTL (Bonferroni-corrected p < 0.05). Edges display the standardised coefficient for genetic correlation (rho) for significant bivariate local genetic correlations, with negative and positive correlations indicated by blue and red colour, respectively. GWAS and eQTL nodes are indicated by grey and white fill, respectively."}
 
 ld_blocks <- 
   bivar_bonf$window_100000 %>%
@@ -1257,6 +1261,155 @@ ggsave(
   device = "png", 
   width = 60, 
   height = 130, 
+  dpi = 300, 
+  units = "mm"
+)
+
+```
+
+# Manuscript {.tabset}
+
+## Supplementary figure
+
+```{r manuscript-supp-fig, eval = F, fig.height = 10}
+
+plots <- vector(mode = "list", length = 2)
+
+plots[[1]] <- 
+  results$bivar %>% 
+  qdapTools::list_df2df(col1 = "window_size") %>% 
+  tidyr::pivot_longer( 
+    cols = -c("window_size", "ld_block", "eqtl_dataset", "gene_locus", "gene_name", "phen1", "phen2"),
+    names_to = "feature",
+    values_to = "value"
+  ) %>% 
+  dplyr::mutate(
+    window_size =
+      window_size %>% 
+      readr::parse_number() %>% 
+      format(scientific = FALSE) %>% 
+      as.factor()
+  ) %>% 
+  dplyr::filter(
+    feature %in% c("fdr"),
+    value < 0.05
+  ) %>% 
+  dplyr::count(window_size, feature, name = "n_total") %>% 
+  dplyr::mutate(
+    unique =
+      case_when(
+        feature == "fdr" ~ n_total - (overlap %>% dplyr::filter(fdr_100000 < 0.05 & fdr_50000 < 0.05) %>% nrow())
+      ),
+    shared =
+      n_total-unique
+  ) %>% 
+  tidyr::pivot_longer(
+    cols = unique:shared,
+    names_to = "sharing",
+    values_to = "n"
+  ) %>% 
+  ggplot(
+    aes(
+      x = window_size,
+      y = n,
+      fill = sharing
+    )
+  ) + 
+  geom_col(colour = "black") +
+  scale_fill_grey() +
+  guides(
+    fill = guide_legend(
+      nrow = 2,
+      title.position = "top"
+    )
+  ) +
+  labs(
+    x = "Window size (kb)",
+    y = "Number of significant bivariate local rg",
+    fill = "Sharing of local rgs"
+  ) +
+  theme_rhr +
+  theme(legend.position = "bottom")
+  
+  
+plots[[2]] <- 
+  results_long %>% 
+  dplyr::filter(
+    !feature %in%
+      c("chr", "start", "stop", "fdr", "bonferroni", "n_pcs", "n_snps", "r2"),
+    !str_detect(feature, "upper"),
+    !str_detect(feature, "lower")
+  ) %>%
+  ggplot(
+    aes(
+      x = window_50000,
+      y = window_100000
+    )
+  ) + 
+  geom_point(
+    aes(
+      fill = doe_same
+    ),
+    shape = 21,
+    colour = "black",
+    alpha = 0.4
+  ) + 
+  geom_smooth(
+    method = "lm",
+    formula = "y~x",
+    level = 0.99,
+    colour = "black",
+    fill = "grey"
+  ) +
+  ggpubr::stat_cor(
+    method = "pearson",
+    cor.coef.name = "R",
+    size = 3
+  ) +
+  geom_abline(
+    intercept = 0,
+    linetype = "dashed",
+    colour = "#EE442F"
+  ) +
+  facet_wrap(
+    vars(phenotype_corr, feature),
+    scales = "free"
+  ) +
+  labs(
+    x = "50-kb window",
+    y = "100-kb window",
+    fill = "Same direction of effect?"
+  ) +
+  scale_fill_discrete(na.translate = F) +
+  theme_rhr +
+  guides(
+    fill = guide_legend(
+      nrow = 2,
+      title.position = "top"
+    )
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 0, hjust = 0.5),
+    legend.position = "bottom"
+    )
+
+supp_fig <-
+  cowplot::plot_grid(
+    plotlist = plots, 
+    nrow = 1, 
+    axis = "bt", 
+    align = "h",
+    rel_widths = c(1,3),
+    labels = letters[1:length(plots)]
+  )
+
+ggsave(
+  supp_fig,
+  path = here::here("results", "99_manuscript_figures"), 
+  filename = "suppfig_3_windowsize_analysis.png",
+  device = "png", 
+  width = 150, 
+  height = 150, 
   dpi = 300, 
   units = "mm"
 )

@@ -641,7 +641,7 @@ plot_global_corr(
 
 ### Figures
 
-```{r proxy-correlation, fig.cap = "Scatter plot of -log10(p-value) and rho for each pair of phenotypes with sufficient univariate signal to carry out a bivariate test using AD/PD GWASs with or without by-proxy cases.  In each panel, Spearman’s rho (ρ) and associated p-value (p) are displayed. The black dashed line represents the line x = y. Points are coloured, where applicable, by whether they share the same direction of effect."}
+```{r proxy-correlation, fig.cap = "Scatter plot of -log10(p-value) and rho for each pair of phenotypes with sufficient univariate signal to carry out a bivariate test using AD/PD GWASs with or without by-proxy cases.  In each panel, Peason's coefficient (R) and associated p-value (p) are displayed. The black dashed line represents the line x = y. Points are coloured, where applicable, by whether they share the same direction of effect."}
 
 temp <- 
   results_long %>% 
@@ -686,9 +686,9 @@ temp <-
     colour = "black"
   ) +
   ggpubr::stat_cor(
-    method = "spearman",
-    cor.coef.name = "rho",
-    size = 1.8
+    method = "pearson",
+    cor.coef.name = "R",
+    size = 3
   ) +
   facet_wrap(
     vars(feature),
@@ -941,7 +941,7 @@ b <-
       ymax = r2.upper
     )
   ) +
-  geom_col() + 
+  geom_col(colour = "black", fill = "#d9d9d9") + 
   geom_errorbar(width=.2) +
   labs(
     x = "Locus and model",

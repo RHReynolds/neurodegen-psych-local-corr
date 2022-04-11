@@ -9,6 +9,8 @@
 #'   \item locus - locus identifier.
 #'   }
 #' @param ref gr. Granges object containing reference ensembl gtf.
+#' @param window `integer` vector indicating base pairs to be added around gene
+#'   bodies.
 #' @param highlight_gene `character` vector with genes (as ensembl IDs) to
 #'   highlight in locus. Highlighted genes will be coloured blue and labelled
 #'   "TRUE".
@@ -25,6 +27,7 @@ plot_locus <-
   function(
     locus_gr,
     ref,
+    window = NULL,
     highlight_gene = NULL,
     highlight_gene_label = NULL
   ) {
@@ -54,6 +57,21 @@ plot_locus <-
       dplyr::filter(
         gene_biotype %in% c("protein_coding", "antisense", "lincRNA")
       )
+
+    if(!is.null(window)){
+
+      coords_to_plot <-
+        coords_to_plot %>%
+        dplyr::mutate(
+          start =
+            case_when(
+              start - window < 0 ~ 0,
+              TRUE ~ start - window
+            ),
+          end = end + window
+        )
+
+    }
 
     # Add locus coordinates
     coords_to_plot <-

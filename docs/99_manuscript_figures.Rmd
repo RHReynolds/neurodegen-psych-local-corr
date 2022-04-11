@@ -310,7 +310,7 @@ plot[[1]] <-
       y = n
     )
   ) +
-  geom_col(colour = "black") +
+  geom_col(colour = "black", fill = "#d9d9d9") +
   labs(
     x = "Chromosome",
     y = "Number of LD blocks"
@@ -898,7 +898,7 @@ plot[[2]] <-
       ymax = r2.upper
     )
   ) +
-  geom_col() + 
+  geom_col(colour = "black", fill = "#d9d9d9") + 
   geom_errorbar(width=.2) +
   labs(
     x = "Locus and model",
@@ -991,7 +991,11 @@ openxlsx::write.xlsx(
 
 ## Supplementary figure(s)
 
+Refer to [04_run_eqtl_analyses.html](https://rhreynolds.github.io/neurodegen-psych-local-corr/04_run_eqtl_analyses.html).
+
 ## Supplementary table(s)
+
+Refer to [04_run_eqtl_analyses.html](https://rhreynolds.github.io/neurodegen-psych-local-corr/04_run_eqtl_analyses.html).
 
 
 <br><br>

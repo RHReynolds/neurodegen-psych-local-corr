@@ -17,7 +17,7 @@ source(here::here("R", "theme_rhr.R"))
 #'  \item `rg`: the estimated genetic correlation
 #'  \item `p`: p-value of the genetic correlation
 #'  }
-#' @param n_phenotypes `integer` vector indicating number of phenotypes run
+#' @param n_phenotypes `integer` vector indicating number of phenotypes run.
 #' @param tidy_label `logical` vector indicating whether phenotype labels should
 #'   be "tidied" i.e. remove digits and anything after `.`. Default is TRUE.
 #'
