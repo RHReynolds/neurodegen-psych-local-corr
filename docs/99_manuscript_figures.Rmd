@@ -69,36 +69,7 @@ Overview of  local and global genetic correlations between neurodegenerative dis
 ```{r fig1-data}
 
 # LAVA results
-files <- 
-  list.files(
-  path = 
-    here::here("results",
-               "02_univar_bivar_test"),
-  pattern = ".lava.rds", 
-  full.names = T
-)
-
-results <- 
-  setNames(
-    object = files %>% 
-      lapply(., function(file){
-        
-        list <- 
-          file %>% 
-          readRDS() 
-        
-        list %>% 
-          purrr::discard(is.null) %>% 
-          qdapTools::list_df2df() %>% 
-          dplyr::select(-X1)
-        
-      }),
-    nm = files %>% 
-      basename() %>% 
-      str_remove(".lava.rds") %>% 
-      str_remove(".*:") %>% 
-      str_remove(".*\\.")
-  )
+results <- readRDS(here::here("results", "02_univar_bivar_test", "results_summary.rds"))
 
 # LDSC results
 global <- 
@@ -127,15 +98,6 @@ p_threshold <- 0.05/nrow(results$bivar)
 # Tidy labels
 bivar_tidy <- 
   results$bivar %>% 
-  as_tibble() %>% 
-  dplyr::mutate(
-    phen1 = phen1 %>%
-      stringr::str_replace_all("[:digit:]", "") %>%
-      stringr::str_remove("\\..*"),
-    phen2 = phen2 %>%
-      stringr::str_replace_all("[:digit:]", "") %>%
-      stringr::str_remove("\\..*")
-  )  %>% 
   dplyr::inner_join(
     ld_blocks %>% 
       dplyr::select(locus, assoc_gwas)
@@ -193,7 +155,7 @@ bivar_count <-
 
 ## Main figure {.active}
 
-```{r fig1, fig.height = 6, fig.cap = "(a) Chord diagram showing the number of significant bivariate local rg’s (p < 0.05/1603) between each of the disease traits across all LD blocks. Positive and negative correlations are coloured red and blue, respectively. (b) Comparison between the global rg’s estimated by LDSC (bottom) and the mean local rg’s from LAVA (top) across all tested LD blocks. Significant global rg’s (p < 0.05/15) are indicated with an asterisk ('*'). The number of significant local rg’s is indicated by a number in each tile. (c) Bar plot showing the number of significant local rg’s between disease trait pairs. The fill of the bars indicates the number of significant LD blocks for which the upper limit of the r2 95% confidence interval (CI) included 1."}
+```{r fig1, fig.height = 6}
 
 plot <- vector(mode = "list", length = 2)
 
@@ -219,13 +181,13 @@ plot[[2]] <-
           .desc = T
         ),
       y = value,
-      fill = fct_rev(name)
+      fill = name
     )
   ) +
   geom_col(
     colour = "black"
   ) +
-  scale_fill_grey() +
+  scale_fill_grey(breaks=c("TRUE", "FALSE")) +
   labs(
     x = "",
     y = "Number of significant\nlocal genetic correlations",
@@ -487,7 +449,8 @@ xlsx[[2]] <-
   results$univ
 
 xlsx[[3]] <-
-  results$bivar
+  results$bivar %>% 
+  dplyr::select(-fdr)
 
 xlsx[[1]] <-
   tibble(
@@ -596,7 +559,7 @@ locus_labels <-
 
 ## Main figure {.active}
 
-```{r fig2, fig.cap = "(a) Bar plot (left) showing the number of traits within trait pairs demonstrating significant local genetic correlation that had genome-wide significant SNPs overlapping the tested LD block (as illustrated by the schematic on the right). (b) Two LD blocks illustrating the situations depicted in (a). Edge diagrams for each LD block show the standardised coefficient for genetic correlation (rho) for each significant bivariate local genetic correlation. Significant negative and positive correlations are indicated by blue and red colour, respectively. Edge diagrams are labelled by the LD block identifier, which traits had genome-wide significant SNPs overlapping the LD block (indicated in the brackets), and the genomic coordinates of the LD block (in the format chromosome:start-end). (c) Heatmaps show the standardised coefficient for genetic correlation (rho) for each bivariate local genetic correlation within the LD block. Asterisks indicate local genetic correlations that were replicated when using AD and PD GWASs which exclude by-proxy cases. Significant negative and positive correlations are indicated by blue and red fill, respectively. Non-significant correlations have a grey fill."}
+```{r fig2}
 
 plot <- vector(mode = "list", length = 4)
 
@@ -755,6 +718,7 @@ Refer to [05_run_noproxy_check.html](https://rhreynolds.github.io/neurodegen-psy
 ## Load data
 
 ```{r fig3-data}
+
 multireg <-
   list.files(
     here::here(
@@ -848,7 +812,7 @@ multireg_tidy <-
 
 ## Main figure {.active}
 
-```{r fig3, fig.cap = "Results for multiple regression models across LD blocks with significant bivariate results between a phenotype and at least 2 others. For both plots, only those multiple regression models with at least one significant predictor (p < 0.05) are shown. (a) Plots of standardised coefficients for each predictor in multiple regression models across several LD blocks, with whiskers spanning the 95% confidence interval for the coefficients. (b) Mulivariate r2 for each LD block and model, where multivariate r2 represents the proportion of variance in genetic signal for the outcome phenotype explained by all predictor phenotypes simultaneously. Whiskers span the 95% confidence interval for the r2.  3 asterisks, p < 0.001; 2 asterisks, p < 0.01; 1 asterisk, p < 0.05."}
+```{r fig3}
 
 plot <- vector(mode = "list", length = 2)
 
@@ -985,17 +949,856 @@ openxlsx::write.xlsx(
 
 ## Load data
 
+```{r fig4-data}
+
+# Genic regions
+gene_filtered_loci <- 
+  readRDS(
+    here::here("results", "04_eqtl_univar_bivar", "window_100000", "gene_filtered_loci.rds")
+  )
+
+# LAVA results
+qtl_tidy <- readRDS(here::here("results", "04_eqtl_univar_bivar", "results_summary.rds"))
+
+# Reference gene annotation
+ref <- import("/data/references/ensembl/gtf_gff3/v87/Homo_sapiens.GRCh37.87.gtf")
+ref <- ref %>% keepSeqlevels(c(1:22), pruning.mode = "coarse") 
+ref <- ref[ref$type == "gene"]
+
+```
+
 ## Data wrangling
+
+```{r fig4-wrangle}
+
+qtl_to_plot <- 
+  qtl_tidy$bivar %>% 
+  lapply(.,function(df){
+    
+    df %>% 
+      dplyr::filter(
+        str_detect(phen2, "ENSG")
+      ) %>% 
+      dplyr::mutate(
+        fill_rho = case_when(
+          p < 0.05 ~ round(rho, 2)
+        ),
+        sig = case_when(
+          fdr < 0.05 ~ "**"
+        ),
+        nom_sig = case_when(
+          p < 0.05 & fdr > 0.05 ~ ".",
+        ),
+        chr_gene = str_c("chr ",chr,": ", gene_name)
+      )
+    
+  })
+
+# Filter for genic regions containing significant eqtl-gwas local rg
+# Include all significant local rgs in genic region 
+qtl_tidy_filtered <-
+  qtl_tidy$bivar$window_100000 %>% 
+  dplyr::filter(fdr < 0.05, str_detect(phen2, "ENSG")) %>% 
+  dplyr::distinct(ld_block, eqtl_dataset, gene_locus) %>% 
+  dplyr::inner_join(qtl_tidy$bivar$window_100000) %>% 
+  dplyr::filter(fdr < 0.05)
+
+# Create list with results split by LD block
+qtl_list <- 
+  setNames(
+    qtl_tidy_filtered %>% 
+      dplyr::group_split(ld_block),
+    nm = 
+      str_c("locus_", unique(qtl_tidy_filtered$ld_block))
+  )
+
+# Number of genes implicated in each ld block
+n_genes <- 
+  gene_filtered_loci %>% 
+  dplyr::ungroup() %>% 
+  dplyr::select(ld_block = locus, gene_locus = gene_id) %>% 
+  dplyr::distinct(ld_block, gene_locus) %>% 
+  dplyr::count(ld_block, name = "n_genes") %>% 
+  dplyr::inner_join(
+    qtl_tidy_filtered %>% 
+      dplyr::distinct(ld_block, gene_locus) %>% 
+      dplyr::count(ld_block, name = "n_signif_genes")
+  ) %>% 
+  dplyr::mutate(n_not_signif_genes = n_genes - n_signif_genes) %>% 
+  tidyr::pivot_longer(
+    cols = contains("signif"),
+    names_to = "signif",
+    values_to = "n"
+  ) %>% 
+  dplyr::mutate(
+    signif =
+      case_when(
+        signif == "n_signif_genes" ~ "TRUE",
+        TRUE ~ "FALSE"
+      )
+  )
+
+# Number of distinct eQTL-disease rgs per LD block 
+# Use this to determine number of gene eQTLs shared across disease traits
+n_shared_eqtl <- 
+  qtl_tidy_filtered %>% 
+  dplyr::filter(str_detect(phen2, "ENSG")) %>% 
+  dplyr::distinct(ld_block, phen1, phen2) %>% 
+  dplyr::count(ld_block, phen2, name = "n_disease") %>% 
+  dplyr::count(ld_block, n_disease, name = "n_genes") %>% 
+  dplyr::mutate(
+    shared_eqtl =
+      case_when(
+        n_disease == 1 ~ "FALSE",
+        n_disease > 1 ~ "TRUE"
+      )
+  )
+
+# Pivot results
+qtl_bivar_long <- 
+  qtl_tidy$bivar %>% 
+  qdapTools::list_df2df(col1 = "window_size") %>% 
+  tidyr::pivot_longer( 
+    cols = -c("window_size", "ld_block", "eqtl_dataset", "gene_locus", "gene_name", "phen1", "phen2"),
+    names_to = "feature",
+    values_to = "value"
+  ) %>% 
+  tidyr::pivot_wider(names_from = "window_size") %>% 
+  dplyr::mutate(
+    across(
+      .cols = contains("window"),
+      ~ case_when(
+        feature == "p" ~ -log10(.x),
+        TRUE ~ .x
+      )
+    )
+  ) %>%
+  dplyr::mutate(
+    feature = 
+      case_when(
+        feature == "p" ~ "-log10(p)",
+        TRUE ~ feature
+      ), 
+    phenotype_corr =
+      case_when(
+        str_detect(phen2, "ENSG") ~ "gwas-eqtl",
+        TRUE ~ "gwas-gwas"
+      ),
+    doe_100000 =
+      case_when(
+        feature == "rho" & window_100000 < 0 ~ "-",
+        feature == "rho" & window_100000 > 0 ~ "+"
+      ),
+    doe_50000 =
+      case_when(
+        feature == "rho" & window_50000 < 0 ~ "-",
+        feature == "rho" & window_50000 > 0 ~ "+" 
+      ),
+    doe_same =
+      case_when(
+        doe_100000 == doe_50000 ~ TRUE,
+        doe_100000 != doe_50000 ~ FALSE
+      )
+  )
+
+# Create granges of ld blocks
+loci_gr <-
+  loci %>%
+  dplyr::rename(locus = LOC) %>% 
+  dplyr::filter(locus %in% qtl_tidy_filtered$ld_block) %>% 
+  GenomicRanges::makeGRangesFromDataFrame(
+    .,
+    keep.extra.columns = TRUE,
+    ignore.strand = TRUE,
+    seqinfo = NULL,
+    seqnames.field = "CHR",
+    start.field = "START",
+    end.field = "STOP"
+  )
+
+```
+
 
 ## Main figure {.active}
 
+```{r fig4, fig.height = 10}
+
+margin <- ggplot2::margin(t = 2, r = 0, b = 0, l = 5, unit = "mm")
+
+plots <- vector(mode = "list")
+
+plots[[1]] <-
+  n_genes %>% 
+  ggplot(
+    aes(
+      x = as.factor(ld_block),
+      y = n,
+      fill = signif
+    )
+  ) +
+  geom_col(colour = "black") +
+  geom_hline(yintercept = 1, linetype = "dashed") +
+  labs(
+    x = "LD block",
+    y = "Number of eQTL genes",
+    fill = "Significant eQTL-GWAS\nlocal rg?"
+  ) +
+  scale_fill_grey(breaks=c("TRUE", "FALSE")) +
+  guides(
+    fill = guide_legend(
+      nrow = 1,
+      title.position = "top"
+    )
+  ) +
+  theme_rhr +
+  theme(
+    legend.position = "bottom",
+    plot.margin = margin
+  )
+
+plots[[2]] <- 
+  n_shared_eqtl %>% 
+  ggplot(
+    aes(
+      x = as.factor(ld_block),
+      y = n_genes,
+      fill = shared_eqtl
+    )
+  ) +
+  geom_col(
+    colour = "black"
+  ) +
+  geom_hline(yintercept = 1, linetype = "dashed") +
+  labs(
+    x = "LD block",
+    y = "Number of eQTL genes",
+    fill = "eQTL shared across\nmultiple disease traits?"
+  ) +
+  scale_fill_grey(breaks=c("TRUE", "FALSE")) +
+  guides(
+    fill = guide_legend(
+      nrow = 1,
+      title.position = "top"
+    )
+  ) +
+  theme_rhr  +
+  theme(
+    legend.position = "bottom",
+    plot.margin = margin
+  )
+
+ld_blocks <- 
+  c(1273, 1719)
+
+for(i in 1:length(ld_blocks)){
+  
+  plots[[i+2]] <-
+   qtl_to_plot$window_100000 %>% 
+      dplyr::filter(ld_block == ld_blocks[i], fdr < 0.05) %>% 
+      ggplot(
+        aes(
+          x = 
+            fct_reorder(
+              gene_name,
+              start
+            ),
+          y = phen1
+        )
+      ) +
+      geom_count(colour = "black", shape = 15, size = 8) +
+      geom_count(aes(colour = fill_rho), shape = 15, size = 7) +
+      geom_text(aes(label = fill_rho), size = 2) +
+      coord_fixed() +
+      facet_grid(rows = vars(eqtl_dataset)) +
+      labs(x = "eQTL gene", y = "Disease trait") +
+      scale_colour_distiller(
+        palette = "RdYlBu",
+        limits = c(-1, 1), breaks = c(-1,0,1), na.value = "grey") +
+      theme_rhr +
+      theme(
+        plot.margin = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = "mm"),
+        legend.position = "none"
+      )
+  
+}
+
+plots[[5]] <- 
+  plot_qtl_edge_diagram(
+    bivar_corr_qtl = 
+      qtl_list[["locus_1273"]] %>% 
+      dplyr::filter(gene_name %in% c("CLU", "SCARA5")),
+    phen = fct_disease,
+    margin = margin,
+    seed = 89
+  )
+
+fig <-
+  cowplot::plot_grid(
+    cowplot::plot_grid(
+      cowplot::plot_grid(
+        cowplot::plot_grid(
+          plotlist = plots[c(1:2)],
+          nrow = 1,
+          labels = c("a", "b")
+        ),
+        plots[[3]],
+        rel_heights = c(1.5,1),
+        # align = "v", 
+        # axis = "lr",
+        ncol = 1,
+        labels = c("", "d")
+      ),
+      ncol = 2,
+      plots[[4]],
+      rel_widths = c(1.9,1),
+      labels = c("", "c")
+    ),
+    ggpubr::ggarrange(
+      plots[[5]]$`CLU:EQTLGEN`,
+      plots[[5]]$`SCARA5:EQTLGEN`,
+      common.legend = TRUE,
+      legend = "bottom",
+      labels = c("e","")
+    ),
+    ncol = 1,
+    rel_heights = c(1.75,1)
+  )
+
+fig
+
+```
+
+```{r fig4-save}
+
+ggsave(
+  fig,
+  path = out_dir, 
+  filename = "fig_4_eqtl.png",
+  device = "png", 
+  width = 150, 
+  height = 200, 
+  dpi = 300, 
+  units = "mm"
+)
+
+```
+
 ## Supplementary figure(s)
 
-Refer to [04_run_eqtl_analyses.html](https://rhreynolds.github.io/neurodegen-psych-local-corr/04_run_eqtl_analyses.html).
+```{r}
+
+supp_fig <- vector(mode = "list", length = 3)
+
+ld_blocks <- unique(qtl_tidy$bivar$window_100000$ld_block)
+
+plots <- 
+  setNames(
+    object = vector(mode = "list", length = length(ld_blocks)),
+    nm = str_c("ld", ld_blocks)
+  )
+
+for(block in ld_blocks){
+  
+  plots[[str_c("ld",block)]] <- 
+    qtl_to_plot$window_100000 %>% 
+    dplyr::filter(ld_block == block) %>% 
+    ggplot(
+      aes(
+        x = 
+          fct_reorder(
+            gene_name,
+            start
+          ),
+        y = phen1
+      )
+    ) +
+    geom_count(colour = "black", shape = 15, size = 5) +
+    geom_count(aes(colour = fill_rho), shape = 15, size = 4) +
+    coord_fixed() +
+    geom_text(aes(label=sig), size = 3, vjust = 0.75) +
+    geom_text(aes(label=nom_sig), size = 5, vjust = 0.1) +
+    facet_grid(rows = vars(eqtl_dataset)) +
+    labs(x = "eQTL gene", y = "Disease trait") +
+    scale_colour_distiller(
+      palette = "RdYlBu",
+      limits = c(-1, 1), breaks = c(-1,0,1), na.value = "grey") +
+    guides(colour = guide_colourbar(title = "Local rg")) +
+    theme_rhr +
+    theme(
+      plot.margin = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = "mm")
+    )
+  
+}
+
+supp_fig[[1]] <-
+  ggpubr::ggarrange(
+    ggpubr::ggarrange(
+      plotlist = 
+        plots[c(1:2)]  %>% 
+        lapply(., function(plot){
+          
+          plot +
+            theme(legend.position = "none")
+          
+        }),
+      align = "h",
+      labels = letters[1:2]
+    ),
+    ggpubr::ggarrange(
+      plotlist = 
+        plots[c(3:4)]  %>% 
+        lapply(., function(plot){
+          
+          plot +
+            theme(legend.position = "none")
+          
+        }),
+      align = "h",
+      labels = letters[3:4]
+    ),
+    plots[[5]],
+    ncol = 1,
+    heights = c(1,1.75,1),
+    common.legend = T,
+    labels = c("", "", "e")
+  )
+
+```
+
+
+```{r fig4-supp-window-size, fig.height = 10}
+
+overlap <- readRDS(here::here("results", "04_eqtl_univar_bivar", "fdr_overlap.rds"))
+
+plots <- vector(mode = "list", length = 2)
+
+plots[[1]] <- 
+  qtl_tidy$bivar %>% 
+  qdapTools::list_df2df(col1 = "window_size") %>% 
+  tidyr::pivot_longer( 
+    cols = -c("window_size", "ld_block", "eqtl_dataset", "gene_locus", "gene_name", "phen1", "phen2"),
+    names_to = "feature",
+    values_to = "value"
+  ) %>% 
+  dplyr::mutate(
+    window_size =
+      window_size %>% 
+      readr::parse_number() %>% 
+      format(scientific = FALSE) %>% 
+      as.factor()
+  ) %>% 
+  dplyr::filter(
+    feature %in% c("fdr"),
+    value < 0.05
+  ) %>% 
+  dplyr::count(window_size, feature, name = "n_total") %>% 
+  dplyr::mutate(
+    unique =
+      case_when(
+        feature == "fdr" ~ n_total - (overlap %>% dplyr::filter(fdr_100000 < 0.05 & fdr_50000 < 0.05) %>% nrow())
+      ),
+    shared =
+      n_total-unique
+  ) %>% 
+  tidyr::pivot_longer(
+    cols = unique:shared,
+    names_to = "sharing",
+    values_to = "n"
+  ) %>% 
+  ggplot(
+    aes(
+      x = window_size,
+      y = n,
+      fill = sharing
+    )
+  ) + 
+  geom_col(colour = "black") +
+  scale_fill_grey() +
+  guides(
+    fill = guide_legend(
+      nrow = 2,
+      title.position = "top"
+    )
+  ) +
+  labs(
+    x = "Window size (kb)",
+    y = "Number of significant bivariate local rg",
+    fill = "Sharing of local rgs"
+  ) +
+  theme_rhr +
+  theme(legend.position = "bottom")
+  
+  
+plots[[2]] <- 
+  qtl_bivar_long %>% 
+  dplyr::filter(
+    !feature %in%
+      c("chr", "start", "stop", "fdr", "bonferroni", "n_pcs", "n_snps", "r2"),
+    !str_detect(feature, "upper"),
+    !str_detect(feature, "lower")
+  ) %>%
+  ggplot(
+    aes(
+      x = window_50000,
+      y = window_100000
+    )
+  ) + 
+  geom_point(
+    aes(
+      fill = doe_same
+    ),
+    shape = 21,
+    colour = "black",
+    alpha = 0.4
+  ) + 
+  geom_smooth(
+    method = "lm",
+    formula = "y~x",
+    level = 0.99,
+    colour = "black",
+    fill = "grey"
+  ) +
+  ggpubr::stat_cor(
+    method = "pearson",
+    cor.coef.name = "R",
+    size = 3
+  ) +
+  geom_abline(
+    intercept = 0,
+    linetype = "dashed",
+    colour = "#EE442F"
+  ) +
+  facet_wrap(
+    vars(phenotype_corr, feature),
+    scales = "free"
+  ) +
+  labs(
+    x = "50-kb window",
+    y = "100-kb window",
+    fill = "Same direction of effect?"
+  ) +
+  scale_fill_discrete(na.translate = F) +
+  theme_rhr +
+  guides(
+    fill = guide_legend(
+      nrow = 2,
+      title.position = "top"
+    )
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 0, hjust = 0.5),
+    legend.position = "bottom"
+    )
+
+supp_fig[[2]] <-
+  cowplot::plot_grid(
+    plotlist = plots, 
+    nrow = 1, 
+    axis = "bt", 
+    align = "h",
+    rel_widths = c(1,3),
+    labels = letters[1:length(plots)]
+  )
+
+supp_fig[[2]]
+
+```
+
+```{r manuscript-supp-fig-r2}
+
+supp_fig[[3]] <-
+  qtl_tidy_filtered %>% 
+  dplyr::mutate(
+    phenotype_corr =
+      case_when(
+        str_detect(phen2, "ENSG") ~ "gwas-eqtl",
+        TRUE ~ "gwas-gwas"
+      )
+  ) %>% 
+  ggplot(
+    aes(
+      x = phenotype_corr,
+      y = r2
+      )
+    ) +
+  geom_boxplot(fill = "#d9d9d9", outlier.alpha = 0) +
+  ggbeeswarm::geom_beeswarm(alpha = 0.5) +
+  labs(
+    x = "Trait type in pair",
+    y = "Explained variance (r2)"
+  ) +
+  theme_rhr
+
+supp_fig[[3]]
+
+```
+
+```{r fig4-supp-save, eval = F}
+
+ggsave(
+  supp_fig[[1]],
+  path = out_dir, 
+  filename = "suppfig_3_eqtl_all.png",
+  device = "png", 
+  width = 170, 
+  height = 280, 
+  dpi = 300, 
+  units = "mm"
+)
+
+ggsave(
+  supp_fig[[2]],
+  path = out_dir, 
+  filename = "suppfig_4_windowsize_analysis.png",
+  device = "png", 
+  width = 150, 
+  height = 150, 
+  dpi = 300, 
+  units = "mm"
+)
+
+ggsave(
+  supp_fig[[3]],
+  path = out_dir, 
+  filename = "suppfig_5_r2.png",
+  device = "png", 
+  width = 90, 
+  height = 90, 
+  dpi = 300, 
+  units = "mm"
+)
+
+```
+
 
 ## Supplementary table(s)
 
-Refer to [04_run_eqtl_analyses.html](https://rhreynolds.github.io/neurodegen-psych-local-corr/04_run_eqtl_analyses.html).
+```{r, fig4-supp-table, fig.height = 10, eval = F}
+
+ld_blocks <- 
+  qtl_tidy$bivar$window_100000 %>% .[["ld_block"]] %>% unique() %>% str_c("ld", .)
+
+# Full results
+results_by_block <- 
+  qtl_tidy %>% 
+  lapply(., function(list_of_df){
+    
+    tmp <-
+      list_of_df %>% 
+      lapply(., function(df){
+        
+        
+        setNames(
+          object =
+            df %>%
+            dplyr::group_split(ld_block),
+          nm = 
+            df[["ld_block"]] %>% 
+            unique() %>% 
+            sort() %>% 
+            str_c("ld", .)
+        )
+        
+      })
+    
+  })
+
+col_descriptions <-
+  tibble(
+    column = colnames(results_by_block$univ$window_100000$ld681),
+    description = 
+      c(
+        "LD block ID",
+        "eQTL dataset from which gene eQTLs are derived",
+        "Ensembl ID for gene for which eQTLs were tested in genic region",
+        "HGNC symbol for gene for which eQTLs were tested in genic region",
+        "Genic region chromosome",
+        "Genic region start base pair",
+        "Genic region end base pair",
+        "The number of SNPs within the genic region",
+        "The number of PCs retained within the genic region",
+        "Analysed phenotype",
+        "Observed local heritability",
+        "P-value from the univariate test (F-test for continuous, Chi-sq for binary)"
+      )
+  ) %>% 
+  dplyr::mutate(sheet = "univariate") %>% 
+  dplyr::bind_rows(
+    tibble(
+      column = colnames(results_by_block$bivar$window_100000$ld681),
+      description = 
+        c(
+          "LD block ID",
+          "eQTL dataset from which gene eQTLs are derived",
+          "Ensembl ID for gene for which eQTLs were tested in genic region",
+          "HGNC symbol for gene for which eQTLs were tested in genic region",
+          "Genic region chromosome",
+          "Genic region start base pair",
+          "Genic region end base pair",
+          "The number of SNPs within the genic region",
+          "The number of PCs retained within the genic region",
+          "Phenotype 1",
+          "Phenotype 2. Gene expression traits (i.e. gene eQTLs) are denoted by their ensembl gene id",
+          "Standardised coefficient for the local genetic correlation",
+          "Lower 95% confidence estimate for rho",
+          "Upper 95% confidence estimate for rho",
+          "Equivalent of taking the square of rho. Denotes the proportion of variance in genetic signal for phen1 explained by phen2 (and vice versa)",
+          "Lower 95% confidence estimate for r2",
+          "Upper 95% confidence estimate for r2",
+          "Simulation p-values for the local genetic correlation",
+          "FDR-corrected simulation p-values",
+          "Bonferroni-corrected simulation p-values"
+        )
+    ) %>% 
+      dplyr::mutate(sheet = "bivariate")
+  ) %>% 
+  dplyr::select(sheet, column, description)
+
+for(window in names(qtl_tidy$bivar)){
+  
+  # Create ld block figures ----
+  qtl_list <- 
+    setNames(
+      qtl_tidy$bivar[[window]] %>% 
+        dplyr::filter(fdr < 0.05) %>% 
+        dplyr::group_split(ld_block),
+      nm = 
+        str_c(ld_blocks)
+    )
+  
+  qtl_genes <-
+    qtl_tidy$bivar[[window]] %>%
+    dplyr::filter(fdr < 0.05) %>% 
+    dplyr::group_by(eqtl_dataset, gene_locus) %>%
+    dplyr::filter(str_detect(phen2, "ENSG")) %>% 
+    .[["gene_locus"]] %>% 
+    unique()
+  
+  fig_list <- vector(mode = "list", length = length(ld_blocks))
+  
+  for(block in ld_blocks){
+    
+    locus_plot <- 
+      plot_locus(
+        locus_gr = loci_gr[loci_gr$locus == str_remove(block, "ld")], 
+        ref = ref,
+        highlight_gene = qtl_genes,
+        highlight_gene_label = "QTL - local rg?",
+        window = str_remove(window, "window_") %>% as.numeric()
+      )
+    
+    edge_plot <- 
+      plot_qtl_edge_diagram(
+        bivar_corr_qtl = qtl_list[[block]],
+        phen = fct_disease,
+        seed = 89
+      )
+    
+    if(length(edge_plot)/4 > 1){
+      
+      height <- c(1,2.5)
+      
+    } else{
+      
+      height <- c(1,0.75)
+    }
+    
+    fig_list[[which(ld_blocks == block)]] <- 
+      ggpubr::ggarrange(
+        locus_plot,
+        ggpubr::ggarrange(
+          plotlist = edge_plot,
+          ncol = 4,
+          nrow = ceiling(length(edge_plot)/4), 
+          common.legend = TRUE,
+          legend = "top"
+        ),
+        ncol = 1,
+        labels = letters[1:2],
+        heights = height
+      )
+    
+    names(fig_list)[which(ld_blocks == block)] <- block
+  }
+  
+  # Save to workbook ----
+  wb <- openxlsx::createWorkbook()
+  
+  # Write column descriptions ----
+  openxlsx::addWorksheet(wb, sheetName = "column_descriptions")
+  
+  openxlsx::writeData(
+    wb,
+    sheet = "column_descriptions",
+    x = col_descriptions,
+    row.names = FALSE,
+    headerStyle = openxlsx::createStyle(textDecoration = "BOLD")
+  )
+  
+  openxlsx::freezePane(
+    wb,
+    sheet = "column_descriptions",
+    firstRow = TRUE
+  )
+  
+  for(block in ld_blocks){
+    
+    # Write results ----
+    for(test in names(results_by_block)){
+      
+      sheetname <- str_c(block, "_", test)
+      
+      openxlsx::addWorksheet(wb, sheetName = sheetname)
+      
+      openxlsx::writeData(
+        wb,
+        sheet = sheetname,
+        x = results_by_block[[test]][[window]][[block]],
+        row.names = FALSE,
+        headerStyle = openxlsx::createStyle(textDecoration = "BOLD")
+      )
+      
+      openxlsx::freezePane(
+        wb,
+        sheet = sheetname,
+        firstRow = TRUE
+      )
+      
+    }
+    
+    # Add figure ----
+    print(fig_list[[block]])
+    
+    if(block == "ld2351"){
+      
+      height <- 45
+      
+    } else{
+      
+      height <- 20
+    }
+    
+    openxlsx::insertPlot(
+      wb,
+      sheet = str_c(block, "_bivar"),
+      width = 20,
+      height = height,
+      units = "cm",
+      startRow = 2,
+      startCol = 22
+    )
+    
+  }
+  
+  openxlsx::saveWorkbook(
+    wb,
+    file = file.path(out_dir, str_c("SupplementaryTable_lava_local_eqtl_", window,".xlsx")),
+    overwrite = TRUE
+  ) 
+  
+}
+
+```
 
 
 <br><br>

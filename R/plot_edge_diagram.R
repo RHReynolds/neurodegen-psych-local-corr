@@ -194,6 +194,8 @@ plot_edge_diagram <-
 #' @param p_threshold `numeric` vector indicating p-value threshold to filter
 #'   results by. Default is NULL.
 #' @param phen `character` vector indicating GWAS phenotypes present.
+#' @param margin \code{\link[ggplot2:margin]{ggplot2::margin}}, specifying
+#'   dimentions of each margin, in the order `t, r, b, l`. Default is 0.
 #' @param seed `integer` vector indicating seed to be used for generating the
 #'   layout of the graph (i.e. how nodes are placed on the plot), which is
 #'   random by default. Setting a seed ensures the same output each time.
@@ -213,6 +215,7 @@ plot_qtl_edge_diagram <-
     bivar_corr_qtl,
     p_threshold = NULL,
     phen,
+    margin = NULL,
     seed = 89
   ) {
 
@@ -264,6 +267,13 @@ plot_qtl_edge_diagram <-
           .[["list_name"]] %>%
           unique()
       )
+
+    # Set margin if NULL
+    if(is.null(margin)){
+
+      margin <- ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = "pt")
+
+    }
 
     plots <-
       bivar_corr_list %>%
@@ -353,6 +363,7 @@ plot_qtl_edge_diagram <-
           ) +
           ggplot2::theme_bw() +
           ggplot2::theme(
+            plot.margin = margin,
             axis.title = element_blank(),
             axis.text = element_blank(),
             axis.ticks = element_blank(),
