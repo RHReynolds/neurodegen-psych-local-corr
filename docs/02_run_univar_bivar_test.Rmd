@@ -78,40 +78,18 @@ nohup Rscript \
 
 ```
 
-## Loading results
+## Tidying and loading results
 Once run, results can be loaded using the following code chunk:
 
-```{r load-lava-results}
-files <- 
-  list.files(
-  path = 
-    here::here("results",
-               "02_univar_bivar_test"),
-  pattern = ".lava.rds", 
-  full.names = T
-)
+```{r tidy-lava-results, eval = F}
 
-results <- 
-  setNames(
-    object = files %>% 
-      lapply(., function(file){
-        
-        list <- 
-          file %>% 
-          readRDS() 
-        
-        list %>% 
-          purrr::discard(is.null) %>% 
-          qdapTools::list_df2df() %>% 
-          dplyr::select(-X1)
-        
-      }),
-    nm = files %>% 
-      basename() %>% 
-      str_remove(".lava.rds") %>% 
-      str_remove(".*:") %>% 
-      str_remove(".*\\.")
-  )
+source(here::here("scripts", "02b_tidy_univar_bivar.R"))
+
+```
+
+```{r load-lava-results}
+
+results <- readRDS(here::here("results", "02_univar_bivar_test", "results_summary.rds"))
 
 ```
 
@@ -283,17 +261,6 @@ tibble(
 
 print("Univariate results (p < 0.05/n_ld_blocks):")
 
-results$univ <- 
-  results$univ %>% 
-  dplyr::mutate(
-    phen = phen %>% 
-      str_replace_all("[:digit:]", "") %>% 
-      str_remove("\\..*") %>% 
-      fct_relevel(
-        fct_disease
-      )
-  )
-
 results$univ %>% 
   dplyr::filter(p < 0.05/nrow(loci)) %>%   
   DT::datatable(rownames = FALSE,
@@ -324,7 +291,8 @@ tibble(
       "Equivalent of taking the square of rho. Denotes the proportion of variance in genetic signal for phen1 explained by phen2 (and vice versa)",
       "Lower 95% confidence estimate for r2",
       "Upper 95% confidence estimate for r2",
-      "Simulation p-values for the local genetic correlation"
+      "Simulation p-values for the local genetic correlation",
+      "FDR-corrected p-value"
     )
 ) %>%
   DT::datatable(rownames = FALSE,
@@ -332,18 +300,6 @@ tibble(
                 class = 'white-space: nowrap')
 
 print("Bivariate results (p < 0.05/n_bivar_tests):")
-
-results$bivar <- 
-  results$bivar %>% 
-  dplyr::mutate(
-    phen1 = phen1 %>% 
-      str_replace_all("[:digit:]", "") %>% 
-      str_remove("\\..*"),
-    phen2 = phen2 %>% 
-      str_replace_all("[:digit:]", "") %>% 
-      str_remove("\\..*"),
-    fdr = p.adjust(p, method = "fdr")
-  )
 
 bivar_thres <- 0.05/nrow(results$bivar)
 

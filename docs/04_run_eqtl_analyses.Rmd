@@ -21,6 +21,7 @@ output:
 library(circlize) # For chord diagram
 library(ggplot2) # For plotting
 library(ggraph) # For edge diagrams
+library(ggbeeswarm) # For geom_beeswarm
 library(tidyverse) # For tidy manipulation of data
 library(stringr) # For string manipulation
 library(rtracklayer) # For loading of reference gtf
@@ -165,83 +166,21 @@ nohup Rscript \
 
 ```
 
-## Loading results
+## Tidying, applying multiple test correction and loading results
 Once run, results can be loaded using the following code chunk:
+
+```{r tidy-lava-results, eval = F}
+
+source(here::here("scripts", "04e_tidy_univar_bivar.R"))
+
+```
 
 ```{r load-lava-results}
 
-results <- 
-  setNames(
-    vector(mode = "list", length = 2),
-      nm = c("univ", "bivar")
-  ) %>% 
-  lapply(., function(x){
-    
-    setNames(
-      vector(mode = "list", length = 2),
-      nm = c("window_100000", "window_50000")
-    )
-    
-  })
-
-for(test in names(results)){
-  
-  for(window in names(results[[test]]))
-    
-    results[[test]][[window]] <- 
-      setNames(
-        object = 
-          list.files(
-            path = 
-              here::here(
-                "results",
-                "04_eqtl_univar_bivar",
-                window,
-                test
-              ),
-            pattern = ".lava.rds", 
-            full.names = T
-          ) %>% 
-          lapply(., function(file) readRDS(file)),
-        nm = 
-          list.files(
-            path = 
-              here::here(
-                "results",
-                "04_eqtl_univar_bivar",
-                window,
-                test
-              ),
-            pattern = ".lava.rds"
-          ) %>% 
-          str_remove(., "\\..*.lava.rds")
-      ) %>% 
-      purrr::discard(is.null) %>% 
-      qdapTools::list_df2df(col1 = "eqtl_gene") %>% 
-      dplyr::rename(
-        gene_locus = locus
-      ) %>% 
-      tidyr::separate(
-        col = eqtl_gene,
-        into = c("eqtl_dataset", NA),
-        sep = ":"
-      ) %>% 
-      dplyr::inner_join(
-        gene_filtered_loci %>% 
-          dplyr::select(
-            ld_block = locus, gene_id, gene_name
-          ),
-        by = c("gene_locus" = "gene_id")
-      ) %>% 
-      dplyr::select(
-        ld_block, eqtl_dataset, gene_locus, gene_name, everything()
-      ) %>% 
-      dplyr::arrange(ld_block, gene_locus, eqtl_dataset) %>% 
-      as_tibble()
-  
-}
+results <- readRDS(here::here("results", "04_eqtl_univar_bivar", "results_summary.rds"))
 
 ```
+
 
 ## Loading plotting functions
 
@@ -309,24 +248,6 @@ tibble(
 
 print("Univariate results (p < 0.05/n_loci):")
 
-results$univ <- 
-  results$univ %>% 
-  lapply(., function(df){
-    
-    df %>% 
-      dplyr::mutate(
-        phen = 
-          case_when(
-            !str_detect(phen, "ENSG") ~ phen %>% 
-              str_replace_all("[:digit:]", "") %>% 
-              str_remove("\\..*"),
-            str_detect(phen, "ENSG") ~ str_remove(phen, ".*_")
-          )
-      )
-    
-  })
-  
-
 results$univ %>% 
   qdapTools::list_df2df(col1 = "window_size") %>% 
   dplyr::filter(p < 0.05/nrow(gene_loci)) %>%
@@ -343,29 +264,6 @@ results$univ %>%
     - A lenient FDR, correcting for all bivariate tests performed
 
 ```{r bivar-table}
-
-results$bivar <-
-  results$bivar %>% 
-  lapply(., function(df){
-    
-    df %>% 
-      dplyr::mutate(
-        across(
-          .cols = contains("phen"),
-          ~ case_when(
-            !str_detect(.x, "ENSG") ~ .x %>% 
-              str_replace_all("[:digit:]", "") %>% 
-              str_remove("\\..*"),
-            str_detect(.x, "ENSG") ~ str_remove(.x, ".*_")
-          )
-        )
-      ) %>% 
-      dplyr::mutate(
-        fdr = p.adjust(p, method = "fdr"),
-        bonferroni = p.adjust(p, method = "bonferroni")
-      )
-    
-  })
 
 # Pivot results
 results_long <- 
@@ -516,6 +414,11 @@ overlap %>%
   DT::datatable(rownames = FALSE,
                 options = list(scrollX = TRUE),
                 class = 'white-space: nowrap')
+
+# saveRDS(
+#   overlap,
+#   here::here("results", "04_eqtl_univar_bivar", "fdr_overlap.rds")
+# )
 
 ```
 
@@ -710,6 +613,7 @@ ggpubr::ggarrange(
 - By comparison, using the more stringent Bonferroni cut-off, we detect a total of `r bivar_bonf$window_100000 %>% nrow()` significant bivariate local $r_{g}$'s across `r bivar_bonf$window_100000 %>% dplyr::distinct(gene_locus) %>% nrow()` distinct genic regions, `r bivar_bonf$window_100000 %>% dplyr::filter(str_detect(phen2, "ENSG")) %>% nrow()` of which involved a GWAS-eQTL pairing (`r bivar_bonf$window_100000 %>% dplyr::filter(str_detect(phen2, "ENSG")) %>% dplyr::distinct(gene_locus) %>% nrow()` distinct genic regions). When pairs of disease phenotypes (which were tested across multiple genes within an LD block) are collapsed within an LD block, we detect a total of `r bivar_bonf$window_100000 %>% dplyr::distinct(ld_block, phen1, phen2) %>% nrow()` significant bivariate local $r_{g}$'s.
 - Of the two eQTL datasets, the dataset with the highest number of genic regions (i.e. a gene where eQTLs were detected) was PsychENCODE (eQTLGen, n genic regions = `r results$univ$window_100000 %>% dplyr::distinct(eqtl_dataset, gene_locus) %>% dplyr::count(eqtl_dataset) %>% dplyr::filter(eqtl_dataset == "EQTLGEN") %>% .[["n"]]`; PsychENCODE, n genic regions = `r results$univ$window_100000 %>% dplyr::distinct(eqtl_dataset, gene_locus) %>% dplyr::count(eqtl_dataset) %>% dplyr::filter(eqtl_dataset == "PSYCHENCODE") %>% .[["n"]]`). In spite of this, the eQTL dataset with highest number of significant bivariate local $r_{g}$'s was eQTLGen, irrespective of the stringency of multiple test correction (Figure \@ref(fig:chord-diagram-rho-bonf), \@ref(fig:chord-diagram-rho-fdr)). This likely reflects the bias in the selection of the LD blocks, which were weighted towards the AD/PD phenotypes, where we might expect to see a greater association with blood-derived molecular phenotypes.
 - Given that genic regions might vary in size, we plotted the number of SNPs within a locus and the p-value from the univariate test to determine whether there was a relationship between locus size and univariate p-value. There was no apparent relationship between the two (as determined by visual inspection, Figure \@ref(fig:nsnps-univ-pvalue)).
+- 
 
 ### Figures
 
@@ -805,6 +709,29 @@ results$univ$window_100000 %>%
 
 ```
 
+```{r r2-across-trait-pairs, fig.cap = "Boxplot of explained variance (r2, the proportion of variance in genetic signal of one disease trait in a pair explained by the other) in trait pairs involved a disease and gene expression trait (gwas-eqtl) or two disease traits (gwas-gwas). Only local rgs that passed significance are plotted (FDR < 0.05)."}
+
+bivar_fdr$window_100000 %>% 
+  dplyr::mutate(
+    phenotype_corr =
+      case_when(
+        str_detect(phen2, "ENSG") ~ "gwas-eqtl",
+        TRUE ~ "gwas-gwas"
+      )
+  ) %>% 
+  ggplot(
+    aes(
+      x = phenotype_corr,
+      y = r2
+      )
+    ) +
+  geom_boxplot(fill = "#d9d9d9", outlier.alpha = 0) +
+  ggbeeswarm::geom_beeswarm(alpha = 0.5) +
+  theme_rhr
+
+```
+
+
 ## Phenotype correlations at genic region level (100-kb window) using lenient FDR multiple test correction {.tabset}
 
 ### Text
@@ -844,6 +771,7 @@ results$univ$window_100000 %>%
     - While each of these correlations was not replicated in every genic region with a significant local $r_{g}$ between a disease phenotype and eQTL, where they were, they shared the same direction of effect as the local $r_{g}$ observed across the entire LD block. 
     - A total of `r bivar_fdr$window_100000 %>% dplyr::filter(ld_block == 2351, str_detect(phen2, "ENSG")) %>% .[["gene_locus"]] %>% unique() %>% length()` genic regions contained a local $r_{g}$ between a disease phenotype and eQTL. 
     - No significant local $r_{g}$ was observed between *APOE* eQTLs and any of the disease traits. In part this was because there was insufficient heritability in the region using PsychENCODE eQTLs (univariate p-value = `r results$univ$window_100000  %>% dplyr::filter(gene_name == "APOE", str_detect(phen, "ENSG"), eqtl_dataset == "PSYCHENCODE") %>% .[["p"]] %>% round(digits = 2)`). While there was sufficient heritability using eQTLGen eQTLs, bivariate p-values did not pass FDR-correction (AD-APOE, rho = `r results$bivar$window_100000 %>% dplyr::filter(gene_name == "APOE", phen1 == "AD", str_detect(phen2, "ENSG")) %>% .[["rho"]] %>% round(digits = 2)`, p = `r results$bivar$window_100000 %>% dplyr::filter(gene_name == "APOE", phen1 == "AD", str_detect(phen2, "ENSG")) %>% .[["p"]] %>% round(digits = 3)`; LBD-APOE, rho = `r results$bivar$window_100000 %>% dplyr::filter(gene_name == "APOE", phen1 == "LBD", str_detect(phen2, "ENSG")) %>% .[["rho"]] %>% round(digits = 2)`, p = `r results$bivar$window_100000 %>% dplyr::filter(gene_name == "APOE", phen1 == "LBD", str_detect(phen2, "ENSG")) %>% .[["p"]] %>% round(digits = 3)`; PD-APOE, rho = `r results$bivar$window_100000 %>% dplyr::filter(gene_name == "APOE", phen1 == "PD", str_detect(phen2, "ENSG")) %>% .[["rho"]] %>% round(digits = 2)`, p = `r results$bivar$window_100000 %>% dplyr::filter(gene_name == "APOE", phen1 == "PD", str_detect(phen2, "ENSG")) %>% .[["p"]] %>% round(digits = 3)`). However, as seen at the level of LD block, AD and LBD were positively correlated, while (i) AD and PD and (ii) LBD and PD were negatively correlated. 
+        - The lack of correlation between eQTLs requlating *APOE* and AD/LBD may reflect that
     - At the *TOMM40* genic region (which is adjacent to the *APOE* genic region), disease phenotypes were correlated as observed at the level of LD block. In addition significant positive local $r_{g}$'s were observed between eQTLGen-derived *TOMM40* eQTLs and both AD and LBD (*TOMM40* has been previously associated with AD). Similar local $r_{g}$ patterns were seen at the *PVRL2* genic region, which is adjacent to the *TOMM40* genic region. Notably, haplotypes in the *PVRL2* have been found to exert risk effects on AD in an APOE-E4 and APOE-E2 genotype-independent manner (PMID: [31346172](https://pubmed.ncbi.nlm.nih.gov/31346172/))
     - Other notable eQTL-trait associations include:
         - A positive correlation between AD and *GEMIN7* eQTLs (across both eQTLGen and PyschENCODE, albeit stronger in PsychENCODE).  *GEMIN7* is a component of the core SMN complex (PMID: [12065586](https://pubmed.ncbi.nlm.nih.gov/12065586/)), which is required for pre-mRNA splicing in the nucleus.
@@ -1266,157 +1194,6 @@ ggsave(
 )
 
 ```
-
-# Manuscript {.tabset}
-
-## Supplementary figure
-
-```{r manuscript-supp-fig, eval = F, fig.height = 10}
-
-plots <- vector(mode = "list", length = 2)
-
-plots[[1]] <- 
-  results$bivar %>% 
-  qdapTools::list_df2df(col1 = "window_size") %>% 
-  tidyr::pivot_longer( 
-    cols = -c("window_size", "ld_block", "eqtl_dataset", "gene_locus", "gene_name", "phen1", "phen2"),
-    names_to = "feature",
-    values_to = "value"
-  ) %>% 
-  dplyr::mutate(
-    window_size =
-      window_size %>% 
-      readr::parse_number() %>% 
-      format(scientific = FALSE) %>% 
-      as.factor()
-  ) %>% 
-  dplyr::filter(
-    feature %in% c("fdr"),
-    value < 0.05
-  ) %>% 
-  dplyr::count(window_size, feature, name = "n_total") %>% 
-  dplyr::mutate(
-    unique =
-      case_when(
-        feature == "fdr" ~ n_total - (overlap %>% dplyr::filter(fdr_100000 < 0.05 & fdr_50000 < 0.05) %>% nrow())
-      ),
-    shared =
-      n_total-unique
-  ) %>% 
-  tidyr::pivot_longer(
-    cols = unique:shared,
-    names_to = "sharing",
-    values_to = "n"
-  ) %>% 
-  ggplot(
-    aes(
-      x = window_size,
-      y = n,
-      fill = sharing
-    )
-  ) + 
-  geom_col(colour = "black") +
-  scale_fill_grey() +
-  guides(
-    fill = guide_legend(
-      nrow = 2,
-      title.position = "top"
-    )
-  ) +
-  labs(
-    x = "Window size (kb)",
-    y = "Number of significant bivariate local rg",
-    fill = "Sharing of local rgs"
-  ) +
-  theme_rhr +
-  theme(legend.position = "bottom")
-  
-  
-plots[[2]] <- 
-  results_long %>% 
-  dplyr::filter(
-    !feature %in%
-      c("chr", "start", "stop", "fdr", "bonferroni", "n_pcs", "n_snps", "r2"),
-    !str_detect(feature, "upper"),
-    !str_detect(feature, "lower")
-  ) %>%
-  ggplot(
-    aes(
-      x = window_50000,
-      y = window_100000
-    )
-  ) + 
-  geom_point(
-    aes(
-      fill = doe_same
-    ),
-    shape = 21,
-    colour = "black",
-    alpha = 0.4
-  ) + 
-  geom_smooth(
-    method = "lm",
-    formula = "y~x",
-    level = 0.99,
-    colour = "black",
-    fill = "grey"
-  ) +
-  ggpubr::stat_cor(
-    method = "pearson",
-    cor.coef.name = "R",
-    size = 3
-  ) +
-  geom_abline(
-    intercept = 0,
-    linetype = "dashed",
-    colour = "#EE442F"
-  ) +
-  facet_wrap(
-    vars(phenotype_corr, feature),
-    scales = "free"
-  ) +
-  labs(
-    x = "50-kb window",
-    y = "100-kb window",
-    fill = "Same direction of effect?"
-  ) +
-  scale_fill_discrete(na.translate = F) +
-  theme_rhr +
-  guides(
-    fill = guide_legend(
-      nrow = 2,
-      title.position = "top"
-    )
-  ) +
-  theme(
-    axis.text.x = element_text(angle = 0, hjust = 0.5),
-    legend.position = "bottom"
-    )
-
-supp_fig <-
-  cowplot::plot_grid(
-    plotlist = plots, 
-    nrow = 1, 
-    axis = "bt", 
-    align = "h",
-    rel_widths = c(1,3),
-    labels = letters[1:length(plots)]
-  )
-
-ggsave(
-  supp_fig,
-  path = here::here("results", "99_manuscript_figures"), 
-  filename = "suppfig_3_windowsize_analysis.png",
-  device = "png", 
-  width = 150, 
-  height = 150, 
-  dpi = 300, 
-  units = "mm"
-)
-
-```
-
-<br><br>
 
 # Session info
 
