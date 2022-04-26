@@ -26,7 +26,7 @@
 #'   Default is TRUE.
 #' @param geom_node_size `integer` vector indicating node size. Default is 3.
 #' @param geom_label_size `integer` vector indicating edge link label size.
-#'   Default is 3.
+#'   Default is 2.
 #' @param base_size `integer` vector indicating base font size in pts. Default
 #'   is 11, i.e. default of \code{ggplot2::\link[ggplot2:theme_bw]{theme_bw}}.
 #' @param ncol `integer` vector indicating number of columns in facet.
@@ -149,7 +149,8 @@ plot_edge_diagram <-
       ggraph::scale_edge_colour_distiller(
         palette = "RdYlBu",
         limits = c(-1,1),
-        direction = -1
+        direction = -1,
+        name = "Local rg (rho)"
       ) +
       ggraph::facet_edges(
         vars(locus),
@@ -194,6 +195,11 @@ plot_edge_diagram <-
 #' @param p_threshold `numeric` vector indicating p-value threshold to filter
 #'   results by. Default is NULL.
 #' @param phen `character` vector indicating GWAS phenotypes present.
+#' @param geom_node_size `integer` vector indicating node size. Default is 3.
+#' @param geom_label_size `integer` vector indicating edge link label size.
+#'   Default is 2.
+#' @param base_size `integer` vector indicating base font size in pts. Default
+#'   is 11, i.e. default of \code{ggplot2::\link[ggplot2:theme_bw]{theme_bw}}.
 #' @param margin \code{\link[ggplot2:margin]{ggplot2::margin}}, specifying
 #'   dimentions of each margin, in the order `t, r, b, l`. Default is 0.
 #' @param seed `integer` vector indicating seed to be used for generating the
@@ -215,6 +221,9 @@ plot_qtl_edge_diagram <-
     bivar_corr_qtl,
     p_threshold = NULL,
     phen,
+    geom_node_size = 3,
+    geom_label_size = 2,
+    base_size = 11,
     margin = NULL,
     seed = 89
   ) {
@@ -339,7 +348,7 @@ plot_qtl_edge_diagram <-
             ),
             angle_calc = 'along',
             label_dodge = unit(1.5, 'mm'),
-            label_size = 2,
+            label_size = geom_label_size,
             width = 1
           ) +
           ggraph::geom_node_label(
@@ -350,18 +359,22 @@ plot_qtl_edge_diagram <-
             repel = T,
             color = 'black',
             fill = fill$fill,
-            size = 3
+            size = geom_node_size
           ) +
           ggplot2::scale_y_reverse() +
           ggraph::scale_edge_colour_distiller(
             palette = "RdYlBu",
             limits = c(-1,1),
-            direction = -1
+            direction = -1,
+            name = "Local rg (rho)"
           ) +
           ggraph::facet_edges(
             vars(eqtl_dataset, gene_name)
           ) +
-          ggplot2::theme_bw() +
+          ggplot2::theme_bw(
+            base_family = "Helvetica",
+            base_size = base_size
+          ) +
           ggplot2::theme(
             plot.margin = margin,
             axis.title = element_blank(),
