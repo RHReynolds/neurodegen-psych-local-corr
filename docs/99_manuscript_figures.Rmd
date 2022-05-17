@@ -272,7 +272,7 @@ plot[[1]] <-
       y = n
     )
   ) +
-  geom_col(colour = "black", fill = "#d9d9d9") +
+  geom_col(colour = "black", fill = "#d9d9d9", size = 0.2) +
   labs(
     x = "Chromosome",
     y = "Number of LD blocks"
@@ -286,7 +286,9 @@ plot[[2]] <-
   dplyr::count(LD_CHR, GWAS) %>% 
   dplyr::mutate(
     LD_CHR = as.factor(LD_CHR),
-    GWAS = str_to_upper(GWAS)
+    GWAS = 
+      str_to_upper(GWAS) %>% 
+      fct_relevel(., fct_disease)
   ) %>% 
   ggplot(
     aes(
@@ -297,7 +299,8 @@ plot[[2]] <-
   ) +
   geom_col(
     position = position_dodge2(preserve = "single"),
-    colour = "black"
+    colour = "black", 
+    size = 0.2
   ) +
   scale_fill_brewer(
     palette = "BrBG",
@@ -308,10 +311,11 @@ plot[[2]] <-
     y = "Number of SNPs"
   ) + 
   coord_flip() + 
+  facet_wrap(vars(GWAS), scales = "free_x") +
   theme_rhr +
   theme(
     axis.text.x = element_text(angle = 0, hjust = 0.5),
-    legend.position = "right"
+    legend.position = "none"
     )
 
 suppfig <- 
@@ -321,7 +325,7 @@ suppfig <-
     axis = "lr",
     ncol = 1,
     nrow = 2,
-    rel_heights = c(1,2),
+    rel_heights = c(1,2.5),
     labels = letters[1:length(plot)]
   )
 
@@ -336,7 +340,7 @@ ggsave(
   path = out_dir, 
   filename = "suppfig_1_ldblocks.png",
   device = "png", 
-  width = 150, 
+  width = 130, 
   height = 180, 
   dpi = 300, 
   units = "mm"
@@ -1378,6 +1382,7 @@ supp_fig[[2]] <-
         TRUE ~ "gwas-gwas"
       )
   ) %>% 
+  # dplyr::filter(phenotype_corr == "gwas-eqtl") %>% 
   ggplot(
     aes(
       x = phenotype_corr,
@@ -1385,10 +1390,16 @@ supp_fig[[2]] <-
       )
     ) +
   geom_boxplot(fill = "#d9d9d9", outlier.alpha = 0) +
-  ggbeeswarm::geom_beeswarm(alpha = 0.5) +
+  ggbeeswarm::geom_beeswarm(
+    # aes(colour = fct_relevel(phen1, levels = fct_disease)), 
+    alpha = 0.5, 
+    # size = 2
+    ) +
+  # scale_colour_manual(values = RColorBrewer::brewer.pal(n = 6, name = "BrBG")) +
   labs(
     x = "Trait type in pair",
-    y = "Explained variance (r2)"
+    y = "Explained variance (r2)",
+    # colour = "Trait"
   ) +
   theme_rhr
 
