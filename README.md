@@ -1,5 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- badges: start -->
+[![DOI](https://zenodo.org/badge/375954357.svg)](https://zenodo.org/badge/latestdoi/375954357) <!-- badges: end -->
+
 # Background
 
 This repository contains code to determine local and global genetic correlations between several neurodegenerative and neuropsychiatric disorders with LAVA and LDSC, respectively.
