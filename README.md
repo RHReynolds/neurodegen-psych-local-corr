@@ -4,10 +4,6 @@
 
 This repository contains code to determine local and global genetic correlations between several neurodegenerative and neuropsychiatric disorders with LAVA and LDSC, respectively.
 
-# License
-
-The code in this repository is released under an MIT license. This repository is distributed in the hope that it will be useful to the wider community, but without any warranty of any kind. Please see the [LICENSE](LICENSE) file for more details.
-
 # Code contents
 
 Within this repository you will find:
@@ -41,6 +37,14 @@ Within this repository you will find:
 <td>Various functions called in <a href="docs" class="uri">docs</a> and <a href="scripts" class="uri">scripts</a>.</td>
 </tr>
 <tr class="odd">
+<td><a href="raw_data" class="uri">raw_data</a></td>
+<td>External tables used in analyses.</td>
+</tr>
+<tr class="even">
+<td><a href="renv" class="uri">renv</a></td>
+<td><code>renv</code>-related scripts-</td>
+</tr>
+<tr class="odd">
 <td><a href="results" class="uri">results</a></td>
 <td>Results from all analyses.</td>
 </tr>
@@ -50,3 +54,20 @@ Within this repository you will find:
 </tr>
 </tbody>
 </table>
+
+# Reproducibility
+
+This repository uses [`renv`](https://rstudio.github.io/renv/index.html) to create a reproducible environment for this R project.
+
+1.  When you first launches this project, `renv` should automatically bootstrap itself, thereby downloading and installing the appropriate version of `renv` into the project library.
+2.  After this has completed, you can use `renv::restore()` to restore the project library locally on your machine.
+
+For more information on collaborating with `renv`, please refer to this [link](https://rstudio.github.io/renv/articles/collaborating.html).
+
+# License
+
+The code in this repository is released under an MIT license. This repository is distributed in the hope that it will be useful to the wider community, but without any warranty of any kind. Please see the [LICENSE](LICENSE) file for more details.
+
+# Citation
+
+If you use any of the code or data from this repository, please cite our [paper](#TODO) and, if applicable, any software dependencies (e.g. [LAVA](https://github.com/josefin-werme/LAVA)).

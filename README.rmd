@@ -16,9 +16,6 @@ knitr::opts_chunk$set(
 # Background
 This repository contains code to determine local and global genetic correlations between several neurodegenerative and neuropsychiatric disorders with LAVA and LDSC, respectively.
 
-# License
-The code in this repository is released under an MIT license. This repository is distributed in the hope that it will be useful to the wider community, but without any warranty of any kind. Please see the [LICENSE](LICENSE) file for more details. 
-
 # Code contents
 
 Within this repository you will find:
@@ -29,5 +26,21 @@ Within this repository you will find:
 | [logs](logs) | For any scripts that were run outside of an `.Rmd` (e.g. scripts from the [scripts](scripts) directory), a log file was recorded and can be accessed here. |
 | [man](man) | Figures used in `.Rmd`s. |
 | [R](R)| Various functions called in [docs](docs) and [scripts](scripts). |
+| [raw_data](raw_data) | External tables used in analyses. |
+| [renv](renv) | `renv`-related scripts- |
 | [results](results) | Results from all analyses. |
 | [scripts](scripts) | Contains analysis scripts. Each script contains a one-line description and is also referenced in its corresponding `.Rmd`. |
+
+# Reproducibility
+This repository uses [`renv`](https://rstudio.github.io/renv/index.html) to create a reproducible environment for this R project. 
+
+1. When you first launches this project, `renv` should automatically bootstrap itself, thereby downloading and installing the appropriate version of `renv` into the project library. 
+2. After this has completed, you can use `renv::restore()` to restore the project library locally on your machine.
+
+For more information on collaborating with `renv`, please refer to this [link](https://rstudio.github.io/renv/articles/collaborating.html).
+
+# License
+The code in this repository is released under an MIT license. This repository is distributed in the hope that it will be useful to the wider community, but without any warranty of any kind. Please see the [LICENSE](LICENSE) file for more details. 
+
+# Citation
+If you use any of the code or data from this repository, please cite our [paper](#TODO) and, if applicable, any software dependencies (e.g. [LAVA](https://github.com/josefin-werme/LAVA)).
