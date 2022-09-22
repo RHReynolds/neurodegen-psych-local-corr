@@ -73,4 +73,4 @@ The code in this repository is released under an MIT license. This repository is
 
 # Citation
 
-If you use any of the code or data from this repository, please cite our [paper](#TODO) and, if applicable, any software dependencies (e.g. [LAVA](https://github.com/josefin-werme/LAVA)).
+If you use any of the code or data from this repository, please cite our [paper](https://www.medrxiv.org/content/10.1101/2022.05.30.22275781v2) and, if applicable, any software dependencies (e.g. [LAVA](https://github.com/josefin-werme/LAVA)).
