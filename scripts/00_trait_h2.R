@@ -102,6 +102,9 @@ h2 <-
   tidyr::pivot_wider(
     names_from = name,
     values_from = value
+  ) %>%
+  dplyr::mutate(
+    z = h2/se
   )
 
 # Save data ---------------------------------------------------------------
