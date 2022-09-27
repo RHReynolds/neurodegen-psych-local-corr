@@ -2,6 +2,7 @@
 
 # Load packages -----------------------------------------------------------
 
+library(janitor)
 library(tidyverse)
 library(stringr)
 library(qdapTools)
@@ -81,17 +82,44 @@ for(i in 1:length(file_paths)){
     read_lines(
       file = file_paths[i],
       skip = 25, # Number of lines to skip in log file
-      n_max = 1 # Number of lines to read
+      n_max = 4 # Number of lines to read
     ) %>%
-    stringr::str_remove(".*: ") %>%
-    stringr::str_split(" ") %>%
-    unlist() %>%
-    readr::parse_number() %>%
+    stringr::str_split(": ") %>%
+    lapply(., function(vector){
+
+      if(str_detect(vector[2], "\\(")){
+
+        tibble(
+          name =
+            c(
+              vector[1],
+              stringr::str_c(vector[1], " se")
+            ),
+          value = vector[2] %>%
+          stringr::str_remove(".*: ") %>%
+          stringr::str_split(" ") %>%
+          unlist() %>%
+          readr::parse_number()
+          )
+
+      } else{
+
+        tibble(
+          name = vector[1],
+          value = vector[2] %>%
+            readr::parse_number()
+        )
+
+      }
+
+
+    }) %>%
+    qdapTools::list_df2df(col1 = "list_name") %>%
     as_tibble() %>%
     bind_cols(
-      phen = basename(file_paths[i]) %>% stringr::str_remove("_h2.log"),
-      name = c("h2", "se")
-    )
+      phen = basename(file_paths[i]) %>% stringr::str_remove("_h2.log")
+    ) %>%
+    dplyr::select(-list_name)
 
 }
 
@@ -103,8 +131,9 @@ h2 <-
     names_from = name,
     values_from = value
   ) %>%
+  janitor::clean_names() %>%
   dplyr::mutate(
-    z = h2/se
+    z = total_observed_scale_h2/total_observed_scale_h2_se
   )
 
 # Save data ---------------------------------------------------------------
