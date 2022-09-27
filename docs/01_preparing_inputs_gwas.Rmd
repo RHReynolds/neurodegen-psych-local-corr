@@ -448,13 +448,13 @@ ggpubr::ggarrange(
 data_to_plot <-
   h2 %>% 
   dplyr::mutate(
-    h2 =
-      (h2*100) %>% round(digits = 1),
+    total_observed_scale_h2  =
+      (total_observed_scale_h2 *100) %>% round(digits = 1),
     se = 
-      (se * 100) %>% round(digits = 1),
+      (total_observed_scale_h2_se * 100) %>% round(digits = 1),
     label = 
       str_c(
-        h2, "%\n(", se, ")"
+        total_observed_scale_h2, "%\n(", total_observed_scale_h2_se, ")"
       )
   )
 
@@ -463,7 +463,7 @@ data_to_plot %>%
     aes(
       x = 1,
       y = fct_rev(phen),
-      fill = h2,
+      fill = total_observed_scale_h2,
       label = label
     )
   ) +
@@ -472,7 +472,7 @@ data_to_plot %>%
     size = 2.5
   ) +
   ggplot2::coord_equal() +
-  ggplot2::labs(x = "", y = "", fill = "Global SNP heritability (h2)") +
+  ggplot2::labs(x = "", y = "", fill = "Global observed-scale\nSNP heritability (h2)") +
   ggplot2::scale_fill_distiller(
     palette = "GnBu",
     limits = c(0, 100)
