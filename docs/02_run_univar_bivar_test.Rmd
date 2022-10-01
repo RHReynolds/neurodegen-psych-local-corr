@@ -111,7 +111,7 @@ ref <- ref[ref$type == "gene"]
 
 # genes to check
 genes <- 
-  c("APOE", "TMEM175", "SNCA", "BIN1", "GRN", "KIF5A")
+  c("APOE", "TMEM175", "SNCA", "BIN1", "GRN", "KIF5A", "GBA")
 
 # construct granges object with LD blocks for overlap with reference gtf
 loci_gr <-
@@ -156,6 +156,27 @@ loci_genes_filtered <-
 
 ```
 
+## Comparison to previous data
+
+```{r comparison-to-prev-data, eval = F}
+
+source(here::here("scripts", "02c_run_comparison_gerring.R"))
+source(here::here("scripts", "02c_run_comparison_smeland.R"))
+
+```
+
+```{r load-overlaps}
+
+overlap_gerring <-
+  readRDS(here::here("results", "02_univar_bivar_test", "results_overlap_with_gerring.rds"))
+
+overlap_smeland <-
+  readRDS(here::here("results", "02_univar_bivar_test", "results_overlap_with_smeland.rds"))
+
+```
+
+
+
 ## Loading plotting functions
 
 ```{r load-plot-func}
@@ -172,6 +193,14 @@ source(here::here("R", "plot_edge_diagram.R"))
 ## Running univariate and bivariate tests
 The detection of valid and interpretable local genetic corrlation ($r_{g}$) requires the presence of sufficient local genetic signal. For this reason, a univariate test was performed as a filtering step for bivariate local $r_{g}$ analyses. Bivariate local correlations were only performed for pairs of traits which both exhibited a significant univariate local genetic signal (p < 0.05/`r nrow(loci)`, where the denominator represents the total number of tested loci, i.e. LD blocks). This resulted in a total of **`r nrow(results$bivar)`** bivariate tests spanning **`r results$bivar %>% .[["locus"]] %>% unique() %>% length()`** distinct LD blocks. 
 <br><br>
+
+## Comparison to previous data
+
+### Gerring et al. 2022
+We intersected the genomic coordinates for significant and non-significant local genetic associations (including only neuropsychiatric phenotypes, i.e. BIP, MDD and SCZ) from LAVA with existing results from a recent analysis of 10 psychiatric disorders and 10 substance abuse phenotypes, which also used LAVA (Gerring et al.; PMID: [35525699](https://pubmed.ncbi.nlm.nih.gov/35525699/)). 
+
+### Smeland et al. 2021
+We intersected the genomic coordinates for significant and non-significant local genetic associations between PD and SCZ with lead SNPs that were found to be jointly associated with PD and SCZ in a recent study using a conditional/conjunctional false discovery rate (FDR) approach to evaluate the overlap between the two traits. Lead SNPs from the study by Smeland et al. were converted from rsIDs to their GRCh37 genomic coordinates using the SNPlocs.Hsapiens.dbSNP144.GRCh37 package and overlapped with LD blocks using `findOverlaps()` from the `GenomicRanges` package.
 
 # Results {.tabset}
 
@@ -763,11 +792,15 @@ fig_list
     - BIN1 (implicated in AD and LBD)
     - GRN (implicated in AD, PD, FTD, and LBD)
     - KIF5A (implicated in PD and ALS/FTD)
+    - GBA (implicated in PD and LBD)
 - AD and PD had sufficient local genetic signal (i.e. univariate heritability) at all tested LD blocks. LBD had insufficient local heritability in the GRN-, KIF5A and TMEM175-containing LD blocks, and therefore was not carried forward in these loci for bivariate testing.
 - Of the LD blocks that contained implicated genes, only the SNCA- and APOE-containing LD blocks contained local $r_{g}$s that passed the Bonferroni significance cut-off (p < 0.05/n_tests; Figure \@ref(fig:pleiotropic-genes-fig)a). Using a more lenient FDR correction, local $r_{g}$s were observed across all LD blocks, except the GRN- and TMEM175-containing LD blocks (Figure \@ref(fig:pleiotropic-genes-fig)b).
     - BIN1-containing LD block 319
         - Bonferroni: no local $r_{g}$s. 
         - FDR: positive local $r_{g}$ between AD and LBD.
+    - GBA-containing LD block 113
+        - Bonferroni: no local $r_{g}$s.  
+        - FDR: negative local $r_{g}$ between MDD and PD and positive local $r_{g}$ between MDD and BIP 
     - SNCA-containing LD block 681
         - Bonferroni & FDR: negative local $r_{g}$ between AD and PD.
     - KIF5A-containing LD block 1794
@@ -897,6 +930,203 @@ cowplot::plot_grid(
 )
 ```
 
+## Overlap with previous data {.tabset}
+
+### Text
+
+#### Gerring et al. 2022
+- We intersected significant and non-significant bivariate local $r_{g}$s from this study that included neuropsychiatric disease traits (n, local $r_{g}$s = `r results$bivar %>% dplyr::filter(phen1 %in% c("BIP","MDD", "SCZ"), phen2 %in% c("BIP", "MDD", "SCZ")) %>% nrow()`; n, distinct LD blocks: `r results$bivar %>% dplyr::filter(phen1 %in% c("BIP","MDD", "SCZ"), phen2 %in% c("BIP", "MDD", "SCZ")) %>% dplyr::distinct(locus) %>% nrow()`; n, signficiant local $r_{g}$s = `r results$bivar %>% dplyr::filter(phen1 %in% c("BIP","MDD", "SCZ"), phen2 %in% c("BIP", "MDD", "SCZ"), p < bivar_thres) %>% nrow()`; n, distinct LD blocks with significant local $r_{g}$s = `r results$bivar %>% dplyr::filter(phen1 %in% c("BIP","MDD", "SCZ"), phen2 %in% c("BIP", "MDD", "SCZ"), p < bivar_thres) %>% dplyr::distinct(locus) %>% nrow()`) with previously reported local $r_{g}$s from a study of 10 psychiatric disorders and 10 substance abuse phenotypes (PMID: [35525699](https://pubmed.ncbi.nlm.nih.gov/35525699/)). 
+- `r overlap_gerring %>% dplyr::filter(p.rhr < bivar_thres) %>% dplyr::distinct(locus.rhr) %>% nrow()` LD blocks were found to contain significant local $r_{g}$s from both studies, `r overlap_gerring %>% dplyr::filter(p.rhr < bivar_thres, overlapping_phen == 2) %>% dplyr::distinct(locus.rhr) %>% nrow()` of which contained the same phenotype pair (`r overlap_gerring %>% dplyr::filter(p.rhr < bivar_thres, overlapping_phen == 2) %>% dplyr::mutate(label = str_c("LD block ", locus.rhr, ", chr", chr, ":", start, "-", stop, ", ", phen1.rhr, " and ", phen2.rhr)) %>% dplyr::pull(label) %>% str_c(collapse = "; ")`) (\@ref(fig:plot-gerring-scatterplot)).
+- Note: a total of 16 local $r_{g}$s (across 14 LD blocks) that included only BIP, MDD or SCZ were detected in Gerring et al. -- of these, we were able to perform bivariate tests using the same phenotype pairs in `r overlap_gerring %>% dplyr::filter(phen1.gerring %in% c("MDD", "BIP", "SCZ"), phen2.gerring %in% c("MDD", "BIP", "SCZ"), overlapping_phen == 2) %>% dplyr::distinct(locus.rhr) %>% nrow()` LD blocks, and `r overlap_gerring %>% dplyr::filter(p.rhr < bivar_thres, overlapping_phen == 2) %>% dplyr::distinct(locus.rhr) %>% nrow()` LD blocks contained `r overlap_gerring %>% dplyr::filter(p.rhr < bivar_thres, overlapping_phen == 2) %>% nrow()` local $r_{g}$s.
+- It is worth noting that there were some differences in the GWAS versions used: (i) we used a more recent BIP GWAS and (ii) while both studies use the same MDD GWAS, our study did not include 23andMe data.
+
+
+#### Smeland et al. 2021
+- We intersected LD blocks containing significant and non-significant bivariate local $r_{g}$s between PD and SCZ with SNPs found to be jointly associated with PD and SCZ in a recent study using a conditional/conjunctional false discovery rate (FDR) approach.
+- `r overlap_smeland %>% nrow()` SNPs intersected with tested LD blocks, but `r overlap_smeland %>% dplyr::filter(p < bivar_thres) %>% nrow()` local $r_{g}$s within these blocks passed the threshold for significance (p < 0.05/`r nrow(results$bivar)`). Notably, in those LD blocks containing SNPs from Smeland et al. where allelic effect directions were consistent, a positive rho was observed in local $r_{g}$s, and likewise, in those LD blocks containing SNPs from Smeland et al. where allelic effect directions were inconsistent, a negative rho was observed in local $r_{g}$s.
+
+### Table
+```{r gerring-overlaps-table}
+
+print("Overlaps with Gerring et al. 2022:")
+
+overlap_gerring %>%
+  DT::datatable(rownames = FALSE,
+                options = list(scrollX = TRUE),
+                class = 'white-space: nowrap')
+
+print("Overlaps with Smeland et al. 2021:")
+
+overlap_smeland %>%
+  DT::datatable(rownames = FALSE,
+                options = list(scrollX = TRUE),
+                class = 'white-space: nowrap')
+
+```
+
+
+### Figures
+
+```{r plot-gerring-scatterplot, fig.cap="Scatter plot of (a) rho and (b) -log10(p-value) for each pair of phenotypes that overlapped between our study and the study by Gerring et al. In (a) the dashed lines indicate significance thresholds in each study (Gerring et al. = 0.05/24,054; this study = 0.05/1603) and in (b) the dashed line represents the line x = y. Points in both plots are coloured by whether they passed significance thresholds in both studies or only the Gerring et al. study."}
+
+plot_data <-
+  overlap_gerring %>% 
+  dplyr::filter(overlapping_phen == 2) %>% 
+  dplyr::select(
+    locus.rhr,
+    chr, start, stop,
+    phen1.rhr, phen2.rhr,
+    contains("rho"),
+    contains("r2"),
+    p.rhr,
+    p.gerring
+    ) %>% 
+  dplyr::mutate(
+    significant = 
+      case_when(
+        p.rhr < bivar_thres & p.gerring < 0.05/24054 ~ "Both",
+        p.rhr >= bivar_thres & p.gerring < 0.05/24054 ~ "Gerring et. al"
+      )
+  ) %>% 
+  tidyr::pivot_longer(cols = rho.gerring:p.gerring, names_to = "feature") %>% 
+  dplyr::mutate(
+    dataset =
+      case_when(
+        stringr::str_detect(feature, "rhr") ~ "rhr",
+        stringr::str_detect(feature, "gerring") ~ "gerring"
+      ),
+    feature =
+      feature %>% 
+      stringr::str_remove("\\.rhr|\\.gerring"), 
+    feature =  
+      case_when(
+        feature == "p" ~ "-log10(p)",
+        TRUE ~ feature
+      ),
+    label = 
+      str_c(locus.rhr, "\n", phen1.rhr, "+", phen2.rhr)
+  ) %>% 
+  tidyr::pivot_wider(
+    names_from = dataset,
+    values_from = value
+  )  %>% 
+  dplyr::mutate(
+    across(
+      .cols = rhr:gerring,
+      ~ case_when(
+        feature == "-log10(p)" ~ -log10(.x),
+        TRUE ~ .x
+      )
+    )
+  )
+
+a <- 
+  plot_data %>% 
+  dplyr::filter(
+    feature %in% 
+      c("rho")
+  ) %>% 
+  ggplot(
+    aes(
+      x = rhr,
+      y = gerring
+    )
+  )  +
+  geom_point(
+    size = 1.5,
+    alpha = 0.8,
+    shape = 21,
+    colour = "black",
+    aes(fill = significant)
+    
+  ) +
+  geom_abline(
+    intercept = 0,
+    linetype = "dashed",
+    colour = "grey"
+  ) +
+  ggrepel::geom_label_repel(
+    aes(
+      label = label
+      ),
+    size = 2,
+    alpha = 0.7,
+    min.segment.length = unit(0, 'lines')
+  ) +
+  facet_wrap(vars(feature)) +
+  expand_limits(x = 0, y = 0) +
+  coord_equal() +
+  labs(
+    x = "This study",
+    y = "Gerring et al. 2022"
+  ) +
+  theme_rhr + 
+  theme(
+    axis.text.x = element_text(angle = 0, hjust = 0.5),
+    legend.position = "top"
+  )
+
+b <-
+  plot_data %>% 
+  dplyr::filter(
+    feature %in% 
+      c("-log10(p)")
+  ) %>% 
+  ggplot(
+    aes(
+      x = rhr,
+      y = gerring
+    )
+  ) +
+  geom_point(
+    size = 1.5,
+    alpha = 0.8,
+    shape = 21,
+    colour = "black",
+    aes(fill = significant)
+  ) +
+  geom_hline(
+    yintercept = -log10(0.05/24054),
+    linetype = "dashed",
+    colour = "grey"
+    ) +
+  geom_vline(
+    xintercept = -log10(bivar_thres),
+    linetype = "dashed",
+    colour = "grey"
+    ) +
+  ggrepel::geom_label_repel(
+    aes(
+      label = label
+      ),
+    size = 2,
+    alpha = 0.7,
+    box.padding = 0.3,
+    min.segment.length = unit(0, 'lines')
+  ) +
+  facet_wrap(vars(feature)) +
+  expand_limits(x = 0, y = 0) +
+  coord_equal() +
+  labs(
+    x = "This study",
+    y = "Gerring et al. 2022"
+  ) +
+  theme_rhr + 
+  theme(
+    axis.text.x = element_text(angle = 0, hjust = 0.5),
+    legend.position = "top"
+  )
+
+
+plot <- 
+  ggpubr::ggarrange(
+    a, b,
+    labels = c("a", "b"),
+    common.legend = TRUE, align = "hv"
+  )
+
+plot
+```
 
 
 <br><br>

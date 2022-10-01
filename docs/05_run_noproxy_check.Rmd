@@ -1027,7 +1027,7 @@ supp_fig <-
 ggsave(
   supp_fig,
   path = here::here("results", "99_manuscript_figures"), 
-  filename = "suppfig_2_proxy_analysis.png",
+  filename = "suppfig_3_proxy_analysis.png",
   device = "png", 
   width = 160, 
   height = 180, 
@@ -1037,7 +1037,7 @@ ggsave(
 
 ```
 
-## Supplemtary table
+## Supplementary table
 
 ```{r manuscript-supp-table, eval = F}
 
@@ -1098,7 +1098,7 @@ xlsx[[1]] <-
 
 openxlsx::write.xlsx(
   xlsx,
-  file = file.path(here::here("results", "99_manuscript_figures"), "SupplementaryTable4_lava_local_noproxy.xlsx"),
+  file = file.path(here::here("results", "99_manuscript_figures"), "SupplementaryTable5_lava_local_noproxy.xlsx"),
   row.names = FALSE,
   headerStyle = openxlsx::createStyle(textDecoration = "BOLD"),
   firstRow = TRUE,

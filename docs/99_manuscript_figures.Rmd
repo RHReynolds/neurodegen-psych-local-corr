@@ -78,6 +78,12 @@ global <-
     delim = "\t"
     ) 
 
+# Trait h2
+h2 <- 
+  read_delim(
+    here::here("results", "00_trait_h2", "h2.txt")
+  )
+
 # GWAS loci
 gwas_loci <- 
   readRDS(here::here("results", "01_input_prep", "gwas_filtered_loci.rds"))
@@ -86,6 +92,10 @@ gwas_loci <-
 ld_blocks <- 
   readRDS(here::here("results", "01_input_prep", "gwas_filtered_loci_w_genes.rds")) %>% 
   dplyr::ungroup()
+
+# Overlap with Gerring et al.
+overlap_gerring <-
+  readRDS(here::here("results", "02_univar_bivar_test", "results_overlap_with_gerring.rds"))
 
 ```
 
@@ -149,6 +159,58 @@ bivar_count <-
         name == "n_upper_r2_ci" ~ "TRUE",
         TRUE ~ "FALSE"
       )
+  )
+
+overlap_gerring_long <-
+  overlap_gerring %>% 
+  dplyr::filter(overlapping_phen == 2) %>% 
+  dplyr::select(
+    locus.rhr,
+    chr, start, stop,
+    phen1.rhr, phen2.rhr,
+    contains("n_snps"),
+    contains("rho"),
+    contains("r2"),
+    p.rhr,
+    p.gerring
+    ) %>% 
+  dplyr::mutate(
+    significant = 
+      case_when(
+        p.rhr < p_threshold & p.gerring < 0.05/24054 ~ "Both",
+        p.rhr >= p_threshold & p.gerring < 0.05/24054 ~ "Gerring et. al"
+      )
+  ) %>% 
+  tidyr::pivot_longer(cols = n_snps.gerring:p.gerring, names_to = "feature") %>% 
+  dplyr::mutate(
+    dataset =
+      case_when(
+        stringr::str_detect(feature, "rhr") ~ "rhr",
+        stringr::str_detect(feature, "gerring") ~ "gerring"
+      ),
+    feature =
+      feature %>% 
+      stringr::str_remove("\\.rhr|\\.gerring"), 
+    feature =  
+      case_when(
+        feature == "p" ~ "-log10(p)",
+        TRUE ~ feature
+      ),
+    label = 
+      str_c(locus.rhr, ": ", phen1.rhr, "+", phen2.rhr)
+  ) %>% 
+  tidyr::pivot_wider(
+    names_from = dataset,
+    values_from = value
+  )  %>% 
+  dplyr::mutate(
+    across(
+      .cols = rhr:gerring,
+      ~ case_when(
+        feature == "-log10(p)" ~ -log10(.x),
+        TRUE ~ .x
+      )
+    )
   )
 
 ```
@@ -254,6 +316,8 @@ ggsave(
 
 ```{r fig1-supp-fig}
 
+suppfig <- list()
+
 plot <- list()
 
 plot[[1]] <- 
@@ -318,7 +382,7 @@ plot[[2]] <-
     legend.position = "none"
     )
 
-suppfig <- 
+suppfig[[1]] <- 
   cowplot::plot_grid(
     plotlist = plot,
     align = "v",
@@ -329,19 +393,200 @@ suppfig <-
     labels = letters[1:length(plot)]
   )
 
-suppfig
+suppfig[[1]]
+
+```
+
+```{r fig1-supp-fig-overlap}
+
+plots <- list()
+
+plots[[1]] <- 
+  overlap_gerring_long %>% 
+  dplyr::filter(
+    feature %in% 
+      c("rho")
+  ) %>% 
+  ggplot(
+    aes(
+      x = rhr,
+      y = gerring
+    )
+  )  +
+  geom_point(
+    size = 1.5,
+    alpha = 0.8,
+    shape = 21,
+    colour = "black",
+    aes(fill = significant)
+    
+  ) +
+  geom_abline(
+    intercept = 0,
+    linetype = "dashed",
+    colour = "grey",
+    alpha = 0.7
+  ) +
+  ggrepel::geom_label_repel(
+    aes(
+      label = label
+      ),
+    size = 1.5,
+    alpha = 0.7,
+    box.padding = 0.2,
+    min.segment.length = unit(0, 'lines')
+  ) +
+  facet_wrap(vars(feature)) +
+  coord_fixed(
+    xlim = c(0, max(overlap_gerring$rho.gerring)), 
+    ylim = c(0, max(overlap_gerring$rho.gerring))
+    ) +
+  labs(
+    x = "This study",
+    y = "Gerring et al. 2022"
+  ) +
+  theme_rhr + 
+  theme(
+    axis.text.x = element_text(angle = 0, hjust = 0.5),
+    legend.position = "top"
+  )
+
+plots[[2]] <-
+  overlap_gerring_long %>% 
+  dplyr::filter(
+    feature %in% 
+      c("-log10(p)")
+  ) %>% 
+  ggplot(
+    aes(
+      x = rhr,
+      y = gerring
+    )
+  ) +
+  geom_point(
+    size = 1.5,
+    alpha = 0.8,
+    shape = 21,
+    colour = "black",
+    aes(fill = significant)
+  ) +
+  geom_hline(
+    yintercept = -log10(0.05/24054),
+    linetype = "dashed",
+    colour = "grey",
+    alpha = 0.7
+    ) +
+  geom_vline(
+    xintercept = -log10(p_threshold),
+    linetype = "dashed",
+    colour = "grey",
+    alpha = 0.7
+    ) +
+  ggrepel::geom_label_repel(
+    aes(
+      label = label
+      ),
+    size = 1.5,
+    alpha = 0.7,
+    # box.padding = 0.25,
+    min.segment.length = unit(0, 'lines')
+  ) +
+  facet_wrap(vars(feature)) +
+  coord_fixed(
+    xlim = c(0, max(-log10(overlap_gerring$p.gerring))*1.25), 
+    ylim = c(0, max(-log10(overlap_gerring$p.gerring))*1.25)
+  ) +
+  labs(
+    x = "This study",
+    y = "Gerring et al. 2022"
+  ) +
+  theme_rhr + 
+  theme(
+    axis.text.x = element_text(angle = 0, hjust = 0.5),
+    legend.position = "top"
+  )
+
+plots[[3]] <- 
+  overlap_gerring_long %>% 
+  dplyr::filter(
+    feature %in% 
+      c("n_snps")
+  ) %>% 
+  ggplot(
+    aes(
+      x = rhr,
+      y = gerring
+    )
+  ) +
+  geom_point(
+    size = 1.5,
+    alpha = 0.8,
+    shape = 21,
+    colour = "black",
+    aes(fill = significant)
+  ) +
+  geom_abline(
+    intercept = 0,
+    linetype = "dashed",
+    colour = "grey",
+    alpha = 0.7
+  ) +
+  ggrepel::geom_label_repel(
+    aes(
+      label = label
+      ),
+    size = 1.5,
+    alpha = 0.7,
+    box.padding = 0.4,
+    min.segment.length = unit(0, 'lines')
+  ) +
+  facet_wrap(vars(feature)) +
+  coord_fixed(
+    xlim = c(0, max(overlap_gerring$n_snps.gerring)*1.25), 
+    ylim = c(0, max(overlap_gerring$n_snps.gerring)*1.25)
+  ) +
+  labs(
+    x = "This study",
+    y = "Gerring et al. 2022"
+  ) +
+  theme_rhr + 
+  theme(
+    axis.text.x = element_text(angle = 0, hjust = 0.5),
+    legend.position = "top"
+  )
+
+suppfig[[2]] <- 
+  ggpubr::ggarrange(
+    plotlist = plots,
+    labels = letters[c(1:length(plots))],
+    common.legend = TRUE, 
+    align = "h"
+  )
+
+suppfig[[2]]
 
 ```
 
 ```{r fig1-supp-fig-save, eval = F}
 
 ggsave(
-  suppfig,
+  suppfig[[1]],
   path = out_dir, 
   filename = "suppfig_1_ldblocks.png",
   device = "png", 
   width = 130, 
   height = 180, 
+  dpi = 300, 
+  units = "mm"
+)
+
+ggsave(
+  suppfig[[2]],
+  path = out_dir, 
+  filename = "suppfig_2_overlap_gerring.png",
+  device = "png", 
+  width = 150, 
+  height = 150, 
   dpi = 300, 
   units = "mm"
 )
@@ -400,15 +645,35 @@ openxlsx::write.xlsx(
 
 xlsx <- 
   setNames(
-    vector(mode = "list", length = 2),
-    c("column_descriptions", "results")
+    vector(mode = "list", length = 3),
+    c("column_descriptions", "trait_h2", "global_rg")
   )
 
-xlsx[[2]] <-
+xlsx[[3]] <-
   global
 
+xlsx[[2]] <-
+  h2
+
 xlsx[[1]] <-
-tibble(
+  tibble(
+    sheet = rep("trait_h2", ncol(h2)),
+  column_name = colnames(h2),
+  description = 
+    c(
+      "Phenotype",
+      "Estimated SNP heritability (h2, observed scale)",
+      "Standard error of h2",
+      "Genomic inflation factor (lambda GC); equivalent of median(chi^2)/0.4549, where denominator indicates expected median of the chi-squared distribution with 1 degree of freedom",
+      "Mean chi-square statistic",
+      "LD score regression intercept",
+      "Standard error for LD score regression intercept",
+      "Heritability Z-score (equivalent of h2/se)"
+    )
+) %>% 
+  bind_rows(
+    tibble(
+      sheet = rep("global_rg", ncol(global)),
   column_name = colnames(global),
   description = 
     c(
@@ -418,7 +683,7 @@ tibble(
       "The bootstrap standard error of the genetic correlation estimate",
       "The bootstrap standard error of the genetic correlation estimate",
       "P-value for genetic correlation",
-      "Estimated snp-heritability of the second phenotype ",
+      "Estimated SNP heritability (h2, observed scale) of the second phenotype ",
       "Standard error of h2 for phenotype 2",
       "Single-trait LD score regression intercept for phenotype 2",
       "Standard error for single-trait LD score regression intercept for phenotype 2",
@@ -426,6 +691,8 @@ tibble(
       "Bootstrap standard error of cross-trait LD score regression intercept"
     )
 )
+  )
+
 
 openxlsx::write.xlsx(
   xlsx,
@@ -502,6 +769,115 @@ xlsx[[1]] <-
 openxlsx::write.xlsx(
   xlsx,
   file = file.path(out_dir, "SupplementaryTable3_lava_local.xlsx"),
+  row.names = FALSE,
+  headerStyle = openxlsx::createStyle(textDecoration = "BOLD"),
+  firstRow = TRUE,
+  append = TRUE,
+  overwrite = TRUE
+)
+
+```
+
+### Overlaps
+
+```{r fig1-supp-tables-overlaps, eval = F}
+
+overlap_smeland <- 
+  readRDS(here::here("results", "02_univar_bivar_test", "results_overlap_with_smeland.rds"))
+
+xlsx <- 
+  setNames(
+    vector(mode = "list", length = 3),
+    c("column_descriptions", "smeland", "gerring")
+  )
+
+xlsx[[2]] <-
+  overlap_smeland %>% 
+  dplyr::select(
+    -n_snps, -n_pcs, 
+    -contains("r2"), -fdr, 
+    -contains("lower"), -contains("upper"),
+    -smeland_same_direction_of_effect, 
+    -rho_consistent_w_effect_consistency
+    )
+
+xlsx[[3]] <-
+  overlap_gerring %>% 
+    dplyr::mutate(
+      trait_pair.rhr =
+        str_c(phen1.rhr, "-", phen2.rhr),
+      trait_pair.gerring = 
+        str_c(phen1.gerring, "-", phen2.gerring)
+    ) %>% 
+  dplyr::select(
+    locus = locus.rhr,
+    chr, start, stop,
+    overlapping_phen,
+    trait_pair.rhr,
+    contains("rhr"),
+    trait_pair.gerring,
+    contains("gerring"),
+    -contains("phen"),
+    -locus.gerring,
+    -contains("lower"),
+    -contains("upper")
+  )
+
+xlsx[[1]] <-
+  tibble(
+    column = colnames(xlsx[[2]]),
+    description = 
+      c(
+        "LD block ID",
+        "LD block chromosome",
+        "LD block start base pair",
+        "LD block end base pair",
+        "Phenotype 1",
+        "Phenotype 2",
+        "LAVA: standardised coefficient for the local genetic correlation",
+        "LAVA: simulation p-values for the local genetic correlation",
+        "Smeland et al. 2021: lead SNP (rsID)",
+        "Smeland et al. 2021: lead SNP (genomic location, GRCh37)",
+        "Smeland et al. 2021: alleles",
+        "Smeland et al. 2021: nearest gene to lead SNP",
+        "Smeland et al. 2021: p-value of lead SNP in original PD GWAS",
+        "Smeland et al. 2021: effect size of lead SNP in original PD GWAS (effect sizes are given with reference to allele 1)",
+        "Smeland et al. 2021: p-value of lead SNP in original SCZ GWAS",
+        "Smeland et al. 2021: effect size of lead SNP in original SCZ GWAS (effect sizes are given with reference to allele 1)",
+        "Smeland et al. 2021: conjunctional FDR value"
+      )
+  ) %>%
+  dplyr::mutate(sheet = "smeland") %>% 
+  dplyr::bind_rows(
+    tibble(
+      column = colnames(xlsx[[3]]),
+      description = 
+        c(
+          "LD block ID",
+          "LD block chromosome",
+          "LD block start base pair",
+          "LD block end base pair",
+          "This study: trait pair",
+          "This study: number of PCs retained within the LD block",
+          "This study: number of SNPs within the LD block",
+          "This study: simulation p-values for the local genetic correlation",
+          "This study: proportion of variance in genetic signal for phen1 explained by phen2 (and vice versa)",
+          "This study: standardised coefficient for the local genetic correlation",
+          "Gerring et al. 2022: trait pair",
+          "Gerring et al. 2022: number of PCs retained within the LD block",
+          "Gerring et al. 2022: number of SNPs within the LD block",
+          "Gerring et al. 2022: simulation p-values for the local genetic correlation",
+          "Gerring et al. 2022: proportion of variance in genetic signal for phen1 explained by phen2 (and vice versa)",
+          "Gerring et al. 2022: standardised coefficient for the local genetic correlation"          
+        )
+    ) %>% 
+      dplyr::mutate(sheet = "gerring")
+  ) %>% 
+  dplyr::select(sheet, everything())
+
+openxlsx::write.xlsx(
+  xlsx,
+  file = file.path(out_dir, "SupplementaryTable4_lava_comparisons.xlsx"),
   row.names = FALSE,
   headerStyle = openxlsx::createStyle(textDecoration = "BOLD"),
   firstRow = TRUE,
@@ -937,7 +1313,7 @@ xlsx[[1]] <-
 
 openxlsx::write.xlsx(
   xlsx,
-  file = file.path(out_dir, "SupplementaryTable5_multireg.xlsx"),
+  file = file.path(out_dir, "SupplementaryTable6_multireg.xlsx"),
   row.names = FALSE,
   headerStyle = openxlsx::createStyle(textDecoration = "BOLD"),
   firstRow = TRUE,
@@ -1550,7 +1926,7 @@ supp_fig[[3]]
 ggsave(
   supp_fig[[1]],
   path = out_dir, 
-  filename = "suppfig_3_eqtl_all.png",
+  filename = "suppfig_4_eqtl_all.png",
   device = "png", 
   width = 150, 
   height = 230, 
@@ -1561,7 +1937,7 @@ ggsave(
 ggsave(
   supp_fig[[2]],
   path = out_dir, 
-  filename = "suppfig_4_r2.png",
+  filename = "suppfig_5_r2.png",
   device = "png", 
   width = 150, 
   height = 150, 
@@ -1572,7 +1948,7 @@ ggsave(
 ggsave(
   supp_fig[[3]],
   path = out_dir, 
-  filename = "suppfig_5_windowsize_analysis.png",
+  filename = "suppfig_6_windowsize_analysis.png",
   device = "png", 
   width = 90, 
   height = 90, 
