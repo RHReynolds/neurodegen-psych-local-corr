@@ -1,0 +1,257 @@
+nohup: ignoring input
+here() starts at /home/rreynolds/misc_projects/neurodegen-psych-local-corr
+Running LAVA version 0.0.6
+-- Attaching packages --------------------------------------- tidyverse 1.3.1 --
+v ggplot2 3.3.5     v purrr   0.3.4
+v tibble  3.1.6     v dplyr   1.0.7
+v tidyr   1.1.4     v stringr 1.4.0
+v readr   2.0.2     v forcats 0.5.1
+-- Conflicts ------------------------------------------ tidyverse_conflicts() --
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()
+$ref_prefix
+[1] "/tools/MAGMA/reference_files/g1000_eur/g1000_eur"
+
+$loc_file
+[1] "/home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/04_eqtl_univar_bivar/window_100000/gene_filtered.loci"
+
+$info_file
+[1] "/home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/04_eqtl_univar_bivar/input.info.txt"
+
+$sample_overlap_file
+[1] "/home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/04_eqtl_univar_bivar/sample_overlap.txt"
+
+$loci_of_interest
+[1] "ENSG00000168078" "ENSG00000168079" "ENSG00000170209" "ENSG00000069399"
+[5] "ENSG00000130202" "ENSG00000130204"
+
+$tidy_bivar
+$tidy_bivar$univ
+$tidy_bivar$univ$window_100000
+# A tibble: 548 x 12
+   ld_block eqtl_dataset gene_locus   gene_name   chr  start   stop n_snps n_pcs
+      <int> <chr>        <chr>        <chr>     <int>  <int>  <int>  <int> <int>
+ 1      681 EQTLGEN      ENSG0000013~ MMRN1         4 9.07e7 9.10e7    825    91
+ 2      681 EQTLGEN      ENSG0000013~ MMRN1         4 9.07e7 9.10e7    825    91
+ 3      681 EQTLGEN      ENSG0000013~ MMRN1         4 9.07e7 9.10e7    825    91
+ 4      681 PSYCHENCODE  ENSG0000013~ MMRN1         4 9.07e7 9.10e7    527    47
+ 5      681 PSYCHENCODE  ENSG0000013~ MMRN1         4 9.07e7 9.10e7    527    47
+ 6      681 PSYCHENCODE  ENSG0000013~ MMRN1         4 9.07e7 9.10e7    527    47
+ 7      681 EQTLGEN      ENSG0000014~ SNCA          4 9.05e7 9.09e7    960    97
+ 8      681 EQTLGEN      ENSG0000014~ SNCA          4 9.05e7 9.09e7    960    97
+ 9      681 EQTLGEN      ENSG0000014~ SNCA          4 9.05e7 9.09e7    960    97
+10      681 PSYCHENCODE  ENSG0000014~ SNCA          4 9.05e7 9.09e7    600    52
+# ... with 538 more rows, and 3 more variables: phen <chr>, h2.obs <dbl>,
+#   p <dbl>
+
+$tidy_bivar$univ$window_50000
+# A tibble: 540 x 12
+   ld_block eqtl_dataset gene_locus   gene_name   chr  start   stop n_snps n_pcs
+      <int> <chr>        <chr>        <chr>     <int>  <int>  <int>  <int> <int>
+ 1      681 EQTLGEN      ENSG0000013~ MMRN1         4 9.08e7 9.09e7    495    75
+ 2      681 EQTLGEN      ENSG0000013~ MMRN1         4 9.08e7 9.09e7    495    75
+ 3      681 EQTLGEN      ENSG0000013~ MMRN1         4 9.08e7 9.09e7    495    75
+ 4      681 PSYCHENCODE  ENSG0000013~ MMRN1         4 9.08e7 9.09e7    288    35
+ 5      681 PSYCHENCODE  ENSG0000013~ MMRN1         4 9.08e7 9.09e7    288    35
+ 6      681 PSYCHENCODE  ENSG0000013~ MMRN1         4 9.08e7 9.09e7    288    35
+ 7      681 EQTLGEN      ENSG0000014~ SNCA          4 9.06e7 9.08e7    687    71
+ 8      681 EQTLGEN      ENSG0000014~ SNCA          4 9.06e7 9.08e7    687    71
+ 9      681 EQTLGEN      ENSG0000014~ SNCA          4 9.06e7 9.08e7    687    71
+10      681 PSYCHENCODE  ENSG0000014~ SNCA          4 9.06e7 9.08e7    437    40
+# ... with 530 more rows, and 3 more variables: phen <chr>, h2.obs <dbl>,
+#   p <dbl>
+
+
+$tidy_bivar$bivar
+$tidy_bivar$bivar$window_100000
+# A tibble: 354 x 20
+   ld_block eqtl_dataset gene_locus   gene_name   chr  start   stop n_snps n_pcs
+      <int> <chr>        <chr>        <chr>     <int>  <int>  <int>  <int> <int>
+ 1      681 EQTLGEN      ENSG0000013~ MMRN1         4 9.07e7 9.10e7    825    91
+ 2      681 EQTLGEN      ENSG0000013~ MMRN1         4 9.07e7 9.10e7    825    91
+ 3      681 EQTLGEN      ENSG0000013~ MMRN1         4 9.07e7 9.10e7    825    91
+ 4      681 PSYCHENCODE  ENSG0000013~ MMRN1         4 9.07e7 9.10e7    527    47
+ 5      681 EQTLGEN      ENSG0000014~ SNCA          4 9.05e7 9.09e7    960    97
+ 6      681 EQTLGEN      ENSG0000014~ SNCA          4 9.05e7 9.09e7    960    97
+ 7      681 EQTLGEN      ENSG0000014~ SNCA          4 9.05e7 9.09e7    960    97
+ 8      681 EQTLGEN      ENSG0000018~ CCSER1        4 9.09e7 9.26e7   4805   304
+ 9      681 EQTLGEN      ENSG0000018~ CCSER1        4 9.09e7 9.26e7   4805   304
+10      681 EQTLGEN      ENSG0000018~ CCSER1        4 9.09e7 9.26e7   4805   304
+# ... with 344 more rows, and 11 more variables: phen1 <chr>, phen2 <chr>,
+#   rho <dbl>, rho.lower <dbl>, rho.upper <dbl>, r2 <dbl>, r2.lower <dbl>,
+#   r2.upper <dbl>, p <dbl>, fdr <dbl>, bonferroni <dbl>
+
+$tidy_bivar$bivar$window_50000
+# A tibble: 267 x 20
+   ld_block eqtl_dataset gene_locus   gene_name   chr  start   stop n_snps n_pcs
+      <int> <chr>        <chr>        <chr>     <int>  <int>  <int>  <int> <int>
+ 1      681 EQTLGEN      ENSG0000013~ MMRN1         4 9.08e7 9.09e7    495    75
+ 2      681 EQTLGEN      ENSG0000013~ MMRN1         4 9.08e7 9.09e7    495    75
+ 3      681 EQTLGEN      ENSG0000013~ MMRN1         4 9.08e7 9.09e7    495    75
+ 4      681 PSYCHENCODE  ENSG0000013~ MMRN1         4 9.08e7 9.09e7    288    35
+ 5      681 EQTLGEN      ENSG0000014~ SNCA          4 9.06e7 9.08e7    687    71
+ 6      681 EQTLGEN      ENSG0000014~ SNCA          4 9.06e7 9.08e7    687    71
+ 7      681 EQTLGEN      ENSG0000014~ SNCA          4 9.06e7 9.08e7    687    71
+ 8      681 EQTLGEN      ENSG0000018~ CCSER1        4 9.10e7 9.26e7   4490   298
+ 9      681 EQTLGEN      ENSG0000018~ CCSER1        4 9.10e7 9.26e7   4490   298
+10      681 EQTLGEN      ENSG0000018~ CCSER1        4 9.10e7 9.26e7   4490   298
+# ... with 257 more rows, and 11 more variables: phen1 <chr>, phen2 <chr>,
+#   rho <dbl>, rho.lower <dbl>, rho.upper <dbl>, r2 <dbl>, r2.lower <dbl>,
+#   r2.upper <dbl>, p <dbl>, fdr <dbl>, bonferroni <dbl>
+
+
+
+$output_filename
+[1] "eqtl_pcor"
+
+`summarise()` has grouped output by 'eqtl_dataset'. You can override using the `.groups` argument.
+Joining, by = "gene_locus"
+[1] "2022-10-02 20:38:02 BST"
+[1] "Locus: ENSG00000069399"
+[1] "...Reading in sumstats"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "~ 6089 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 723 SNPs which could not be aligned, 5366 remaining"
+[1] "2022-10-02 20:43:48 BST"
+[1] "Correlating: AD2019 PD2019.meta5.ex23andMe"
+[1] "Adjusting for: EQTLGEN_ENSG00000069399"
+[1] "~ Running partial correlation for 'AD2019' and 'PD2019.meta5.ex23andMe', conditioned on 'EQTLGEN_ENSG00000069399'"
+[1] "2022-10-02 20:44:21 BST"
+[1] "Correlating: AD2019 EQTLGEN_ENSG00000069399"
+[1] "Adjusting for: PD2019.meta5.ex23andMe"
+[1] "~ Running partial correlation for 'AD2019' and 'EQTLGEN_ENSG00000069399', conditioned on 'PD2019.meta5.ex23andMe'"
+[1] "2022-10-02 20:44:26 BST"
+[1] "Correlating: PD2019.meta5.ex23andMe EQTLGEN_ENSG00000069399"
+[1] "Adjusting for: AD2019"
+[1] "~ Running partial correlation for 'PD2019.meta5.ex23andMe' and 'EQTLGEN_ENSG00000069399', conditioned on 'AD2019'"
+[1] "2022-10-02 20:44:31 BST"
+[1] "Locus: ENSG00000130202"
+[1] "...Reading in sumstats"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "~ 4631 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 578 SNPs which could not be aligned, 4053 remaining"
+[1] "2022-10-02 20:48:58 BST"
+[1] "Correlating: AD2019 LBD2020"
+[1] "Adjusting for: EQTLGEN_ENSG00000130202"
+[1] "~ Running partial correlation for 'AD2019' and 'LBD2020', conditioned on 'EQTLGEN_ENSG00000130202'"
+[1] "2022-10-02 20:53:31 BST"
+[1] "Correlating: AD2019 EQTLGEN_ENSG00000130202"
+[1] "Adjusting for: LBD2020"
+[1] "~ Running partial correlation for 'AD2019' and 'EQTLGEN_ENSG00000130202', conditioned on 'LBD2020'"
+[1] "2022-10-02 20:53:37 BST"
+[1] "Correlating: LBD2020 EQTLGEN_ENSG00000130202"
+[1] "Adjusting for: AD2019"
+[1] "~ Running partial correlation for 'LBD2020' and 'EQTLGEN_ENSG00000130202', conditioned on 'AD2019'"
+[1] "2022-10-02 20:53:42 BST"
+[1] "Locus: ENSG00000130204"
+[1] "...Reading in sumstats"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "~ 4663 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 583 SNPs which could not be aligned, 4080 remaining"
+[1] "2022-10-02 20:58:08 BST"
+[1] "Correlating: AD2019 LBD2020"
+[1] "Adjusting for: EQTLGEN_ENSG00000130204"
+[1] "~ Running partial correlation for 'AD2019' and 'LBD2020', conditioned on 'EQTLGEN_ENSG00000130204'"
+[1] "2022-10-02 21:02:52 BST"
+[1] "Correlating: AD2019 EQTLGEN_ENSG00000130204"
+[1] "Adjusting for: LBD2020"
+[1] "~ Running partial correlation for 'AD2019' and 'EQTLGEN_ENSG00000130204', conditioned on 'LBD2020'"
+[1] "2022-10-02 21:02:57 BST"
+[1] "Correlating: LBD2020 EQTLGEN_ENSG00000130204"
+[1] "Adjusting for: AD2019"
+[1] "~ Running partial correlation for 'LBD2020' and 'EQTLGEN_ENSG00000130204', conditioned on 'AD2019'"
+[1] "2022-10-02 21:03:01 BST"
+[1] "Locus: ENSG00000168078"
+[1] "...Reading in sumstats"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "~ 6720 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 766 SNPs which could not be aligned, 5954 remaining"
+[1] "2022-10-02 21:07:06 BST"
+[1] "Correlating: AD2019 PD2019.meta5.ex23andMe"
+[1] "Adjusting for: EQTLGEN_ENSG00000168078"
+[1] "~ Running partial correlation for 'AD2019' and 'PD2019.meta5.ex23andMe', conditioned on 'EQTLGEN_ENSG00000168078'"
+[1] "2022-10-02 21:07:13 BST"
+[1] "Correlating: AD2019 EQTLGEN_ENSG00000168078"
+[1] "Adjusting for: PD2019.meta5.ex23andMe"
+[1] "~ Running partial correlation for 'AD2019' and 'EQTLGEN_ENSG00000168078', conditioned on 'PD2019.meta5.ex23andMe'"
+[1] "2022-10-02 21:07:18 BST"
+[1] "Correlating: PD2019.meta5.ex23andMe EQTLGEN_ENSG00000168078"
+[1] "Adjusting for: AD2019"
+[1] "~ Running partial correlation for 'PD2019.meta5.ex23andMe' and 'EQTLGEN_ENSG00000168078', conditioned on 'AD2019'"
+[1] "2022-10-02 21:12:45 BST"
+[1] "Locus: ENSG00000168079"
+[1] "...Reading in sumstats"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "~ 6415 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 724 SNPs which could not be aligned, 5691 remaining"
+[1] "2022-10-02 21:16:51 BST"
+[1] "Correlating: AD2019 PD2019.meta5.ex23andMe"
+[1] "Adjusting for: EQTLGEN_ENSG00000168079"
+[1] "~ Running partial correlation for 'AD2019' and 'PD2019.meta5.ex23andMe', conditioned on 'EQTLGEN_ENSG00000168079'"
+[1] "2022-10-02 21:16:55 BST"
+[1] "Correlating: AD2019 EQTLGEN_ENSG00000168079"
+[1] "Adjusting for: PD2019.meta5.ex23andMe"
+[1] "~ Running partial correlation for 'AD2019' and 'EQTLGEN_ENSG00000168079', conditioned on 'PD2019.meta5.ex23andMe'"
+[1] "2022-10-02 21:16:59 BST"
+[1] "Correlating: PD2019.meta5.ex23andMe EQTLGEN_ENSG00000168079"
+[1] "Adjusting for: AD2019"
+[1] "~ Running partial correlation for 'PD2019.meta5.ex23andMe' and 'EQTLGEN_ENSG00000168079', conditioned on 'AD2019'"
+[1] "2022-10-02 21:17:04 BST"
+[1] "Locus: ENSG00000170209"
+[1] "...Reading in sumstats"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "~ 5319 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 650 SNPs which could not be aligned, 4669 remaining"
+[1] "2022-10-02 21:20:01 BST"
+[1] "Correlating: MDD2019 SCZ2018"
+[1] "Adjusting for: EQTLGEN_ENSG00000170209"
+[1] "~ Running partial correlation for 'MDD2019' and 'SCZ2018', conditioned on 'EQTLGEN_ENSG00000170209'"
+[1] "2022-10-02 21:20:07 BST"
+[1] "Correlating: MDD2019 EQTLGEN_ENSG00000170209"
+[1] "Adjusting for: SCZ2018"
+[1] "~ Running partial correlation for 'MDD2019' and 'EQTLGEN_ENSG00000170209', conditioned on 'SCZ2018'"
+[1] "2022-10-02 21:20:12 BST"
+[1] "Correlating: SCZ2018 EQTLGEN_ENSG00000170209"
+[1] "Adjusting for: MDD2019"
+[1] "~ Running partial correlation for 'SCZ2018' and 'EQTLGEN_ENSG00000170209', conditioned on 'MDD2019'"
+[1] "2022-10-02 21:20:18 BST"
+[1] "Locus: ENSG00000170209"
+[1] "...Reading in sumstats"
+[1] "...Reading in SNP info from reference data"
+[1] "...Extracting common SNPs"
+[1] "~ 3143 SNPs shared across data sets"
+[1] "...Aligning effect alleles to reference data set"
+[1] "...Removing 606 SNPs which could not be aligned, 2537 remaining"
+[1] "2022-10-02 21:23:17 BST"
+[1] "Correlating: MDD2019 SCZ2018"
+[1] "Adjusting for: PSYCHENCODE_ENSG00000170209"
+[1] "~ Running partial correlation for 'MDD2019' and 'SCZ2018', conditioned on 'PSYCHENCODE_ENSG00000170209'"
+[1] "2022-10-02 21:23:23 BST"
+[1] "Correlating: MDD2019 PSYCHENCODE_ENSG00000170209"
+[1] "Adjusting for: SCZ2018"
+[1] "~ Running partial correlation for 'MDD2019' and 'PSYCHENCODE_ENSG00000170209', conditioned on 'SCZ2018'"
+[1] "2022-10-02 21:23:27 BST"
+[1] "Correlating: SCZ2018 PSYCHENCODE_ENSG00000170209"
+[1] "Adjusting for: MDD2019"
+[1] "~ Running partial correlation for 'SCZ2018' and 'PSYCHENCODE_ENSG00000170209', conditioned on 'MDD2019'"
+Warning message:
+The `x` argument of `as_tibble.matrix()` must have unique column names if `.name_repair` is omitted as of tibble 2.0.0.
+Using compatibility `.name_repair`.
+This warning is displayed once every 8 hours.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated. 
+Warning message:
+In dir.create(out_dir, showWarnings = T) :
+  '/home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/04_eqtl_univar_bivar/window_100000/pcor' already exists
+[1] "Done! Analysis output written to /home/rreynolds/misc_projects/neurodegen-psych-local-corr/results/04_eqtl_univar_bivar/window_100000/pcor/eqtl_pcor.partcorr.lava.rds"

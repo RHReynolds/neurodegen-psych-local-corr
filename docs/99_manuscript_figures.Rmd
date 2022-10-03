@@ -1345,6 +1345,10 @@ ref <- import("/data/references/ensembl/gtf_gff3/v87/Homo_sapiens.GRCh37.87.gtf"
 ref <- ref %>% keepSeqlevels(c(1:22), pruning.mode = "coarse") 
 ref <- ref[ref$type == "gene"]
 
+# Partial correlations
+pcorr <-
+  readRDS(here::here("results", "04_eqtl_univar_bivar", "window_100000", "pcor", "eqtl_pcor.partcorr.lava.rds"))
+
 ```
 
 ## Data wrangling
@@ -1496,6 +1500,47 @@ loci_gr <-
     end.field = "STOP"
   )
 
+# Tidy pcorr
+pcorr <-
+  pcorr %>% 
+  lapply(., function(list){
+    
+    list %>%
+      qdapTools::list_df2df(col1 = "list_name") %>%
+      dplyr::mutate(
+        eqtl_dataset =
+          case_when(
+            stringr::str_detect(phen1, "PSYCH") |
+              stringr::str_detect(phen2, "PSYCH") |
+              stringr::str_detect(z, "PSYCH") ~ "PSYCHENCODE",
+            stringr::str_detect(phen1, "EQTLGEN") |
+              stringr::str_detect(phen2, "EQTLGEN") |
+              stringr::str_detect(z, "EQTLGEN") ~ "EQTLGEN"
+          )
+      ) %>%
+      dplyr::mutate(
+        across(
+          .cols = phen1:z,
+          ~ case_when(
+            !str_detect(.x, "ENSG") ~ .x %>%
+              str_replace_all("[:digit:]", "") %>%
+              str_remove("\\..*"),
+            str_detect(.x, "ENSG") ~ str_remove(.x, ".*_")
+          )
+        )
+      )
+    
+  }) %>%
+  qdapTools::list_df2df(col1 = "list_name_2") %>%
+  dplyr::select(
+    eqtl_dataset,
+    gene_locus,
+    gene_name,
+    everything(),
+    -contains("list_name")
+  ) %>%
+  as_tibble()
+
 ```
 
 
@@ -1606,7 +1651,7 @@ plots[[6]] <-
   plot_qtl_edge_diagram(
     bivar_corr_qtl = 
       qtl_list[["locus_1273"]] %>% 
-      dplyr::filter(gene_name %in% c("CLU", "SCARA5")),
+      dplyr::filter(gene_name %in% c("CLU", "SCARA5", "PBK")),
     phen = fct_disease,
     geom_node_size = 2,
     base_size = 8,
@@ -1636,6 +1681,8 @@ fig <-
     ggpubr::ggarrange(
       plots[[6]]$`CLU:EQTLGEN`,
       plots[[6]]$`SCARA5:EQTLGEN`,
+      plots[[6]]$`PBK:EQTLGEN`,
+      nrow = 1, ncol = 3,
       common.legend = TRUE,
       legend = "none",
       labels = c("e","")
@@ -1961,7 +2008,7 @@ ggsave(
 
 ## Supplementary table(s)
 
-```{r, fig4-supp-table, fig.height = 10, eval = F}
+```{r fig4-supp-table, fig.height = 10, eval = F}
 
 ld_blocks <- 
   qtl_tidy$bivar$window_100000 %>% .[["ld_block"]] %>% unique() %>% str_c("ld", .)
@@ -2185,6 +2232,53 @@ for(window in names(qtl_tidy$bivar)){
   ) 
   
 }
+
+```
+
+```{r fig4-supp-table-pcorr, eval = F}
+
+xlsx <- 
+  setNames(
+    vector(mode = "list", length = 2),
+    c("column_descriptions", "results")
+  )
+
+xlsx[[2]] <-
+  pcorr
+
+xlsx[[1]] <-
+  tibble(
+    column = colnames(pcorr),
+    description = 
+      c("eQTL dataset from which gene eQTLs are derived",
+        "Ensembl ID for gene for which eQTLs were tested in genic region",
+        "HGNC symbol for gene for which eQTLs were tested in genic region",
+        "Genic region chromosome",
+        "Genic region start base pair",
+        "Genic region end base pair",
+        "The number of SNPs within the genic region",
+        "The number of PCs retained within the genic region",
+        "Phenotype 1. Gene expression traits (i.e. gene eQTLs) are denoted by their ensembl gene id",
+        "Phenotype 2. Gene expression traits (i.e. gene eQTLs) are denoted by their ensembl gene id",
+        "Phenotype which the genetic correlation between phenotype 1 and 2 was conditioned on",
+        "The proportion of genetic signal in phenotype 1 explained by z",
+        "The proportion of genetic signal in phenotype 2 explained by z",
+        "The partial correlation between phen1 and phen2 conditioned on z",
+        "Lower bound of 95% confidence interval for partial correlation",
+        "Upper bound of 95% confidence interval for partial correlation",
+        "Simulation p-values for the partial genetic correlation"
+      )
+  )
+
+openxlsx::write.xlsx(
+  xlsx,
+  file = file.path(out_dir, "SupplementaryTable9_pcorr.xlsx"),
+  row.names = FALSE,
+  headerStyle = openxlsx::createStyle(textDecoration = "BOLD"),
+  firstRow = TRUE,
+  append = TRUE,
+  overwrite = TRUE
+)
 
 ```
 

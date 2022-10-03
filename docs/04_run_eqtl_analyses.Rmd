@@ -181,6 +181,59 @@ results <- readRDS(here::here("results", "04_eqtl_univar_bivar", "results_summar
 
 ```
 
+## Partial correlations
+
+```{r run-pcorr, eval = F}
+
+source(here::here("scripts", "04f_run_partial_corr.R"))
+
+```
+
+```{r load-pcorr}
+
+pcorr <-
+  readRDS(here::here("results", "04_eqtl_univar_bivar", "window_100000", "pcor", "eqtl_pcor.partcorr.lava.rds")) %>% 
+  lapply(., function(list){
+    
+    list %>%
+      qdapTools::list_df2df(col1 = "list_name") %>%
+      dplyr::mutate(
+        eqtl_dataset =
+          case_when(
+            stringr::str_detect(phen1, "PSYCH") |
+              stringr::str_detect(phen2, "PSYCH") |
+              stringr::str_detect(z, "PSYCH") ~ "PSYCHENCODE",
+            stringr::str_detect(phen1, "EQTLGEN") |
+              stringr::str_detect(phen2, "EQTLGEN") |
+              stringr::str_detect(z, "EQTLGEN") ~ "EQTLGEN"
+          )
+      ) %>%
+      dplyr::mutate(
+        across(
+          .cols = phen1:z,
+          ~ case_when(
+            !str_detect(.x, "ENSG") ~ .x %>%
+              str_replace_all("[:digit:]", "") %>%
+              str_remove("\\..*"),
+            str_detect(.x, "ENSG") ~ str_remove(.x, ".*_")
+          )
+        )
+      )
+    
+  }) %>%
+  qdapTools::list_df2df(col1 = "list_name_2") %>%
+  dplyr::select(
+    eqtl_dataset,
+    gene_locus,
+    gene_name,
+    everything(),
+    -contains("list_name")
+  ) %>%
+  as_tibble()
+
+```
+
+
 
 ## Loading plotting functions
 
@@ -215,6 +268,9 @@ Due to the potential sample overlap between cohorts and its impact on any estima
 
 ## Running univariate and bivariate tests using eQTL summary statistics
 For each genic region, only those traits that were found to have significant local $r_{g}$ in the associated LD block were used for univariate and bivariate analyses with eQTL summary statistics. As described in [02_run_univar_bivar_test.html](02_run_univar_bivar_test.html), a univariate test was performed as a filtering step for bivariate local $r_{g}$ analyses. Bivariate local correlations were only performed (i) if the eQTL within the genic region exhibited a significant univariate local genetic signal and (ii) for pairs of traits which both exhibited a significant univariate local genetic signal. A cut-off of p < 0.05/`r nrow(gene_loci) %>% format(scientific = F)` was used to determine univariate significance. Using a 100-kb window, this resulted in a total of **`r nrow(results$bivar$window_100000)`** bivariate tests spanning **`r results$bivar$window_100000 %>% .[["gene_locus"]] %>% unique() %>% length()`** distinct genic regions (with a 50-kb window, a total of **`r nrow(results$bivar$window_50000)`** bivariate tests spanning **`r results$bivar$window_50000 %>% .[["gene_locus"]] %>% unique() %>% length()`** distinct genic regions). Bivariate results were multiple test corrected using two strategies: (i) a more stringent Bonferroni correction (i.e. p < 0.05/n bivariate tests) and (ii) a more lenient FDR correction. 
+
+## Partial correlations
+Partial correlations were computed where three-way relationships were observed between 2 disease traits and an eQTL. The partial correlation reflects the correlation between 2 traits (e.g. disease X and Y) that can be explained by a third trait (e.g. eQTL, Z). Thus, a partial correlation approaching 0 suggests that trait Z captures an increasing proportion of the correlation between traits X and Y. Due to the three-way nature of the relationships, 3 possible conformations were possible (i.e. X~Y|Z, X~Z|Y and Y~Z|X); partial correlations were computed for all 3.
 
 # Results {.tabset}
 
@@ -421,6 +477,48 @@ overlap %>%
 # )
 
 ```
+
+### Partial correlations
+
+```{r pcorr-table}
+
+print("Partial correlations column descriptions:")
+
+tibble(
+    column = colnames(pcorr),
+    description = 
+      c("eQTL dataset from which gene eQTLs are derived",
+        "Ensembl ID for gene for which eQTLs were tested in genic region",
+        "HGNC symbol for gene for which eQTLs were tested in genic region",
+        "Genic region chromosome",
+        "Genic region start base pair",
+        "Genic region end base pair",
+        "The number of SNPs within the genic region",
+        "The number of PCs retained within the genic region",
+        "Phenotype 1. Gene expression traits (i.e. gene eQTLs) are denoted by their ensembl gene id",
+        "Phenotype 2. Gene expression traits (i.e. gene eQTLs) are denoted by their ensembl gene id",
+        "Phenotype which the genetic correlation between phenotype 1 and 2 was conditioned on",
+        "The proportion of genetic signal in phenotype 1 explained by z",
+        "The proportion of genetic signal in phenotype 2 explained by z",
+        "The partial correlation between phen1 and phen2 conditioned on z",
+        "Lower bound of 95% confidence interval for partial correlation",
+        "Upper bound of 95% confidence interval for partial correlation",
+        "Simulation p-values for the partial genetic correlation"
+      )
+  ) %>% 
+  DT::datatable(rownames = FALSE,
+                options = list(scrollX = TRUE),
+                class = 'white-space: nowrap')
+
+print("All partial correlations:")
+
+pcorr %>% 
+  DT::datatable(rownames = FALSE,
+                options = list(scrollX = TRUE),
+                class = 'white-space: nowrap')
+
+```
+
 
 
 ## Comparison of bivariate local $r_{g}$'s across 50-kb and 100-kb windows {.tabset}
@@ -748,6 +846,9 @@ bivar_fdr$window_100000 %>%
     - When locus 1273 was subsetted by genic region, a significant positive local $r_{g}$ was observed between AD and PD in `r results$bivar$window_100000 %>% dplyr::filter(ld_block == 1273, phen1== "AD", phen2 == "PD", fdr < 0.05, rho > 0) %>% .[["gene_locus"]] %>% unique() %>% length()` out of `r gene_filtered_loci %>% dplyr::filter(locus == 1273) %>% nrow()` genic regions (in the remaining genic regions, local $r_{g}$'s between AD and PD were non-significant). This included the *SCARA5* genic region, where significant negative local $r_{g}$'s were observed between AD and eQTLGen-derived *SCARA5* eQTLs, as well as, PD and eQTLGen-derived *SCARA5* eQTLs.
         - *SCARA5* is a ferritin receptor that internalises ferritin (protein that stores iron), after which iron is liberated and transported to the cytosol. It is important for non-transferrin iron delivery (PMID: [19154717](https://pubmed.ncbi.nlm.nih.gov/19154717/)). 
         - This is notable, as ferritin has found to be increased in AD and PD and, more generally, several studies have implicated cellular iron overload and iron-induced oxidative stress in AD, PD and other neurodegenerative diseases (as reviewed in PMID: [28154410](https://pubmed.ncbi.nlm.nih.gov/28154410/)).
+    - In the *PBK* genic region there was also a significant positive local $r_{g}$'s between AD and PD, as well as between AD and eQTLGen-derived *PBK* eQTLs, as well as, PD and eQTLGen-derived *PBK* eQTLs.
+        - PBK/TOPK (PDZ-binding kinase, T-LAK-cell-originated protein kinase) is a serine-threonine kinase. Functions partly as an MAP kinase kinase by phosphorylation of p38 mitogen-activated protein kinase (MAPK) and is active during mitosis through phosphorylation of residue Thr9 by cyclin B1/Cdk1 (PMID: [33670114](https://pubmed.ncbi.nlm.nih.gov/33670114/))
+        - Abundant in highly proliferative tissues, such as the placenta, testis, T-LAK cells, activated lymphoid cells and lymphoid tumors, but it is expressed at a very low level or is even absent in non-proliferative normal tissues, such as normal adult brain tissue (with the exception of the subependymal zone and early postnatal cerebellar external layer, which is enriched with rapidly proliferating progenitor cells) (PMID: [33670114](https://pubmed.ncbi.nlm.nih.gov/33670114/), (16291951)[https://pubmed.ncbi.nlm.nih.gov/16291951/]).
     - A significant positive local $r_{g}$ between AD and PD was also observed at the *ELP3* genic region, together with a positive local $r_{g}$ between PD and eQTLGen-derived *ELP3* eQTLs. *ELP3* is a component of the RNA polymerase II elongator complex (specifically it is the catalytic tRNA acetyltransferase subunit), which is required for multiple tRNA modifications. It is thought to be involved in neurogenesis (PMID: [19185337](https://pubmed.ncbi.nlm.nih.gov/19185337/)). Emil Gustavsson mentioned that ELP3 was a PD candidate risk gene he had been working on, but was unable to link to PD risk. 
     - Notably, while no local $r_{g}$ was observed between AD and PD in the *CLU* locus, a significant positive local $r_{g}$ was observed between AD and eQTLGen-derived *CLU* eQTLs and a negative local $r_{g}$ was observed between PD and eQTLGen-derived *CLU* eQTLs. *CLU* has been associated with AD (PMID: [30872998](https://pubmed.ncbi.nlm.nih.gov/30872998/)), although the mechanism by which it might confer risk or protection is not known.
 - Locus 1719
