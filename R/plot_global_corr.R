@@ -20,6 +20,8 @@ source(here::here("R", "theme_rhr.R"))
 #' @param n_phenotypes `integer` vector indicating number of phenotypes run.
 #' @param tidy_label `logical` vector indicating whether phenotype labels should
 #'   be "tidied" i.e. remove digits and anything after `.`. Default is TRUE.
+#' @param base_size `integer` vector indicating base size of theme. Default is
+#'   10.
 #'
 #' @return `ggplot` displaying the genetic correlations between phenotypes.
 #' \itemize{
@@ -40,7 +42,8 @@ plot_global_corr <-
   function(
     global_corr,
     n_phenotypes,
-    tidy_label = TRUE
+    tidy_label = TRUE,
+    base_size = 10
   ) {
 
     # Only need first half of matrix, thus must extract appropriate rows from dataframe
@@ -96,7 +99,7 @@ plot_global_corr <-
       ggplot2::guides(colour = "none") +
       ggplot2::theme_bw(
         base_family = "Helvetica",
-        base_size = 10
+        base_size = base_size
       ) +
       ggplot2::theme(
         panel.border = element_blank(),
