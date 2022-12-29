@@ -28,7 +28,7 @@ knitr::opts_chunk$set(echo = T, warning = F, message = F)
 # Set defaults for ggplots 
 theme_rhr <- theme_set(
   theme_bw(base_family = "Helvetica",
-           base_size = 8) + 
+           base_size = 7) + 
   theme(panel.grid.major.x = element_blank(),
         legend.position = "top",
         axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
@@ -584,7 +584,8 @@ results_long %>%
 
 ```{r global-corr, fig.height = 5, fig.cap = "Global genetic correlations between pairs of phenotypes. Significant negative and positive correlations are indicated by blue and red fill, respectively. Non-significant correlations (p >= 0.05/n_tests) have a grey fill."}
 
-global %>% 
+fig_global <- 
+  global %>% 
   dplyr::mutate(
     rg =
       case_when(
@@ -625,8 +626,11 @@ global %>%
   ) %>%
 plot_global_corr(
   n_phenotypes = 5,
-  tidy_label = FALSE
+  tidy_label = FALSE,
+  base_size = 7
 )
+
+fig_global
 
 ```
 
@@ -976,30 +980,36 @@ plot
 
 # Manuscript {.tabset}
 
-## Supplementary figure
+## Supplementary figures
 
 ```{r manuscript-supp-fig, eval = F, fig.height = 10}
 
-supp_fig <- 
+supp_fig <-
   cowplot::plot_grid(
     ggpubr::ggarrange(
-      temp +
-        facet_wrap(
-          vars(feature),
-          ncol = 1,
-          scales = "free"
-        ) +
-        guides(
-          fill = guide_legend(
-            nrow = 2,
-            title.position = "top"
-          )
-        ) +
-        theme_rhr +
-        theme(
-          axis.text.x = element_text(angle = 0, hjust = 0.5),
-          legend.position = "bottom"
-          ),
+        fig_global,
+        temp +
+          facet_wrap(
+            vars(feature),
+            ncol = 1,
+            scales = "free"
+          ) +
+          guides(
+            fill = guide_legend(
+              nrow = 2,
+              title.position = "top"
+            )
+          ) +
+          theme_rhr +
+          theme(
+            axis.text.x = element_text(angle = 0, hjust = 0.5),
+            legend.position = "bottom"
+          ), 
+        nrow = 1,
+        align = "h",
+        labels = c("a", "b")
+      ),
+    ggpubr::ggarrange(
       ggpubr::ggarrange(
         plotlist = plots[c(2,4)], 
         nrow = 2,
@@ -1007,21 +1017,17 @@ supp_fig <-
         common.legend = T,
         legend = "bottom"
       ),
-      ncol = 2,
-      align = "h", 
-      widths = c(1,2),
-      labels = c("a", "b")
-    ),
-    cowplot::plot_grid(
-      a,b, 
-      nrow = 1, 
-      axis = "bt", 
-      align = "h",
-      rel_widths = c(3,1)
+      cowplot::plot_grid(
+        a,b, 
+        nrow = 1, 
+        axis = "bt", 
+        align = "h",
+        rel_widths = c(2,1)
+      ),
+       labels = c("c", "d")
     ),
     ncol = 1,
-    rel_heights = c(2,1),
-    labels = c("", "c")
+    rel_heights = c(1,1)
   )
 
 ggsave(
@@ -1030,7 +1036,7 @@ ggsave(
   filename = "suppfig_3_proxy_analysis.png",
   device = "png", 
   width = 160, 
-  height = 180, 
+  height = 210, 
   dpi = 300, 
   units = "mm"
 )
@@ -1043,36 +1049,60 @@ ggsave(
 
 xlsx <- 
   setNames(
-    vector(mode = "list", length = 3),
-    c("column_descriptions", "univariate", "bivariate")
+    vector(mode = "list", length = 4),
+    c("column_descriptions", "global", "univariate", "bivariate")
   )
 
 xlsx[[2]] <-
-  results$univ$no_proxy
+  global
 
 xlsx[[3]] <-
-   results$bivar$no_proxy
+  results$univ$no_proxy
+
+xlsx[[4]] <-
+  results$bivar$no_proxy
 
 xlsx[[1]] <-
   tibble(
-    column = colnames(results$univ),
+    column = colnames(global),
     description = 
       c(
-        "LD block ID",
-        "LD block chromosome",
-        "LD block start base pair",
-        "LD block end base pair",
-        "The number of SNPs within the LD block",
-        "The number of PCs retained within the LD block",
-        "Analysed phenotype",
-        "Observed local heritability",
-        "P-value from the univariate test (F-test for continuous, Chi-sq for binary)"
+        "Phenotype 1",
+        "Phenotype 2",
+        "The estimated genetic correlation",
+        "The bootstrap standard error of the genetic correlation estimate",
+        "Z-score for genetic correlation",
+        "P-value for genetic correlation",
+        "Estimated SNP heritability (h2, observed scale) of the second phenotype",
+        "Standard error of h2 for phenotype 2",
+        "Single-trait LD score regression intercept for phenotype 2",
+        "Standard error for single-trait LD score regression intercept for phenotype 2",
+        "Estimated genetic covariance between p1 and p2",
+        "Bootstrap standard error of cross-trait LD score regression intercept"
       )
-  ) %>%
-  dplyr::mutate(sheet = "univariate") %>% 
+  ) %>% 
+  dplyr::mutate(sheet = "global") %>% 
   dplyr::bind_rows(
     tibble(
-      column = colnames(results$bivar),
+      column = colnames(results$univ$no_proxy),
+      description = 
+        c(
+          "LD block ID",
+          "LD block chromosome",
+          "LD block start base pair",
+          "LD block end base pair",
+          "The number of SNPs within the LD block",
+          "The number of PCs retained within the LD block",
+          "Analysed phenotype",
+          "Observed local heritability",
+          "P-value from the univariate test (F-test for continuous, Chi-sq for binary)"
+        )
+    ) %>%
+      dplyr::mutate(sheet = "univariate")
+  ) %>% 
+  dplyr::bind_rows(
+    tibble(
+      column = colnames(results$bivar$no_proxy),
       description = 
         c(
           "LD block ID",
@@ -1089,7 +1119,8 @@ xlsx[[1]] <-
           "Equivalent of taking the square of rho. Denotes the proportion of variance in genetic signal for phen1 explained by phen2 (and vice versa)",
           "Lower 95% confidence estimate for r2",
           "Upper 95% confidence estimate for r2",
-          "Simulation p-values for the local genetic correlation"
+          "Simulation p-values for the local genetic correlation",
+          "FDR-corrected p-value for the local genetic correlation"
         )
     ) %>% 
       dplyr::mutate(sheet = "bivariate")
