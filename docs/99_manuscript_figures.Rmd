@@ -681,7 +681,7 @@ xlsx[[1]] <-
       "Phenotype 2",
       "The estimated genetic correlation",
       "The bootstrap standard error of the genetic correlation estimate",
-      "The bootstrap standard error of the genetic correlation estimate",
+      "Z-score for genetic correlation",
       "P-value for genetic correlation",
       "Estimated SNP heritability (h2, observed scale) of the second phenotype ",
       "Standard error of h2 for phenotype 2",
@@ -1150,10 +1150,10 @@ multireg <-
 ```{r fig3-wrangle}
 
 multireg_tidy <-
-  # filter outcomes w. significant predictors
+  # filter for full models
   multireg %>% 
   dplyr::filter(
-    p < 0.05
+    model_type == "full"
   ) %>%
   dplyr::select(locus, contains("model"), outcome) %>% 
   dplyr::distinct() %>% 
@@ -1196,8 +1196,12 @@ multireg_tidy <-
 
 plot <- vector(mode = "list", length = 2)
 
+# plot multi reg with at least one significant predicotr
 plot[[1]] <- 
   multireg_tidy %>% 
+  dplyr::filter(
+    p < 0.05
+  ) %>% 
   ggplot(
     aes(
       x = predictors, 
@@ -1225,7 +1229,10 @@ plot[[1]] <-
   theme_rhr
 
 plot[[2]] <- 
-  multireg_tidy %>% 
+  multireg_tidy  %>% 
+  dplyr::filter(
+    p < 0.05
+  ) %>%  
   dplyr::mutate(
     locus_model =
       str_c(locus, model, sep = "\n")
@@ -1272,6 +1279,119 @@ ggsave(
   device = "png", 
   width = 130, 
   height = 120, 
+  dpi = 300, 
+  units = "mm"
+)
+
+```
+
+## Supplementary figure
+
+```{r fig3-supp-multireg}
+
+supp_fig <- vector(mode = "list", length = 2)
+
+# plot non-signif multi reg 
+supp_fig[[1]] <- 
+  multireg_tidy %>% 
+  dplyr::filter(
+    p >= 0.05
+  ) %>% 
+  dplyr::group_by(
+    locus, model
+  ) %>% 
+  dplyr::filter(
+    n() > 1
+  ) %>% 
+  dplyr::mutate(
+    model = str_wrap(model, width = 15)
+  ) %>% 
+  ggplot(
+    aes(
+      x = predictors, 
+      y = gamma, 
+      ymin = gamma.lower, 
+      ymax = gamma.upper
+      )
+    ) +
+  geom_pointrange(
+    colour = "#888888", fatten = 0.25
+    ) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_text(
+    aes(
+      y = gamma.upper + (0.1 * gamma.upper), 
+      label = p_text
+      )
+    ) +
+  facet_wrap(
+    vars(locus, model), 
+    scales = "free_x",
+    nrow = 1
+    ) +
+  labs(x = "Predictors", y = "Standardised multiple\nregression coefficient") +
+  theme_rhr
+
+supp_fig[[2]] <- 
+  multireg_tidy  %>% 
+  dplyr::filter(
+    p >= 0.05
+  ) %>% 
+  dplyr::group_by(
+    locus, model
+  ) %>% 
+  dplyr::filter(
+    n() > 1
+  ) %>%  
+  dplyr::mutate(
+    model = str_wrap(model, width = 15),
+    locus_model =
+      str_c(locus, model, sep = "\n")
+  ) %>% 
+  dplyr::distinct(
+    locus, locus_model, r2, r2.lower, r2.upper
+  ) %>% 
+  ggplot(
+    aes(
+      x = locus_model %>% 
+        fct_reorder(., .x = as.numeric(locus), .fun = max),
+      y = r2,
+      ymin = r2.lower,
+      ymax = r2.upper
+    )
+  ) +
+  geom_col(colour = "black", fill = "#d9d9d9") + 
+  geom_errorbar(width=.2) +
+  labs(
+    x = "Locus and model",
+    y = "Multivariate r2"
+  ) +
+  theme_rhr 
+
+  
+supp_fig <- 
+  cowplot::plot_grid(
+    plotlist = supp_fig, 
+    ncol = 1, 
+    axis = "lr", 
+    align = "v",
+    labels = letters[1:length(supp_fig)]
+  )
+
+supp_fig
+
+
+```
+
+```{r fig3-supp-save, eval = F}
+
+ggsave(
+  supp_fig,
+  path = out_dir, 
+  filename = "suppfig_4_multireg.png",
+  device = "png", 
+  width = 170, 
+  height = 140, 
   dpi = 300, 
   units = "mm"
 )
@@ -1371,7 +1491,7 @@ qtl_to_plot <-
           fdr < 0.05 ~ "**"
         ),
         nom_sig = case_when(
-          p < 0.05 & fdr > 0.05 ~ ".",
+          p < 0.05 & fdr > 0.05 ~ "."
         ),
         chr_gene = str_c("chr ",chr,": ", gene_name)
       )
@@ -1973,7 +2093,7 @@ supp_fig[[3]]
 ggsave(
   supp_fig[[1]],
   path = out_dir, 
-  filename = "suppfig_4_eqtl_all.png",
+  filename = "suppfig_5_eqtl_all.png",
   device = "png", 
   width = 150, 
   height = 230, 
@@ -1984,7 +2104,7 @@ ggsave(
 ggsave(
   supp_fig[[2]],
   path = out_dir, 
-  filename = "suppfig_5_r2.png",
+  filename = "suppfig_6_r2.png",
   device = "png", 
   width = 150, 
   height = 150, 
@@ -1995,7 +2115,7 @@ ggsave(
 ggsave(
   supp_fig[[3]],
   path = out_dir, 
-  filename = "suppfig_6_windowsize_analysis.png",
+  filename = "suppfig_7_windowsize_analysis.png",
   device = "png", 
   width = 90, 
   height = 90, 
