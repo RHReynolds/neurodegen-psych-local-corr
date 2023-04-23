@@ -1196,35 +1196,37 @@ multireg_tidy <-
 
 plot <- vector(mode = "list", length = 2)
 
-# plot multi reg with at least one significant predicotr
-plot[[1]] <- 
+# plot multi reg with at least one significant predictor
+plot[[1]] <-
   multireg_tidy %>% 
   dplyr::filter(
     p < 0.05
   ) %>% 
+  dplyr::distinct(locus, model) %>% 
+  dplyr::inner_join(multireg_tidy) %>% 
   ggplot(
     aes(
       x = predictors, 
       y = gamma, 
       ymin = gamma.lower, 
       ymax = gamma.upper
-      )
-    ) +
+    )
+  ) +
   geom_pointrange(
     colour = "#888888", fatten = 0.25
-    ) +
+  ) +
   geom_hline(yintercept = 0, linetype = "dashed") +
   geom_text(
     aes(
       y = gamma.upper + (0.1 * gamma.upper), 
       label = p_text
-      )
-    ) +
+    )
+  ) +
   facet_wrap(
     vars(locus, model), 
     scales = "free_x",
     nrow = 1
-    ) +
+  ) +
   labs(x = "Predictors", y = "Standardised multiple\nregression coefficient") +
   theme_rhr
 
@@ -1275,8 +1277,8 @@ fig
 ggsave(
   fig,
   path = out_dir, 
-  filename = "fig_3_multireg.png",
-  device = "png", 
+  filename = "fig_3_multireg.pdf",
+  device = "pdf", 
   width = 130, 
   height = 120, 
   dpi = 300, 
@@ -1817,13 +1819,13 @@ fig
 
 ```
 
-```{r fig4-save}
+```{r fig4-save, eval = F}
 
 ggsave(
   fig,
   path = out_dir, 
-  filename = "fig_4_eqtl.png",
-  device = "png", 
+  filename = "fig_4_eqtl.pdf",
+  device = "pdf", 
   width = 150, 
   height = 240, 
   dpi = 300, 
